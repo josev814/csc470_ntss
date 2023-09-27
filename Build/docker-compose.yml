@@ -1,0 +1,22 @@
+version: '3'
+services:
+  mysql-server-80:
+    image: mysql/mysql-server:8.0
+    env_file:
+     - .envvars
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+  app:
+    build:
+     context: ../
+     dockerfile: ./Build/dockerfile
+    depends_on:
+      - mysql-server-80
+    env_file:
+      - .envvars
+    ports:
+      - "8889:80"
+    expose:
+      - 8889
+    restart: unless-stopped

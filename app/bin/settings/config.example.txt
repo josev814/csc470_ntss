@@ -1,0 +1,14 @@
+[default]
+debug = False
+# when dryrun is set to true, we won't insert into the db
+dryrun = False
+
+[database]
+driver=mysql
+
+[mysql]
+host=
+port=3306
+username=
+password=
+database=
