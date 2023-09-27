@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
+"""
+The NTSS app
+"""
 import cgitb
+from os import path
+import configparser
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 cgitb.enable()
 print('Content-type: text/html')
 print()
 
-from os import path
-from jinja2 import Environment, FileSystemLoader, select_autoescape
-from datetime import datetime
-import configparser
 
 
 this_file_abs = path.realpath(__file__).split('/')
@@ -36,4 +38,3 @@ print(
     template.render(
     )
 )
-
