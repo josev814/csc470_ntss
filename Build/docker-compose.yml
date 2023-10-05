@@ -1,6 +1,8 @@
 version: '3'
+name: ntss
 services:
   mysql-server-80:
+    container_name: ntss_database
     image: mysql/mysql-server:8.0
     env_file:
      - .envvars
@@ -8,6 +10,7 @@ services:
       - "3306:3306"
     restart: unless-stopped
   app:
+    container_name: ntss_app
     build:
      context: ../
      dockerfile: ./Build/dockerfile
