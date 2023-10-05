@@ -1,0 +1,6 @@
+.idea/*
+.coverage
+app/bin/settings/config.txt
+**/**.pyc
+.github/*
+.git/**
