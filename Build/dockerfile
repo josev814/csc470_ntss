@@ -39,8 +39,8 @@ ARG PYTHON_VERSION="${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION}.${PYTHON_PAT
 ARG PIP_BASE_CMD="python${PYTHON_MAJOR_VERSION} -m pip"
 
 RUN apt-get update \
-    && apt-cache policy python${PYTHON_MAJOR_VERSION} | grep -i candidate | awk '{split($2, v, "-"); print v[1]; }' > apt_pyversion.txt \
-    && apt_pyversion=$(cat /tmp/apt_pyversion.txt) \
+    && apt-cache policy python${PYTHON_MAJOR_VERSION} | grep -i candidate | awk '{split($2, v, "-"); print v[1]; }' > /apt_pyversion.txt \
+    && apt_pyversion=$(cat /apt_pyversion.txt) \
     && if [[ "${apt_pyversion}" =~ ${PYTHON_VERSION} ]]; then \
         apt-get install python3-dev python3-minimal python3-pip python3-venv \
     ; else \
@@ -55,7 +55,8 @@ RUN apt-get update \
     ; fi
 
 # Replace default python version
-RUN if ! [[ "${apt_pyversion}" =~ ${PYTHON_VERSION} ]]; then \
+RUN apt_pyversion=$(cat /apt_pyversion.txt) \
+    && if ! [[ "${apt_pyversion}" =~ ${PYTHON_VERSION} ]]; then \
         rm -f /usr/bin/python${PYTHON_MAJOR_VERSION} /usr/bin/pip${PYTHON_MAJOR_VERSION} \
         && ln -s /usr/local/bin/python${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION} /usr/bin/python${PYTHON_MAJOR_VERSION} \
         && ln -s /usr/local/bin/pip${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION} /usr/bin/pip${PYTHON_MAJOR_VERSION} \
@@ -65,17 +66,22 @@ WORKDIR /app
 COPY requirements.txt ./
 
 RUN pip_cmd="${PIP_BASE_CMD} install -r requirements.txt --no-cache-dir" \
-    && apt_pyversion=$(cat /tmp/apt_pyversion.txt) \
-    && rm /tmp/apt_pyversion.txt \
-    && if [[ "${apt_pyversion}" =~ ${PYTHON_VERSION} ]] && [[ ${OS_VERSION} -gt 11 ]]; then \
-        pip_cmd+=" --break-system-packages" \
+    && apt_pyversion=$(cat /apt_pyversion.txt) \
+    && rm /apt_pyversion.txt \
+    && if [[ "${apt_pyversion}" =~ ${PYTHON_VERSION} ]]; then \
+        apt-get update && apt-get install lsb-release \
+        && os_num=$(lsb_release -sr) \
+        && os_name=$(lsb_release -si) \
+        && apt-get remove --purge lsb-release \
+        && if [[ "${os_name}" == 'Debian' ]] && [[ ${os_num} -gt 11 ]]; then \
+            pip_cmd+=" --break-system-packages" \
+        ; fi \
     ; else \
         python${PYTHON_MAJOR_VERSION} -m ensurepip --default-pip \
+        && ${PIP_BASE_CMD[@]} install -U pip setuptools wheel \
     ; fi \
-    && ${PIP_BASE_CMD[@]} install -U pip setuptools wheel \
     && ${pip_cmd[@]} \
     && rm -f requirements.txt
-
 
 FROM pythoninstall as app
 LABEL project="NTSS" \
