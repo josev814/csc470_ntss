@@ -1,25 +1,41 @@
 version: '3'
 name: ntss
 services:
-  mysql-server-80:
+  ntss_database:
     container_name: ntss_database
-    image: mysql/mysql-server:8.0
+    image: mariadb
     env_file:
-     - .envvars
+      - .dbenvvars
     ports:
       - "3306:3306"
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb -u $$MYSQL_USER -p$$MYSQL_PWD" ]
+      interval: 1s
+      timeout: 2s
+      retries: 200
   app:
     container_name: ntss_app
+    image: ntss_app
     build:
-     context: ../
-     dockerfile: ./Build/dockerfile
+      context: ../
+      dockerfile: ./Build/dockerfile
+      args:
+        OS_NAME: "debian"
+        OS_VERSION: "bullseye"
+        PYTHON_MAJOR_VERSION: "3"
+        PYTHON_MINOR_VERSION: "11"
+        PYTHON_PATCH_VERSION: 2
     depends_on:
-      - mysql-server-80
+      ntss_database:
+        condition: service_healthy
     env_file:
-      - .envvars
+      - .appenvvars
     ports:
       - "8889:80"
     expose:
       - 8889
     restart: unless-stopped
+    volumes:
+      - ../app/public_html:/var/www/html/public_html/
+      - ../app/bin:/app/ntss_bin/

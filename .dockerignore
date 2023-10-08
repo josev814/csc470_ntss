@@ -4,3 +4,5 @@ app/bin/settings/config.txt
 **/**.pyc
 .github/*
 .git/**
+**/**envvars
+**/__pycache__/**

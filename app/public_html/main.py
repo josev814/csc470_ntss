@@ -2,11 +2,12 @@
 """
 The NTSS app
 """
-import cgitb
+#import cgitb
 from os import path
 import configparser
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-cgitb.enable()
+#cgitb.enable()
+
 print('Content-type: text/html')
 print()
 
