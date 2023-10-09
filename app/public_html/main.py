@@ -30,7 +30,7 @@ if 'database' in cp.sections() and cp.has_option('database', 'driver'):
 
 
 env = Environment(
-    loader=FileSystemLoader('templates'),
+    loader=FileSystemLoader('views'),
     autoescape=select_autoescape(['html', 'xml'])
 )
 template = env.get_template('index.html')
