@@ -6,7 +6,7 @@ The NTSS app
 from os import path
 import configparser
 
-from ntss.controllers.ntss import ntss_controller
+from ntss.controllers.ntss import NtssController
 
 print('Content-type: text/html')
 print()
@@ -26,5 +26,5 @@ if 'database' in cp.sections() and cp.has_option('database', 'driver'):
         if driver_type == 'mysql':
             pass
 
-application = ntss_controller()
+application = NtssController()
 application.home()

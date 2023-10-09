@@ -1,6 +1,6 @@
-from .views import views
+from .views import Views
 
-class ntss_views(views):
+class NtssViews(Views):
 
     def login_view(self):
         """

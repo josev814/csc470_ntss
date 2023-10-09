@@ -1,6 +1,6 @@
-from ntss.views.ntss import ntss_views
+from ntss.views.ntss import NtssViews
 
-class ntss_controller():
+class NtssController():
 
     def home(self):
-        ntss_views().login_view()
+        NtssViews().login_view()
