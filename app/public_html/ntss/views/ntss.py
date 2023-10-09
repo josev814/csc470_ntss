@@ -1,18 +1,12 @@
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from .views import views
 
-class ntss_views():
+class ntss_views(views):
 
-    def login_view():
+    def login_view(self):
         """
         Load the login template
         """
-        env = Environment(
-            loader=FileSystemLoader('ntss/templates'),
-            autoescape=select_autoescape(['html', 'xml'])
-        )
-        template = env.get_template('login.html')
-
+        self.set_template('login.html')
         print(
-            template.render(
-            )
+            self.template.render()
         )
