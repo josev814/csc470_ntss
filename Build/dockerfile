@@ -88,7 +88,7 @@ LABEL project="NTSS" \
     university="Fayetteville State University"
 WORKDIR /app
 
-COPY ./Build/apache2/conf-available/* /etc/apache2/conf-available/
+#COPY ./Build/apache2/conf-available/* /etc/apache2/conf-available/
 COPY ./Build/apache2/sites-available/* /etc/apache2/sites-available/
 COPY ./Build/apache2/mods-available/* /etc/apache2/mods-available/
 
