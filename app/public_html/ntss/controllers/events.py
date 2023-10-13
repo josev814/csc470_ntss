@@ -8,6 +8,7 @@ class EventsController():
             pass
         if not self.has_access():
             # load a view for access denied
+            pass
             
 
     # add other methods below

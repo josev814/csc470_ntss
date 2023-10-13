@@ -8,6 +8,7 @@ class UsersController():
             pass
         if not self.has_access():
             # load a view for access denied
+            pass
 
     # add other methods below
     # Views should be placed in the views -> users.py file

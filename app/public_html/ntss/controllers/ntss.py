@@ -8,6 +8,7 @@ class NtssController():
             pass
         if not self.has_access():
             # load a view for access denied
+            pass
 
     def login(self):
         return NtssViews().login_view()
@@ -19,4 +20,7 @@ class NtssController():
         return False
 
     def get_permissions(self):
+        return False
+    
+    def has_access(self):
         return False
