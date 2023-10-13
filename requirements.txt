@@ -9,3 +9,5 @@ pydantic==2.3.0
 requests==2.31.0
 mysql-connector-python==8.1
 supervisor==4.2.2
+webob
+parse

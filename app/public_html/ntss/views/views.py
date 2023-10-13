@@ -3,8 +3,12 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 class Views():
 
     template = None
+    platformName = 'NTSS'
+    templateVars = {
+        'platformName': platformName,
+    }
 
-    def set_template(self, template_name: str, templates_path:str='ntss/templates'):
+    def set_template(self, template_name: str, templates_path:str='/var/www/html/public_html/ntss/templates'):
         """
         Load the template
         """

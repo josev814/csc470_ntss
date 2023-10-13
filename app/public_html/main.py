@@ -2,29 +2,44 @@
 """
 The NTSS app
 """
-#import cgitb
-from os import path
-import configparser
+from os import path, environ
+import http.client
+import sys
 
+
+sys.path.append('/var/www/html/public_html')
+
+from ntss.controllers.routes import Routes
 from ntss.controllers.ntss import NtssController
 
-print('Content-type: text/html')
-print()
+application=Routes()
+@application.route(path='/', methods=['GET'])
+def home(request, response):
+    output = NtssController().login()
+    response.status_code = 200
+    response.text = output
+    return [output]
 
-this_file_abs = path.realpath(__file__).split('/')
-this_file_abs.pop()
-this_file_abs.pop()
-BASEDIR = '/'.join(this_file_abs)
-DATABASE = None
-CONFIGFILE = path.join('/bin', 'settings', 'config.txt')
-cp = configparser.ConfigParser()
-cp.read(CONFIGFILE)
+@application.route('/dashboard', methods=['GET'])
+def dashboard(request, response):
+    #response.text = 'This is the dashboard'
+    output = NtssController().dashboard()
+    response.status_code = 200
+    response.text = output
+    return [output]
 
-if 'database' in cp.sections() and cp.has_option('database', 'driver'):
-    driver_type = cp.get('database', 'driver')
-    if driver_type in cp.sections():
-        if driver_type == 'mysql':
-            pass
+@application.route('/profile', methods=['GET'])
+def profile(request, response):
+    response.text = 'This is the profile management page'
 
-application = NtssController()
-application.home()
+@application.route('/events', methods=['GET'])
+def events(request, response):
+    response.text = 'This is the events management page'
+
+@application.route('/event/', methods=['GET', 'POST'])
+def events(request, response, id, name):
+    response.text = f'This is the event management page for {id}: {name}'
+
+@application.route('/event/{id}/{name}', methods=['GET', 'UPDATE', 'DELETE'])
+def events(request, response, id, name):
+    response.text = f'This is the event management page for {id}: {name}'
