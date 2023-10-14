@@ -27,22 +27,18 @@ class Users(MysqlDatabase):
             }
         )
     
-    def _set_encrypted_password(self, password):
+    def _set_encrypted_password(self, password:str):
         """
         Encrypts the password for a user
         """
-        import hashlib
-        from random import random
-        salt = hashlib.sha256(str(random()), str(random()))[:5]
-        hash = hashlib.sha256(f'{salt}{password}').hexdigest()
-        encrypted = hashlib.sha256(f'{salt}||{hash}')
-        return encrypted
+        from argon2 import PasswordHasher
+        ph = PasswordHasher()
+        return ph.hash(password) # GOOD
 
-    def _check_password(self, password, encrypted_password) -> bool:
+    def _check_password(self, password:str, encrypted_password) -> bool:
         """
         Checks if the password submitted is the same as the password that was stored
         """
-        import hashlib
-        salt, hash = encrypted_password.split('||')
-        return hash == hashlib.sha256(salt, password)
-    
+        from argon2 import PasswordHasher
+        ph = PasswordHasher()
+        return ph.verify(encrypted_password, password) # GOOD

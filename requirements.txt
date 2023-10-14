@@ -11,3 +11,4 @@ mysql-connector-python==8.1
 supervisor==4.2.2
 webob
 parse
+argon2-cffi
