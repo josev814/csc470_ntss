@@ -40,6 +40,6 @@ def events(request, response):
 def events(request, response, id, name):
     response.text = f'This is the event management page for {id}: {name}'
 
-@application.route('/event/{id}/{name}', methods=['GET', 'UPDATE', 'DELETE'])
+@application.route('/event/{id}/{name}', methods=['GET', 'POST', 'PATCH', 'DELETE'])
 def events(request, response, id, name):
     response.text = f'This is the event management page for {id}: {name}'
