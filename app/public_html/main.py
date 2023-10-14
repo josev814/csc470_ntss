@@ -2,8 +2,6 @@
 """
 The NTSS app
 """
-from os import path, environ
-import http.client
 import sys
 
 
@@ -12,10 +10,13 @@ sys.path.append('/var/www/html/public_html')
 from ntss.controllers.routes import Routes
 from ntss.controllers.ntss import NtssController
 
+
 application=Routes()
-@application.route(path='/', methods=['GET'])
+
+
+@application.route(path='/', methods=['GET', 'POST'])
 def home(request, response):
-    output = NtssController().login()
+    output = NtssController().login(request)
     response.status_code = 200
     response.text = output
     return [output]
@@ -36,10 +37,8 @@ def profile(request, response):
 def events(request, response):
     response.text = 'This is the events management page'
 
-@application.route('/event/', methods=['GET', 'POST'])
-def events(request, response, id, name):
-    response.text = f'This is the event management page for {id}: {name}'
-
 @application.route('/event/{id}/{name}', methods=['GET', 'POST', 'PATCH', 'DELETE'])
-def events(request, response, id, name):
-    response.text = f'This is the event management page for {id}: {name}'
+def event(request, response, event_id, name):
+    print(request.params)
+    print(request.query_string)
+    response.text = f'This is the event management page for {event_id}: {name}'
