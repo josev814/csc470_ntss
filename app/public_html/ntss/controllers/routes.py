@@ -74,9 +74,6 @@ class Routes():
         """
         for path, path_dict in self._routes.items():
             accepted_methods, handler = path_dict.values()
-            print(accepted_methods)
-            print(request_method)
-            print(request_method in accepted_methods)
             parse_result = parse(path, request_path)
             if parse_result and request_method in accepted_methods:
                 return handler, parse_result.named
