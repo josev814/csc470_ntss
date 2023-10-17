@@ -1,19 +1,49 @@
+"""
+This is the base module for Views
+All Views should inherit from this class
+"""
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-class Views():
 
+class Views:
+    """
+    This is the base class for Views
+    All Views should inherit from this class
+    """
     template = None
+    _templates_path = '/var/www/html/public_html/ntss/templates'
+    _env = Environment()
     platformName = 'NTSS'
     templateVars = {
         'platformName': platformName,
     }
 
-    def set_template(self, template_name: str, templates_path:str='/var/www/html/public_html/ntss/templates'):
+    def set_templates_environment(self, templates_path: str = ''):
         """
-        Load the template
+        Sets the jinja environment for where templates should be found
+
+        :param templates_path:
+        :return:
         """
-        env = Environment(
+        if templates_path == '':
+            templates_path = self._templates_path
+
+        self._env = Environment(
             loader=FileSystemLoader(templates_path),
             autoescape=select_autoescape(['html', 'xml'])
         )
-        self.template = env.get_template(template_name)
+
+    def set_template(self, template_name: str, templates_path: str = ''):
+        """
+        Loads the template requested
+
+        :param template_name:
+        :param templates_path:
+        :return:
+        """
+        if templates_path == '':
+            templates_path = self._templates_path
+
+        self.set_templates_environment(templates_path)
+
+        self.template = self._env.get_template(template_name)
