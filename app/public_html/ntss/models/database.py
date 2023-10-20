@@ -12,11 +12,12 @@ class MysqlDatabase:
     table=None
 
     def __init__(self):
-        _engine = create_engine(
-            f"mysql://{getenv('db_user')}:{getenv('db_pass')}@{getenv('db_host')}:{getenv('db_port')}",
+        db_userpass=f"{getenv('db_user')}:{getenv('db_pass')}"
+        self._engine = create_engine(
+            f"mysql://{db_userpass}@{getenv('db_host')}:{getenv('db_port')}",
             echo=True
         )
-        _query = ''
+        self._query = ''
 
     def create(self, kwdict):
         """
@@ -29,10 +30,10 @@ class MysqlDatabase:
         """
         records = []
         self._query = select(self.table.c['","'.join(columns)])
-        for filter in filters:
-            if filter.operator == '=':
-                self._query.where(f'{filter.column}' == f'{filter.value}')
-    
+        for query_filter in filters:
+            if query_filter.operator == '=':
+                self._query.where(f'{query_filter.column}' == f'{query_filter.value}')
+
         with Session(self._engine) as db_sess:
             for row in db_sess.execute(self._query):
                 records.append(row)
