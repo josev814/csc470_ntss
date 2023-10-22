@@ -1,4 +1,5 @@
 from typing import Any
+import os
 from parse import parse
 from webob import Request, Response
 from ntss.config.constants import ALL_HTTP_METHODS
@@ -56,7 +57,10 @@ class Routes():
         response = Response()
         
         handler = None
-
+        if request.path.startswith('/static'):
+            self._load_file(request, response)
+            return response
+        
         if request.method not in self._http_methods:
             self.default_response(response)
         else:
@@ -85,4 +89,23 @@ class Routes():
         """
         response.status_code = 404
         response.text = RouteViews().error_page()
+    
+    def _load_file(self, request, response):
+        """
+        Loads a static file
+        """
+        www_path='/var/www/html/public_html'
+        if not os.path.isfile(f'{www_path}{request.path}'):
+            response = self.default_response(response)
+        else:
+            response.status_code = 200
+            if request.path.endswith('css'):
+                response.content_type = 'text/css'
+            elif request.path.endswith('js'):
+                response.content_type = 'text/js'
+            
+            response.text = ''
+            with open(f'{www_path}{request.path}', 'r') as file_handler:
+                response.text = file_handler.read()
+
         
