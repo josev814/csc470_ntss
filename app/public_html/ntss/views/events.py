@@ -17,3 +17,11 @@ class EventViews(Views):
         self.set_template('events_list.html')
         self.templateVars['pageName'] = 'Events'
         return self.template.render(self.templateVars)
+
+    def display_invoice(self, invoice_information):
+        """
+        Load the invoice for a user
+        """
+        self.set_template('print_invoice.html')
+        self.templateVars['invoice_information'] = invoice_information
+        return self.template.render(self.templateVars)

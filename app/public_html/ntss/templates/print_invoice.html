@@ -1,0 +1,79 @@
+{% include "blocks/admin_printer_top.html" %}
+<div class="container">
+<!--{% include "blocks/navigation.html" %} -->
+
+<div class="col-12 d-flex flex-row-reverse">
+  Date: {{ invoice_information.date }}
+  Invoice #{{ invoice_information.id }}
+</div>
+<div class="col-12">
+  <div class="row">
+    <div class="col-6 d-flext flex-row">
+      <div class="card col-6">
+        <div class="card-header d-flex flex-row">
+          <strong>FROM: &nbsp;</strong> NTSS
+        </div>
+        <div class="card-body">
+          <div class="row">1314 Coley Dr</div>
+          <div class="row">Fayetteville, NC 28301</div>
+          <div class="row">(910) 672-1111</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 d-flex flex-row-reverse">
+      <div class="card col-6">
+        <div class="card-header d-flex flex-row">
+          <strong>TO:&nbsp;</strong> {{ invoice_information.customer.name }}
+        </div>
+        <div class="card-body">
+          <div class="row">{{ invoice_information.customer.address }}</div>
+          <div class="row">{{ invoice_information.customer.city }}, {{ invoice_information.customer.state }} {{ invoice_information.customer.zipcode }}</div>
+          {% if phone_number in invoice_information.customer %}
+          <div class="row">{{ invoice_information.customer.phone_number }}</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-12 mt-4">
+  <div class="row">
+    <div class="table-responsive col-12">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th scope="col">Service</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+            <th scope="col">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in invoice_information.invoice_details['items'] -%}
+          <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.qty }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.subtotal }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="col-12 mt-4">
+  <div class="d-flex justify-content-end">
+      <div><b>Sub Total:</b></div>
+      <div class="col-1 d-flex justify-content-end">{{ invoice_information.invoice_details['subtotal'] }}</div>
+  </div>
+  <div class="d-flex justify-content-end">
+    <div><b>Tax:</b></div>
+    <div class="col-1 d-flex justify-content-end">{{ invoice_information.invoice_details['tax'] }}%</div>
+  </div>
+  <div class="d-flex justify-content-end">
+    <div><b>Balance Due:</b></div>
+    <div class="col-1 d-flex justify-content-end">{{ invoice_information.invoice_details['total'] }}</div>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}

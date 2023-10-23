@@ -50,6 +50,15 @@ def event(request, response, id):
     print(request.params)
     response.text = f'This is the event management page for {id}'
 
+@application.route('/myevent/{event_id}/invoice/{invoice_id}', methods=['GET'])
+def myinvoice(request, response, event_id, invoice_id):
+    """ A page to print an invoice """
+    print(request.path)
+    output = EventsController().get_exhibitor_booth_invoice(event_id, invoice_id)
+    response.status_code = 200
+    response.text = output
+    return [output]
+
 @application.route('/myevent/{event_id}', methods=['GET', 'POST', 'PATCH', 'DELETE'])
 def myevent(request, response, event_id):
     """ A page to list a particular event """
