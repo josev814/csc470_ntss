@@ -9,6 +9,7 @@ sys.path.append('/var/www/html/public_html')
 
 from ntss.controllers.routes import Routes
 from ntss.controllers.ntss import NtssController
+from ntss.controllers.events import EventsController
 
 
 application=Routes()
@@ -25,7 +26,7 @@ def home(request, response):
 @application.route('/dashboard', methods=['GET'])
 def dashboard(request, response):
     """ The dashboard that is displayed when users first login"""
-    print(request.params)
+    print(request.path)
     output = NtssController().dashboard()
     response.status_code = 200
     response.text = output
@@ -43,8 +44,26 @@ def events(request, response):
     print(request.params)
     response.text = 'This is the events management page'
 
-@application.route('/event/{id}/{name}', methods=['GET', 'POST', 'PATCH', 'DELETE'])
-def event(request, response, event_id, name):
+@application.route('/event/{id}', methods=['GET', 'POST', 'PATCH', 'DELETE'])
+def event(request, response, id):
     """ A page to list a particular event """
     print(request.params)
-    response.text = f'This is the event management page for {event_id}: {name}'
+    response.text = f'This is the event management page for {id}'
+
+@application.route('/myevent/{event_id}', methods=['GET', 'POST', 'PATCH', 'DELETE'])
+def myevent(request, response, event_id):
+    """ A page to list a particular event """
+    print(request.path)
+    output = EventsController().get_user_event(event_id)
+    response.status_code = 200
+    response.text = output
+    return [output]
+
+@application.route('/myevents', methods=['GET'])
+def myevents(request, response):
+    """ A page to display a user's events"""
+    print(request.path)
+    output = EventsController().get_user_events()
+    response.status_code = 200
+    response.text = output
+    return [output]

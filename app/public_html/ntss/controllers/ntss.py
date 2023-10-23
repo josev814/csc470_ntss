@@ -1,6 +1,7 @@
+from ntss.controllers.controller import BaseController
 from ntss.views.ntss import NtssViews
 
-class NtssController():
+class NtssController(BaseController):
 
     def __init__(self) -> None:
         if not self.is_logged_in() and not self.get_permissions():
@@ -27,12 +28,3 @@ class NtssController():
 
     def dashboard(self):
         return NtssViews().dashboard()
-    
-    def is_logged_in(self):
-        return False
-
-    def get_permissions(self):
-        return False
-    
-    def has_access(self):
-        return False

@@ -1,6 +1,7 @@
+from ntss.controllers.controller import BaseController
 from ntss.views.users import UserViews
 
-class UsersController():
+class UsersController(BaseController):
 
     def __init__(self) -> None:
         if not self.is_logged_in() and not self.get_permissions():

@@ -91,3 +91,7 @@ body {
 .navbar-nav {
     flex-direction: row;
 }
+
+.left-nav, .text-left {
+  text-align: left;
+}
