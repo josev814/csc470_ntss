@@ -1,6 +1,14 @@
-from .views import Views
+from ntss.views.views import Views
 
 class UserViews(Views):
+    """
+    The class for handling views for users
+    """
     
-    # TODO: Make the event views here
-    pass
+    def get_user_profile(self, user_info):
+        """
+        Load the the profile for a user
+        """
+        self.set_template('user_profile.html')
+        self.templateVars['user'] = user_info
+        return self.template.render(self.templateVars)

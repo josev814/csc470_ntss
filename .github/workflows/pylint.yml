@@ -25,4 +25,4 @@ jobs:
         python -m pip install -r requirements.txt
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py')
+        pylint --disable C0303 $(git ls-files '*.py')

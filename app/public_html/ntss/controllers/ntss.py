@@ -1,15 +1,13 @@
+"""
+The NTSS package is the main controller that users access when first accessing the site.
+"""
 from ntss.controllers.controller import BaseController
 from ntss.views.ntss import NtssViews
 
 class NtssController(BaseController):
-
-    def __init__(self) -> None:
-        if not self.is_logged_in() and not self.get_permissions():
-            # redirect to home to login
-            pass
-        if not self.has_access():
-            # load a view for access denied
-            pass
+    """
+    The NTSS controller is the default controller that is accessed
+    """
 
     def login(self, request_data):
         """
@@ -27,4 +25,7 @@ class NtssController(BaseController):
         return NtssViews().login_view(email, password)
 
     def dashboard(self):
+        """
+        Load the Dashboard for a User
+        """
         return NtssViews().dashboard()

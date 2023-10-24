@@ -8,11 +8,6 @@ class EventsController(BaseController):
     """
     The controller for events
     """
-    def __init__(self) -> None:
-        """
-        Initializes the events controller
-        """
-        super().__init__()
 
     def get_user_event(self, event_id):
         """
