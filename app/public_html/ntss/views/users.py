@@ -1,3 +1,6 @@
+"""
+Package for User Views
+"""
 from ntss.views.views import Views
 
 class UserViews(Views):

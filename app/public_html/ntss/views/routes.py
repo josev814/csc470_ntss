@@ -1,7 +1,12 @@
-from .views import Views
+"""
+Package for Route Views
+"""
+from ntss.views.views import Views
 
 class RouteViews(Views):
-    
+    """
+    Class for Route Views
+    """
     def error_page(self):
         """
         Load the error page template

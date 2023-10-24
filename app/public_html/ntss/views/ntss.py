@@ -1,7 +1,12 @@
-from .views import Views
+"""
+Package for NTSS Views
+"""
+from ntss.views.views import Views
 
 class NtssViews(Views):
-    
+    """
+    Class for NTSS Views
+    """
     def login_view(self, email=None, password=None):
         """
         Load the login template
