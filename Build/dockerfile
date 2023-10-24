@@ -88,16 +88,20 @@ LABEL project="NTSS" \
     university="Fayetteville State University"
 WORKDIR /app
 
-COPY ./Build/apache2/conf-available/* /etc/apache2/conf-available/
+#COPY ./Build/apache2/conf-available/* /etc/apache2/conf-available/
 COPY ./Build/apache2/sites-available/* /etc/apache2/sites-available/
 COPY ./Build/apache2/mods-available/* /etc/apache2/mods-available/
 
-RUN rm /var/log/apache2/access.log /var/log/apache2/error.log \
+RUN apt-get update \
+    && apt-get install libapache2-mod-wsgi-py3 \
+    && rm /var/log/apache2/access.log /var/log/apache2/error.log \
     && ln -s /dev/stdout /var/log/apache2/access.log \
     && ln -s /dev/stderr /var/log/apache2/error.log \
-    && a2enconf cgi.conf \
+    # && a2enconf cgi.conf \
+    && a2enmod wsgi \
     && a2dismod -f dir \
-    && a2enmod cgi dir
+    # && a2enmod cgi dir \
+    && a2enmod wsgi
 
 COPY ./Build/supervisor.conf /etc/supervisor/conf.d/supervisord.conf
 
