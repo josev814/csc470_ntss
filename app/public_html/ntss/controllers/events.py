@@ -13,7 +13,7 @@ class EventsController(BaseController):
         Initializes the events controller
         """
         super().__init__()
-    
+
     def get_user_event(self, event_id):
         """
         Gets an event for a user
