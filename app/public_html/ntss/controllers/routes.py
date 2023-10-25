@@ -5,7 +5,7 @@ from typing import Any
 import os
 from parse import parse
 from webob import Request, Response
-from ntss.config.constants import ALL_HTTP_METHODS
+from ntss.config.constants import ALL_HTTP_METHODS, WWW_PATH
 from ntss.views.routes import RouteViews
 
 class Routes():
@@ -101,8 +101,7 @@ class Routes():
         """
         Loads a static file
         """
-        www_path='/var/www/html/public_html'
-        if not os.path.isfile(f'{www_path}{request.path}'):
+        if not os.path.isfile(f'{WWW_PATH}{request.path}'):
             self.default_response(response)
         else:
             response.status_code = 200
@@ -112,5 +111,5 @@ class Routes():
                 response.content_type = 'text/js'
             
             response.text = ''
-            with open(f'{www_path}{request.path}', 'r', encoding='utf-8') as file_handler:
+            with open(f'{WWW_PATH}{request.path}', 'r', encoding='utf-8') as file_handler:
                 response.text = file_handler.read()

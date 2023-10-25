@@ -4,16 +4,13 @@ The NTSS app
 """
 import sys
 
-
-sys.path.append('/var/www/html/public_html')
-
 from ntss.controllers.routes import Routes
 from ntss.controllers.ntss import NtssController
 from ntss.controllers.events import EventsController
+from ntss.controllers.users import UsersController
 
 
 application=Routes()
-
 
 @application.route(path='/', methods=['GET', 'POST'])
 def home(request, response):

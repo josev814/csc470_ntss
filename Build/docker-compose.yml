@@ -37,5 +37,5 @@ services:
       - 8889
     restart: unless-stopped
     volumes:
-      - ../app/public_html:/var/www/html/public_html/
+      - ../app/public_html:/app/ntss_www/
       - ../app/bin:/app/ntss_bin/
