@@ -2,9 +2,9 @@
 <div class="container">
 <!--{% include "blocks/navigation.html" %} -->
 
-<div class="col-12 d-flex flex-row-reverse">
-  Date: {{ invoice_information.date }}
-  Invoice #{{ invoice_information.id }}
+<div class="d-flex flex-column">
+  <div class="d-flex justify-content-end"><b>Date:&nbsp;</b> {{ invoice_information.date }}</div>
+  <div class="d-flex justify-content-end"><b>Invoice #:&nbsp;</b>{{ invoice_information.id }}</div>
 </div>
 <div class="col-12">
   <div class="row">
@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="col-6 d-flex flex-row-reverse">
+    <div class="col-6 d-flex justify-content-end">
       <div class="card col-6">
         <div class="card-header d-flex flex-row">
           <strong>TO:&nbsp;</strong> {{ invoice_information.customer.name }}
