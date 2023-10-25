@@ -25,6 +25,7 @@ class Routes():
         """
         self._http_methods = self._set_http_methods(methods)
 
+
         if path in self._routes:
             raise AssertionError(f'Route {path} already exists.')
         
@@ -41,6 +42,9 @@ class Routes():
         if methods is None:
             methods = ALL_HTTP_METHODS
         
+        accepted_methods = [
+            method.upper() for method in methods if method.upper() in ALL_HTTP_METHODS
+        ]
         accepted_methods = [
             method.upper() for method in methods if method.upper() in ALL_HTTP_METHODS
         ]
