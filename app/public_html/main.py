@@ -44,11 +44,11 @@ def events(request, response):
     print(request.params)
     response.text = 'This is the events management page'
 
-@application.route('/event/{id}', methods=['GET', 'POST', 'PATCH', 'DELETE'])
-def event(request, response, id):
+@application.route('/event/{event_id}', methods=['GET', 'POST', 'PATCH', 'DELETE'])
+def event(request, response, event_id):
     """ A page to list a particular event """
     print(request.params)
-    response.text = f'This is the event management page for {id}'
+    response.text = f'This is the event management page for {event_id}'
 
 @application.route('/myevent/{event_id}/invoice/{invoice_id}', methods=['GET'])
 def myinvoice(request, response, event_id, invoice_id):
