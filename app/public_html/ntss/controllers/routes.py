@@ -1,9 +1,6 @@
 """
 This package handles the route requests
 """
-"""
-This package handles the route requests
-"""
 from typing import Any
 import os
 from parse import parse
@@ -12,9 +9,6 @@ from ntss.config.constants import ALL_HTTP_METHODS, WWW_PATH
 from ntss.views.routes import RouteViews
 
 class Routes():
-    """
-    This class handles the route requests and response to the server
-    """
     """
     This class handles the route requests and response to the server
     """
@@ -123,4 +117,3 @@ class Routes():
             response.text = ''
             with open(f'{WWW_PATH}{request.path}', 'r', encoding='utf-8') as file_handler:
                 response.text = file_handler.read()
-
