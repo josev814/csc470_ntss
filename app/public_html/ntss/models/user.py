@@ -2,7 +2,7 @@
 This package handles interactions with the database pertaining to users
 """
 from argon2 import PasswordHasher
-from database import MysqlDatabase
+from ntss.models.database import MysqlDatabase
 
 class Users(MysqlDatabase):
     """

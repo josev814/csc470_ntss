@@ -1,7 +1,12 @@
-from .views import Views
+"""
+Package for Event Views
+"""
+from ntss.views.views import Views
 
 class EventViews(Views):
-    
+    """
+    Class for Event Views
+    """
     def user_event(self, event_info):
         """
         Load the events for a user

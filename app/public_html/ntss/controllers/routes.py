@@ -1,3 +1,6 @@
+"""
+This package handles the route requests
+"""
 from typing import Any
 import os
 from parse import parse
@@ -6,7 +9,9 @@ from ntss.config.constants import ALL_HTTP_METHODS
 from ntss.views.routes import RouteViews
 
 class Routes():
-
+    """
+    This class handles the route requests and response to the server
+    """
     def __init__(self):
         """
         Instanciate routes and methods
@@ -19,7 +24,7 @@ class Routes():
         Handles adding paths and handlers to a route
         """
         self._http_methods = self._set_http_methods(methods)
-        
+
         if path in self._routes:
             raise AssertionError(f'Route {path} already exists.')
         
@@ -36,7 +41,9 @@ class Routes():
         if methods is None:
             methods = ALL_HTTP_METHODS
         
-        accepted_methods = [method.upper() for method in methods if method.upper() in ALL_HTTP_METHODS]
+        accepted_methods = [
+            method.upper() for method in methods if method.upper() in ALL_HTTP_METHODS
+        ]
         return accepted_methods
 
     def __call__(self, environ, start_response) -> Any:
@@ -96,7 +103,7 @@ class Routes():
         """
         www_path='/var/www/html/public_html'
         if not os.path.isfile(f'{www_path}{request.path}'):
-            response = self.default_response(response)
+            self.default_response(response)
         else:
             response.status_code = 200
             if request.path.endswith('css'):
@@ -105,7 +112,5 @@ class Routes():
                 response.content_type = 'text/js'
             
             response.text = ''
-            with open(f'{www_path}{request.path}', 'r') as file_handler:
+            with open(f'{www_path}{request.path}', 'r', encoding='utf-8') as file_handler:
                 response.text = file_handler.read()
-
-        
