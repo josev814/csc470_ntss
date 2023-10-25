@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """
 The NTSS app
+Import all controllers that will have route defined for them
 """
-import sys
-
 from ntss.controllers.routes import Routes
 from ntss.controllers.ntss import NtssController
 from ntss.controllers.events import EventsController
-from ntss.controllers.users import UsersController
+#from ntss.controllers.users import UsersController
 
 
 application=Routes()
