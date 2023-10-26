@@ -59,7 +59,7 @@ docker compose -f "Build/docker-compose.yml" down --volumes
 This project uses the MVC convention
 
 ## Routes
-In main.py, add any routes that should be detected by our application.
+In **wsgi.py**, add any routes that should be detected by our application.
 You will use `@application` which is an instance of the Routes class.
 Then you will call the route method.  The route method takes the path as the first argument.
 The second argument is a list of the methods that the route supports such as GET, POST, PATCH, UPDATE, DELETE.

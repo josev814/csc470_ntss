@@ -8,7 +8,6 @@ class NtssController(BaseController):
     """
     The NTSS controller is the default controller that is accessed
     """
-
     def login(self, request_data):
         """
         Display the login page
