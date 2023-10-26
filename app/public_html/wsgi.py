@@ -6,7 +6,7 @@ Import all controllers that will have route defined for them
 from ntss.controllers.routes import Routes
 from ntss.controllers.ntss import NtssController
 from ntss.controllers.events import EventsController
-#from ntss.controllers.users import UsersController
+from ntss.controllers.users import UsersController
 
 
 application=Routes()
@@ -69,6 +69,15 @@ def myevents(request, response):
     """ A page to display a user's events"""
     print(request.path)
     output = EventsController().get_user_events()
+    response.status_code = 200
+    response.text = output
+    return [output]
+
+@application.route('/myprofile/{user_id}', methods=['GET'])
+def myprofile(request, response, user_id):
+    """ A page to display a user's events"""
+    print(request.path)
+    output = UsersController().get_user_profile(user_id)
     response.status_code = 200
     response.text = output
     return [output]

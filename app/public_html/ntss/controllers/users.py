@@ -3,6 +3,7 @@ Package to handle Users
 """
 from ntss.controllers.controller import BaseController
 from ntss.views.users import UserViews
+#from ntss.models.user import Users as UserModel
 
 class UsersController(BaseController):
     """
@@ -20,4 +21,9 @@ class UsersController(BaseController):
         """
         Gets the profile for a user
         """
-        UserViews().get_user_profile(user_id)
+        user_info = {
+            'user_id': user_id,
+            'name': 'My Name',
+            'email': 'myemail@123.com'
+        }
+        return UserViews().get_user_profile(user_info)
