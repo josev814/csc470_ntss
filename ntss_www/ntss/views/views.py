@@ -5,6 +5,7 @@ All Views should inherit from this class
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from ntss.config.constants import WWW_PATH
 
+
 class Views:
     """
     This is the base class for Views

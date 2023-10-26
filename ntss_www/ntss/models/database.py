@@ -5,14 +5,15 @@ from os import getenv
 from sqlalchemy import select, create_engine
 from sqlalchemy.orm import Session
 
+
 class MysqlDatabase:
     """
     The MySQL Datbase class
     """
-    table=None
+    table = None
 
     def __init__(self):
-        db_userpass=f"{getenv('db_user')}:{getenv('db_pass')}"
+        db_userpass = f"{getenv('db_user')}:{getenv('db_pass')}"
         self._engine = create_engine(
             f"mysql://{db_userpass}@{getenv('db_host')}:{getenv('db_port')}",
             echo=True

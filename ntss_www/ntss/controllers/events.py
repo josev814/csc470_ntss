@@ -4,6 +4,7 @@ The package to handle events
 from ntss.controllers.controller import BaseController
 from ntss.views.events import EventViews
 
+
 class EventsController(BaseController):
     """
     The controller for events
@@ -14,7 +15,7 @@ class EventsController(BaseController):
         Gets an event for a user
         """
         print(f'Call event model to get event info for {event_id}')
-        event_info={
+        event_info = {
             'id': 12,
             'name': "Event XII",
             'description': '',
@@ -36,7 +37,7 @@ class EventsController(BaseController):
         """
         Gets an event for a user
         """
-        event_info={
+        event_info = {
             'id': event_id,
             'name': "Event XII",
             'description': '',
@@ -46,7 +47,7 @@ class EventsController(BaseController):
             'location': 'Fayetteville, NC',
             'venue': 'Fayetteville State University'
         }
-        customer_info={
+        customer_info = {
             'id': 345,
             'name': 'Jose\' Vargas',
             'address': '1234 Pelican Bay',

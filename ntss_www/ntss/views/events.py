@@ -3,6 +3,7 @@ Package for Event Views
 """
 from ntss.views.views import Views
 
+
 class EventViews(Views):
     """
     Class for Event Views
@@ -14,7 +15,7 @@ class EventViews(Views):
         self.set_template('event_info.html')
         self.templateVars['event'] = event_info
         return self.template.render(self.templateVars)
-    
+
     def user_events(self):
         """
         Load the events for a user
