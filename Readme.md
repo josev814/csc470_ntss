@@ -55,6 +55,31 @@ docker compose -f "Build/docker-compose.yml" down --volumes
   - Removes the images used for the application
 
 
+# Project Development
+This project uses the MVC convention
 
+## Routes
+In **wsgi.py**, add any routes that should be detected by our application.
+You will use `@application` which is an instance of the Routes class.
+Then you will call the route method.  The route method takes the path as the first argument.
+The second argument is a list of the methods that the route supports such as GET, POST, PATCH, UPDATE, DELETE.
+```python
+@application.route('/dashboard', methods=['GET'])
+```
+
+After defining the route, create a function that will take in the the request and response as the first two parameters.
+Within the function, you call the other classes that the function should call.
+The example below will load the dashboard page.
+
+```python
+@application.route('/dashboard', methods=['GET'])
+def dashboard(request, response):
+    output = NtssController().dashboard()
+    response.status_code = 200
+    response.text = output
+    return [output]
+```
+
+##
 
 [Project.md]: ./Project.md

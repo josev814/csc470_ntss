@@ -22,9 +22,9 @@ services:
       dockerfile: ./Build/dockerfile
       args:
         OS_NAME: "debian"
-        OS_VERSION: "bullseye"
-        PYTHON_MAJOR_VERSION: "3"
-        PYTHON_MINOR_VERSION: "11"
+        OS_VERSION: "bookworm"
+        PYTHON_MAJOR_VERSION: 3
+        PYTHON_MINOR_VERSION: 11
         PYTHON_PATCH_VERSION: 2
     depends_on:
       ntss_database:
@@ -37,5 +37,5 @@ services:
       - 8889
     restart: unless-stopped
     volumes:
-      - ../app/public_html:/var/www/html/public_html/
+      - ../app/public_html:/app/ntss_www/
       - ../app/bin:/app/ntss_bin/
