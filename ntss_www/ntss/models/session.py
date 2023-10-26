@@ -5,7 +5,7 @@ import json
 from webob import cookies
 
 
-class session:
+class Session:
     """
     This class will do session management for users
     """
