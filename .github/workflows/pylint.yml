@@ -25,4 +25,4 @@ jobs:
         python -m pip install -r requirements.txt
     - name: Analysing the code with pylint
       run: |
-        pylint --disable C0303,C0413 $(git ls-files '*.py')
+        pylint --ignore-paths=tests --disable C0303,C0413 $(git ls-files '*.py')

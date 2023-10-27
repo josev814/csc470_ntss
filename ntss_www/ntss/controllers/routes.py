@@ -8,6 +8,7 @@ from webob import Request, Response
 from ntss.config.constants import ALL_HTTP_METHODS, WWW_PATH
 from ntss.views.routes import RouteViews
 
+
 class Routes():
     """
     This class handles the route requests and response to the server
@@ -25,23 +26,22 @@ class Routes():
         """
         self._http_methods = self._set_http_methods(methods)
 
-
         if path in self._routes:
             raise AssertionError(f'Route {path} already exists.')
-        
+
         def wrapper(handler):
             self._routes[path] = {'http_methods': self._http_methods, 'handler': handler}
             return handler
 
         return wrapper
-    
+
     def _set_http_methods(self, methods):
         """
         Sets the routes accepted for the path
         """
         if methods is None:
             methods = ALL_HTTP_METHODS
-        
+
         accepted_methods = [
             method.upper() for method in methods if method.upper() in ALL_HTTP_METHODS
         ]
@@ -66,12 +66,12 @@ class Routes():
         If the handler if found it's returned, otherwise the default response is returned
         """
         response = Response()
-        
+
         handler = None
         if request.path.startswith('/static'):
             self._load_file(request, response)
             return response
-        
+
         if request.method not in self._http_methods:
             self.default_response(response)
         else:
@@ -82,7 +82,7 @@ class Routes():
         else:
             self.default_response(response)
         return response
-    
+
     def _get_handler(self, request_path, request_method):
         """
         This loads the function from the main.py file that maps to the requested path
@@ -100,7 +100,7 @@ class Routes():
         """
         response.status_code = 404
         response.text = RouteViews().error_page()
-    
+
     def _load_file(self, request, response):
         """
         Loads a static file
@@ -113,7 +113,7 @@ class Routes():
                 response.content_type = 'text/css'
             elif request.path.endswith('js'):
                 response.content_type = 'text/js'
-            
+
             response.text = ''
             with open(f'{WWW_PATH}{request.path}', 'r', encoding='utf-8') as file_handler:
                 response.text = file_handler.read()

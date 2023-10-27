@@ -3,3 +3,4 @@
 app/bin/settings/config.txt
 **/**.pyc
 **/**envvars
+.vscode/*

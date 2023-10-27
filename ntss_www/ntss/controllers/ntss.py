@@ -4,6 +4,7 @@ The NTSS package is the main controller that users access when first accessing t
 from ntss.controllers.controller import BaseController
 from ntss.views.ntss import NtssViews
 
+
 class NtssController(BaseController):
     """
     The NTSS controller is the default controller that is accessed
