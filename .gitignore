@@ -4,3 +4,5 @@ app/bin/settings/config.txt
 **/**.pyc
 **/**envvars
 .vscode/*
+.DS_Store
+.DS_Store/*
