@@ -47,7 +47,7 @@ docker-compose -f Build/docker-compose.yml build --no-cache && docker compose -f
 
 ## Teardown the application
 ```bash
-docker compose -f "Build/docker-compose.yml" down --volumes
+docker compose -f "Build/docker-compose.yml" down --volumes --remove-orphans
 ```
 - (--volumes|-v)
   - Removes named and anonymous volumes pertaining to the service

@@ -1,6 +1,8 @@
 # the host needs to match the database service name
 MYSQL_HOST=ntss_database
 # these must match the values set in the .dbenvvars file
-MYSQL_DATABASE=
+MYSQL_DATABASE=ntss
 MYSQL_USER=
 MYSQL_PASSWORD=
+# Should match the password above
+MYSQL_PWD=
