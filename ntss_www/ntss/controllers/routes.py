@@ -5,11 +5,12 @@ from typing import Any
 import os
 from parse import parse
 from webob import Request, Response
+from webob.exc import HTTPSeeOther
 from ntss.config.constants import ALL_HTTP_METHODS, WWW_PATH
 from ntss.views.routes import RouteViews
 
 
-class Routes():
+class Routes:
     """
     This class handles the route requests and response to the server
     """
@@ -22,12 +23,12 @@ class Routes():
 
     def route(self, path, methods=None):
         """
-        Handles adding paths and handlers to a route
+        Handles adding paths and handlers to the routes
         """
-        self._http_methods = self._set_http_methods(methods)
-
         if path in self._routes:
             raise AssertionError(f'Route {path} already exists.')
+
+        self._http_methods = self._set_http_methods(methods)
 
         def wrapper(handler):
             self._routes[path] = {'http_methods': self._http_methods, 'handler': handler}
@@ -40,15 +41,20 @@ class Routes():
         Sets the routes accepted for the path
         """
         if methods is None:
-            methods = ALL_HTTP_METHODS
-
-        accepted_methods = [
-            method.upper() for method in methods if method.upper() in ALL_HTTP_METHODS
-        ]
-        accepted_methods = [
-            method.upper() for method in methods if method.upper() in ALL_HTTP_METHODS
-        ]
+            accepted_methods = 'GET'
+        else:
+            accepted_methods = [
+                method.upper() for method in methods if method.upper() in ALL_HTTP_METHODS
+            ]
         return accepted_methods
+    
+    def __set_redirect(self, request, response):
+        # Extract the port number from the host
+        port = request.referer.split(':')[-1].split('/')[0]
+        location = response.location
+        response = Response(status=303)
+        response.headers['Location'] = f'{request.host_url}:{port}{location}'
+        return response
 
     def __call__(self, environ, start_response) -> Any:
         """
@@ -58,12 +64,15 @@ class Routes():
 
         response = self.handle_request(request)
 
+        if isinstance(response, HTTPSeeOther):
+            response = self.__set_redirect(request, response)
+
         return response(environ, start_response)
 
     def handle_request(self, request) -> Response:
         """
         Takes the incoming request searches for the handler
-        If the handler if found it's returned, otherwise the default response is returned
+        If the handler is found it's returned, otherwise the default response is returned
         """
         response = Response()
 
@@ -72,15 +81,17 @@ class Routes():
             self._load_file(request, response)
             return response
 
-        if request.method not in self._http_methods:
-            self.default_response(response)
-        else:
-            handler, kwargs = self._get_handler(request.path, request.method)
+        handler, kwargs = self._get_handler(request.path, request.method)
 
         if handler:
-            handler(request, response, **kwargs)
+            resp = handler(request, response, **kwargs)
+            if isinstance(resp, HTTPSeeOther):
+                response = resp
+            else:
+                response = resp
         else:
             self.default_response(response)
+
         return response
 
     def _get_handler(self, request_path, request_method):

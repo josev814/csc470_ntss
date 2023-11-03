@@ -13,11 +13,21 @@ ALL_HTTP_METHODS = (
     'PUT',
     'DELETE',
     'OPTIONS',
-    'PATCH',
+    'PATCH'
 )
 
 
-US_STATES = [
+ROLES = (
+    'NTSS_ADMIN',
+    'EVENT_STAFF',
+    'EXHIBITOR',
+    'DOMAIN_EXPERT',
+    'SELECTED_SPEAKER',
+    'OBSERVER'
+)
+
+
+US_STATES = (
     'Alabama', 'Alaska', 'Arizona', 'Arkansas',
     'California', 'Colorado', 'Connecticut',
     'Washington DC', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
@@ -28,4 +38,4 @@ US_STATES = [
     'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
     'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
     'Wisconsin', 'Wyoming'
-]
+)
