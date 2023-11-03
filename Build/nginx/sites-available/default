@@ -23,7 +23,7 @@ server {
     root /app/ntss_www;
 
     location = /favico.ico  {
-        alias /app/ntss_www/static/images/favico.ico;
+        alias /app/ntss_www/static/images/favicon/favico.ico;
     }
     
     # attempts to load a static file, if not found proxy to app
