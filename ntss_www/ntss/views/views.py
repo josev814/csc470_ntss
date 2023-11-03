@@ -3,6 +3,7 @@ This is the base module for Views
 All Views should inherit from this class
 """
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+from ntss.config.constants import WWW_PATH
 
 
 class Views:
@@ -11,7 +12,7 @@ class Views:
     All Views should inherit from this class
     """
     template = None
-    _templates_path = '/var/www/html/public_html/ntss/templates'
+    _templates_path = f'{WWW_PATH}ntss/templates'
     _env = Environment()
     platformName = 'NTSS'
     templateVars = {
@@ -27,7 +28,7 @@ class Views:
         """
         if templates_path == '':
             templates_path = self._templates_path
-
+        print(f'{self._templates_path}')
         self._env = Environment(
             loader=FileSystemLoader(templates_path),
             autoescape=select_autoescape(['html', 'xml'])

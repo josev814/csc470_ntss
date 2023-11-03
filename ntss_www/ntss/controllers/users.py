@@ -4,6 +4,7 @@ Package to handle Users
 from ntss.controllers.controller import BaseController
 from ntss.views.users import UserViews
 
+
 class UsersController(BaseController):
     """
     This class handles anything pertaining to a user

@@ -3,6 +3,7 @@ Package for Route Views
 """
 from ntss.views.views import Views
 
+
 class RouteViews(Views):
     """
     Class for Route Views

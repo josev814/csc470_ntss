@@ -4,11 +4,13 @@ The base controller that other controllers should inherit from
 from http import cookiejar
 import os
 
+
 class BaseController:
     """
     The base controller
     """
     _cookies = {}
+
     def __init__(self):
         """
         Checks if the user is logged in and if not redirects them
