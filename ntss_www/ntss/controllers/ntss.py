@@ -51,8 +51,7 @@ class NtssController(BaseController):
     def logout(self):
         """
         Logout the user and redirect to the login page
-        """
-        """
+
         Make sure to destroy the session for the user
         """
         session_id = self._get_session_id()
@@ -78,9 +77,7 @@ class NtssController(BaseController):
         """
         self._load_cookies()
         print('cookies: ', self._cookies)
-        """
-        TODO fix this
-        """
+        # TODO fix this
         session_id = 'xxxx'
         return session_id
 

@@ -70,6 +70,9 @@ class BaseController:
         return False
 
     def redirect(self, path):
+        """
+        Method to redirect to another path
+        """
         if not path.startswith('/'):
             path = '/' + path
 

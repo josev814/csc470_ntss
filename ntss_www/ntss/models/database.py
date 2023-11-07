@@ -24,11 +24,15 @@ class MysqlDatabase:
         self.metadata = None
 
     def set_table_metadata(self, metadata=None):
+        """
+        Set the table metadata holder
+        """
         self.metadata = MetaData()
-        if metadata:
-            pass
 
     def set_table(self, table_name, auto_load: bool = True):
+        """
+        Setting the table that we're going to query
+        """
         self._table_name = table_name
         print(self._table_name)
         print(getenv('MYSQL_DATABASE'))
@@ -56,6 +60,24 @@ class MysqlDatabase:
         Method to select data from the database
         """
         records = []
+        combined_filter = __build_query_filter(filters)
+
+        self._query = self._table.select().where(combined_filter)
+        table_columns = self._table.columns.keys()
+        with self._engine.connect() as db_conn:
+            db_exec = db_conn.execute(self._query)
+            try:
+                for row in db_exec.fetchmany(1):
+                    row_dict = self.__create_dict_rows(row, table_columns, columns)
+                    records.append(row_dict)
+            except TypeError as error:
+                print(f'TypeError: {error}')
+        return records
+
+    def __build_query_filter(self, filters=None):
+        """
+        Sets the query filter
+        """
         query_filters = []
         for query_filter in filters:
             column_name = query_filter['column']
@@ -67,25 +89,19 @@ class MysqlDatabase:
                     filter_condition = self._table.c[column_name] != value
 
             query_filters.append(filter_condition)
-
         combined_filter = and_(*query_filters)
+        return combined_filter
 
-        self._query = self._table.select().where(combined_filter)
-        table_columns = self._table.columns.keys()
-        with self._engine.connect() as db_conn:
-            db_exec = db_conn.execute(self._query)
-            if db_exec:
-                try:
-                    for row in db_exec.fetchmany(1):
-                        row_dict = {}
-                        for i, value in enumerate(row):
-                            if columns and table_columns[i] not in columns:
-                                continue
-                            row_dict[table_columns[i]] = value
-                        records.append(row_dict)
-                except TypeError as error:
-                    print(f'TypeError: {error}')
-        return records
+    def __create_dict_rows(self, row, table_columns, return_columns):
+        """
+        Takes the row response and builds a dictionary with column names
+        """
+        row_dict = {}
+        for i, value in enumerate(row):
+            if columns and table_columns[i] not in return_columns:
+                continue
+            row_dict[table_columns[i]] = value
+        return row_dict
 
     def db_update(self):
         """
