@@ -167,7 +167,7 @@ class Session(RedisSession):
         Get the expiration time of the session
         """
         if not self.does_key_exist(session_id):
-            return datetime().now() - timedelta(seconds=1)
+            return datetime.now() - timedelta(seconds=1)
         return self.get_key_expiration(session_id, True)
 
     def _create_unique_id(self):
