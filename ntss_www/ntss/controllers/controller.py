@@ -64,7 +64,7 @@ class BaseController:
         """
         Checks if the user is currently logged in
         """
-        if self._cookies and COOKIE_INFO['name'] in self._cookies.keys() \ 
+        if self._cookies and COOKIE_INFO['name'] in self._cookies.keys() \
                 and self._cookies.get(COOKIE_INFO['name']):
             return True
         return False
