@@ -1,8 +1,8 @@
 """
 This package handles interactions with the database pertaining to users
 """
-from argon2 import PasswordHasher
 from uuid import uuid4
+import argon2
 from ntss.models.database import MysqlDatabase
 
 
@@ -16,18 +16,19 @@ class Users(MysqlDatabase):
         When initializing the Users model set the default table to users
         """
         super().__init__()
-        self.table = 'users'
+        self.set_table_metadata()
+        self.set_table('users')
 
     def get_permissions(self, user_id):
         """
         Gets permissions for a user
         """
-        self.table = 'user_permissions'
+        self.set_table('user_permissions')
         query_filter = [
                 {'column': 'user_id', 'operator': '=', 'value': user_id}
             ]
-        permissions = self.select(
-            '*',
+        permissions = self.db_select(
+            ['*'],
             query_filter
         )
         return permissions
@@ -36,14 +37,13 @@ class Users(MysqlDatabase):
         """
         Retrieves a user from the database based on their user_email
         """
-        user = []
+        user = {}
         records = self._get_user_by(email=user_email)
         for record in records:
-            if not user_password or \
-                    (user_password and self._check_password(user_password, record['password'])):
+            if user_password and self._check_password(user_password, record['password']):
                 user = record
         return user
-    
+
     def get_user_by_id(self, user_id: int) -> dict:
         """
         Retrieves a user from the database based on their user_id
@@ -67,9 +67,9 @@ class Users(MysqlDatabase):
             query_filter.append(
                 {'column': 'email', 'operator': '=', 'value': email}
             )
-        records = self.select(
-            '*',
-            query_filter
+        print(f'qf: {query_filter}')
+        records = self.db_select(
+            filters=query_filter
         )
         return records
 
@@ -77,7 +77,7 @@ class Users(MysqlDatabase):
         """
         Adds a user and returns their user_id from the database
         """
-        self.create(
+        self.db_create(
             {
                 'user_email': user_email,
                 'password': self._set_encrypted_password(user_password)
@@ -85,21 +85,27 @@ class Users(MysqlDatabase):
         )
 
     @staticmethod
-    def _set_encrypted_password(self, password: str):
+    def _set_encrypted_password(password: str):
         """
         Encrypts the password for a user
         """
-        return PasswordHasher().hash(password)  # GOOD
+        return argon2.PasswordHasher().hash(password)  # GOOD
 
     @staticmethod
-    def _check_password(self, password: str, encrypted_password) -> bool:
+    def _check_password(password: str, db_password: str) -> bool:
         """
         Checks if the password submitted is the same as the password that was stored
         """
-        return PasswordHasher().verify(encrypted_password, password)  # GOOD
+        return_val = False
+        try:
+            argon2.PasswordHasher().verify(f'{db_password}', password)  # GOOD
+            return_val = True
+        except argon2.exceptions.VerifyMismatchError as msg:
+            print(msg)
+        return return_val
 
     @staticmethod
-    def generate_auth_key(self) -> str:
+    def generate_auth_key() -> str:
         """
         Generates a hex unique identifier
         :return: str

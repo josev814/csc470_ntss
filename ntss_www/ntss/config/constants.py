@@ -6,6 +6,7 @@ DO NOT put sensitive information in here like usernames, passwords, hashes or se
 
 WWW_PATH = '/app/ntss_www/'
 
+
 ALL_HTTP_METHODS = (
     'GET',
     'HEAD',
@@ -25,6 +26,11 @@ ROLES = (
     'SELECTED_SPEAKER',
     'OBSERVER'
 )
+
+COOKIE_INFO = {
+    'name': 'ntss_session',
+    'max_age': 3600,  # 1 hour
+}
 
 
 US_STATES = (

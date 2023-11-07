@@ -19,7 +19,7 @@ class NTSSSessions(unittest.TestCase):
         self._session_model = Session()
         self.session_id = ''
         self.session_data = {}
-    
+
     def test_get_nonexistant_session(self):
         session_id = self._session_model._create_unique_id()
         session_info = self._session_model.get_session(session_id)

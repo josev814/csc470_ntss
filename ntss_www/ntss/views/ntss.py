@@ -8,7 +8,7 @@ class NtssViews(Views):
     """
     Class for NTSS Views
     """
-    def login_view(self, email=None, password=None):
+    def login_view(self, email=None, password=None, errors=None):
         """
         Load the login template
         """
@@ -18,6 +18,8 @@ class NtssViews(Views):
             self.templateVars['email'] = email
         if password:
             self.templateVars['password'] = password
+        if errors:
+            self.templateVars['errors'] = errors
         return self.template.render(self.templateVars)
 
     def dashboard(self):

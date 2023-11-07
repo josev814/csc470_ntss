@@ -13,6 +13,11 @@ application = Routes()
 
 
 def return_output(response, data, http_code=200):
+    """
+    Returns the output response if either the text or response object
+
+    This is necessary when using headers for redirects
+    """
     if isinstance(data, str):
         response.status_code = http_code
         response.text = data
@@ -25,7 +30,7 @@ def return_output(response, data, http_code=200):
 def home(request, response):
     """ The homepage of the site """
     output = NtssController(request).login()
-    #print(type(output))
+    # print(type(output))
     response = return_output(response, output, 200)
     return response
 
@@ -39,11 +44,11 @@ def dashboard(request, response):
     return response
 
 
-@application.route('/user/{id}', methods=['GET'])
-def profile(request, response, id):
+@application.route('/user/{user_id}', methods=['GET'])
+def profile(request, response, user_id):
     """ The page to view a user's profile"""
     print(request.params)
-    response.text = 'This is the profile management page'
+    response.text = f'This is the profile management page for {user_id}'
     return response
 
 
@@ -87,6 +92,7 @@ def myevents(request, response):
     output = EventsController(request).get_user_events()
     response.text = output
     return response
+
 
 @application.route('/logout', methods=['GET'])
 def logout(request, response):

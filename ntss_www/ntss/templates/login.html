@@ -1,6 +1,9 @@
 {% include "blocks/header.html" %}
 <body class="text-center">
   <main class="form-signin">
+    {% if errors: %}
+    {% include "blocks/error_modal.html" %}
+    {% endif %}
     <form method="POST">
       <h1 class="h3 mb-3 fw-normal">{{ platformName }}</h1>
       <h2 class="h3 mb-3 fw-normal">Please sign in</h2>

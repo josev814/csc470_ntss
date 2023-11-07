@@ -4,6 +4,7 @@ The NTSS package is the main controller that users access when first accessing t
 from ntss.controllers.controller import BaseController
 from ntss.views.ntss import NtssViews
 from ntss.controllers.users import UsersController
+from ntss.models.session import Session
 
 
 class NtssController(BaseController):
@@ -23,27 +24,28 @@ class NtssController(BaseController):
             if not errors:
                 print('valid login')
                 return self._redirect('/dashboard')
-        return NtssViews().login_view(email, password)
+        return NtssViews().login_view(email, password, errors)
 
     def _validate_login(self):
         email = None
         password = None
-        error_msg = 'Invalid Credentials'
+        error_msg = 'Invalid Credentials Provided'
         for request_name, request_value in self._request.params.items():
             match request_name:
                 case 'email':
                     email = request_value
                 case 'password':
                     password = request_value
-        if UsersController(self._request).validate_user(email, password) and \
-                UsersController(self._request).has_access('dashboard'):
+        user_ctrl = UsersController(self._request)
+        if user_ctrl.validate_user(email, password) and user_ctrl.has_access('dashboard'):
+            self._create_session(user_ctrl)
             error_msg = None
         if not email:
             error_msg = 'Email is required'
         elif not password:
             error_msg = 'Password is required'
         return email, password, error_msg
-    
+
     def logout(self):
         """
         Logout the user and redirect to the login page
@@ -51,6 +53,8 @@ class NtssController(BaseController):
         """
         Make sure to destroy the session for the user
         """
+        session_id = self._get_session_id()
+        Session().delete_session(session_id)
         return self._redirect('/')
 
     def dashboard(self):
@@ -58,3 +62,18 @@ class NtssController(BaseController):
         Load the Dashboard for a User
         """
         return NtssViews().dashboard()
+
+    def _create_session(self, user_controller):
+        """
+        Creates a session for the current user
+        """
+        user_controller.create_session()
+
+    def _get_session_id(self):
+        cookies = self._load_cookies()
+        print(cookies)
+        session_id = 'xxxx'
+        return session_id
+
+    def _get_session_data(self, session_id):
+        return Session().get_session(session_id)

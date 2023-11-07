@@ -47,7 +47,7 @@ class Routes:
                 method.upper() for method in methods if method.upper() in ALL_HTTP_METHODS
             ]
         return accepted_methods
-    
+
     def __set_redirect(self, request, response):
         # Extract the port number from the host
         port = request.referer.split(':')[-1].split('/')[0]

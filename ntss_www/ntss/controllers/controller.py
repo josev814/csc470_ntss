@@ -1,9 +1,10 @@
 """
 The base controller that other controllers should inherit from
 """
-from webob import Request, Response, exc
+from webob import Response, exc
 from http import cookiejar
-import os
+import json
+from ntss.config.constants import COOKIE_INFO
 
 
 class BaseController:
@@ -24,7 +25,6 @@ class BaseController:
             if not self.is_logged_in() and not self.get_permissions():
                 Response.location = '/'
                 # redirect to home to login
-                pass
         elif not self.has_access(request.path):
             # load a view for access denied
             pass
@@ -35,6 +35,31 @@ class BaseController:
         """
         cookiejar.CookieJar().clear_expired_cookies()
         self._cookies = self._request.cookies
+
+    def _add_cookie(
+            self, response: Response,
+            cookie_value: str | dict | list,
+            cookie_name: str | None = None
+            ):
+        """
+        Set a cookie to send to the browser
+        """
+        cookie_data = cookie_value
+        if type(cookie_value) in [dict, list]:
+            cookie_data = json.dumps(cookie_value)
+        if cookie_name is None:
+            cookie_name = COOKIE_INFO['name']
+        cookie_settings = {
+            'name': cookie_name,
+            'value': cookie_data,
+            'path': '/',
+            'secure': True,
+            'httponly': True,
+            'max_age': COOKIE_INFO['max_age'],
+            'samesite': 'strict'
+        }
+        response.set_cookie(**cookie_settings)
+        return response
 
     def is_logged_in(self):
         """
@@ -48,7 +73,7 @@ class BaseController:
     def _redirect(self, path):
         if not path.startswith('/'):
             path = '/' + path
-        
+
         redirect = exc.HTTPSeeOther(location=path)
         return redirect
 
