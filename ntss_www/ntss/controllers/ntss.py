@@ -24,7 +24,7 @@ class NtssController(BaseController):
         if self._request.method == 'POST':
             email, password, errors = self._validate_login()
             if not errors:
-                return self._redirect('/dashboard')
+                return self.redirect('/dashboard')
         return NtssViews().login_view(email, password, errors)
 
     def _validate_login(self):
@@ -58,7 +58,7 @@ class NtssController(BaseController):
         session_id = self._get_session_id()
         Session().delete_session(session_id)
         self._clear_login_cookie()
-        return self._redirect('/')
+        return self.redirect('/')
 
     def dashboard(self):
         """
@@ -73,10 +73,19 @@ class NtssController(BaseController):
         self._session_id = user_ctrl.create_session()
 
     def _get_session_id(self):
-        cookies = self._load_cookies()
+        """
+        Gets the session id for the current session
+        """
+        self._load_cookies()
         print('cookies: ', cookies)
+        """
+        TODO fix this
+        """
         session_id = 'xxxx'
         return session_id
 
     def _get_session_data(self, session_id):
+        """
+        Returns the session data
+        """
         return Session().get_session(session_id)

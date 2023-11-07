@@ -1,9 +1,9 @@
 """
 The base controller that other controllers should inherit from
 """
-from webob import exc
 from http import cookiejar
 import json
+from webob import exc
 from ntss.config.constants import COOKIE_INFO
 
 
@@ -64,11 +64,12 @@ class BaseController:
         """
         Checks if the user is currently logged in
         """
-        if self._cookies and COOKIE_INFO['name'] in self._cookies.keys() and self._cookies.get(COOKIE_INFO['name']):
+        if self._cookies and COOKIE_INFO['name'] in self._cookies.keys() and \ 
+                self._cookies.get(COOKIE_INFO['name']):
             return True
         return False
 
-    def _redirect(self, path):
+    def redirect(self, path):
         if not path.startswith('/'):
             path = '/' + path
 
@@ -90,7 +91,7 @@ class BaseController:
         Checks if the user has access for the page requested
         This should be based on the permissions and route
         """
-        ROLEPATHS = ['/', '/logout', '/dashbaord']
-        if path in ROLEPATHS:
+        role_paths = ['/', '/logout', '/dashbaord']
+        if path in role_paths:
             return True
         return False

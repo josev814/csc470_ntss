@@ -26,7 +26,7 @@ def login_access_required(call_func):
             ntss_ctrl = NtssController(request, response)
             if not ntss_ctrl.is_logged_in() and not ntss_ctrl.get_permissions():
                 # redirect to home to login
-                return ntss_ctrl._redirect('/')
+                return ntss_ctrl.redirect('/')
         return call_func(request, response, **kwargs)
     return decorated_view
 

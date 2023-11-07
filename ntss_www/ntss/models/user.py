@@ -67,11 +67,16 @@ class Users(MysqlDatabase):
             query_filter.append(
                 {'column': 'email', 'operator': '=', 'value': email}
             )
-        print(f'qf: {query_filter}')
         records = self.db_select(
             filters=query_filter
         )
         return records
+    
+    def get_user_roles(self):
+        """
+        Gets the assigned roles for the current user
+        """
+        
 
     def add_user(self, user_email: str, user_password: str) -> int:
         """

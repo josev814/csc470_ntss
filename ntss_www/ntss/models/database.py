@@ -51,7 +51,7 @@ class MysqlDatabase:
             db_exec = db_conn.execute(insert_query, value_list)
         return db_exec
 
-    def db_select(self, columns: list = [], filters=None):
+    def db_select(self, columns: list = None, filters=None):
         """
         Method to select data from the database
         """
@@ -78,10 +78,10 @@ class MysqlDatabase:
                 try:
                     for row in db_exec.fetchmany(1):
                         row_dict = {}
-                        for i in range(len(row)):
+                        for i, value in enumerate(row):
                             if columns and table_columns[i] not in columns:
                                 continue
-                            row_dict[table_columns[i]] = row[i]
+                            row_dict[table_columns[i]] = value
                         records.append(row_dict)
                 except TypeError as error:
                     print(f'TypeError: {error}')

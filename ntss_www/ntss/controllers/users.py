@@ -51,10 +51,11 @@ class UsersController(BaseController):
         Returns additional permissions for the user
         """
 
-    def has_access(self, location: str) -> bool:
+    def has_access(self, path: str) -> bool:
         """
         Returns if the current user has access
         """
+        print(path)
         return True
 
     def create_session(self):
