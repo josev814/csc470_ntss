@@ -1,7 +1,7 @@
 """
 The base controller that other controllers should inherit from
 """
-from webob import Response, exc
+from webob import exc
 from http import cookiejar
 import json
 from ntss.config.constants import COOKIE_INFO
@@ -14,20 +14,14 @@ class BaseController:
     _cookies = {}
     _request = None
 
-    def __init__(self, request):
+    def __init__(self, request, response):
         """
         Checks if the user is logged in and if not redirects them
         Also verifies that the user has access
         """
         self._request = request
+        self._response = response
         self._load_cookies()
-        if request.path == '/':
-            if not self.is_logged_in() and not self.get_permissions():
-                Response.location = '/'
-                # redirect to home to login
-        elif not self.has_access(request.path):
-            # load a view for access denied
-            pass
 
     def _load_cookies(self):
         """
@@ -37,9 +31,9 @@ class BaseController:
         self._cookies = self._request.cookies
 
     def _add_cookie(
-            self, response: Response,
+            self,
             cookie_value: str | dict | list,
-            cookie_name: str | None = None
+            cookie_name: str = None
             ):
         """
         Set a cookie to send to the browser
@@ -58,15 +52,19 @@ class BaseController:
             'max_age': COOKIE_INFO['max_age'],
             'samesite': 'strict'
         }
-        response.set_cookie(**cookie_settings)
-        return response
+        self._response.set_cookie(**cookie_settings)
+        return self._response
+
+    def _clear_login_cookie(self):
+        if self._cookies and COOKIE_INFO['name'] in self._cookies.keys() \
+                and self._cookies.get(COOKIE_INFO['name']):
+            self._response.delete_cookie(COOKIE_INFO['name'])
 
     def is_logged_in(self):
         """
         Checks if the user is currently logged in
         """
-        print(self._cookies.keys())
-        if self._cookies and 'logged_in' in self._cookies.keys() and self._cookies.get('logged_in'):
+        if self._cookies and COOKIE_INFO['name'] in self._cookies.keys() and self._cookies.get(COOKIE_INFO['name']):
             return True
         return False
 
@@ -74,7 +72,11 @@ class BaseController:
         if not path.startswith('/'):
             path = '/' + path
 
-        redirect = exc.HTTPSeeOther(location=path)
+        redirect = exc.HTTPSeeOther(
+            location=path,
+            detail=f'Redirecting To {path}',
+            headers=self._response.headers
+            )
         return redirect
 
     def get_permissions(self):
@@ -83,9 +85,12 @@ class BaseController:
         """
         return False
 
-    def has_access(self, path):
+    def has_access(self, path: str) -> bool:
         """
         Checks if the user has access for the page requested
         This should be based on the permissions and route
         """
-        return True
+        ROLEPATHS = ['/', '/logout', '/dashbaord']
+        if path in ROLEPATHS:
+            return True
+        return False

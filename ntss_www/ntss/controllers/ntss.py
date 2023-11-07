@@ -12,6 +12,8 @@ class NtssController(BaseController):
     The NTSS controller is the default controller that is accessed
     """
 
+    _session_id = None
+
     def login(self):
         """
         Display the login page
@@ -22,7 +24,6 @@ class NtssController(BaseController):
         if self._request.method == 'POST':
             email, password, errors = self._validate_login()
             if not errors:
-                print('valid login')
                 return self._redirect('/dashboard')
         return NtssViews().login_view(email, password, errors)
 
@@ -36,9 +37,10 @@ class NtssController(BaseController):
                     email = request_value
                 case 'password':
                     password = request_value
-        user_ctrl = UsersController(self._request)
-        if user_ctrl.validate_user(email, password) and user_ctrl.has_access('dashboard'):
+        user_ctrl = UsersController(self._request, self._response)
+        if user_ctrl.validate_user(email, password) and user_ctrl.has_access('/dashboard'):
             self._create_session(user_ctrl)
+            self._add_cookie(self._session_id)
             error_msg = None
         if not email:
             error_msg = 'Email is required'
@@ -55,6 +57,7 @@ class NtssController(BaseController):
         """
         session_id = self._get_session_id()
         Session().delete_session(session_id)
+        self._clear_login_cookie()
         return self._redirect('/')
 
     def dashboard(self):
@@ -63,15 +66,15 @@ class NtssController(BaseController):
         """
         return NtssViews().dashboard()
 
-    def _create_session(self, user_controller):
+    def _create_session(self, user_ctrl):
         """
         Creates a session for the current user
         """
-        user_controller.create_session()
+        self._session_id = user_ctrl.create_session()
 
     def _get_session_id(self):
         cookies = self._load_cookies()
-        print(cookies)
+        print('cookies: ', cookies)
         session_id = 'xxxx'
         return session_id
 

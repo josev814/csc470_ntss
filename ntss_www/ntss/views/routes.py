@@ -15,3 +15,11 @@ class RouteViews(Views):
         self.set_template('404.html')
         self.templateVars['pageName'] = 'Page Not Found'
         return self.template.render(self.templateVars)
+
+    def access_denied(self):
+        """
+        Load the access denied page template
+        """
+        self.set_template('403.html')
+        self.templateVars['pageName'] = 'Unauthorized Access'
+        return self.template.render(self.templateVars)

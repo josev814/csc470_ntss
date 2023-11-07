@@ -151,7 +151,7 @@ tmp_upload_dir = None
 errorlog = '-'
 loglevel = 'debug'
 accesslog = '-'
-access_log_format = 'guvicorn: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" "%({content-type}o)s" "%({location}o)s"'
+access_log_format = 'guvicorn: %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" "%({content-type}o)s" "%({location}o)s" "%({set-cookie}o)s"'
 
 #
 # Process naming

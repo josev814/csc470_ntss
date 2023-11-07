@@ -13,7 +13,7 @@ class RedisSession:
     """
     Redis Session Manager
     """
-    
+
     def __init__(self, expiration: int = 7200):
         """
         Initializes the Redis cache

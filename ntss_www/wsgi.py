@@ -3,6 +3,7 @@
 The NTSS app
 Import all controllers that will have route defined for them
 """
+from functools import wraps
 from ntss.controllers.routes import Routes
 from ntss.controllers.ntss import NtssController
 from ntss.controllers.events import EventsController
@@ -10,6 +11,24 @@ from ntss.controllers.events import EventsController
 
 
 application = Routes()
+
+
+def login_access_required(call_func):
+    """
+    Checks if the user is logged in for a route
+
+    if the user is logged in and has access we call the route
+    if the user is not logged in, we redirect to home
+    """
+    @wraps(call_func)
+    def decorated_view(request, response, **kwargs):
+        if request.path != '/':
+            ntss_ctrl = NtssController(request, response)
+            if not ntss_ctrl.is_logged_in() and not ntss_ctrl.get_permissions():
+                # redirect to home to login
+                return ntss_ctrl._redirect('/')
+        return call_func(request, response, **kwargs)
+    return decorated_view
 
 
 def return_output(response, data, http_code=200):
@@ -29,17 +48,19 @@ def return_output(response, data, http_code=200):
 @application.route(path='/', methods=['GET', 'POST'])
 def home(request, response):
     """ The homepage of the site """
-    output = NtssController(request).login()
+    print('aa: ', request)
+    output = NtssController(request, response).login()
     # print(type(output))
     response = return_output(response, output, 200)
     return response
 
 
 @application.route('/dashboard', methods=['GET'])
+@login_access_required
 def dashboard(request, response):
     """ The dashboard that is displayed when users first login"""
     print(request.path)
-    output = NtssController(request).dashboard()
+    output = NtssController(request, response).dashboard()
     response.text = output
     return response
 
@@ -71,7 +92,7 @@ def event(request, response, event_id):
 def myinvoice(request, response, event_id, invoice_id):
     """ A page to print an invoice """
     print(request.path)
-    output = EventsController(request).get_exhibitor_booth_invoice(event_id, invoice_id)
+    output = EventsController(request, response).get_exhibitor_booth_invoice(event_id, invoice_id)
     response.text = output
     return response
 
@@ -80,7 +101,7 @@ def myinvoice(request, response, event_id, invoice_id):
 def myevent(request, response, event_id):
     """ A page to list a particular event """
     print(request.path)
-    output = EventsController(request).get_user_event(event_id)
+    output = EventsController(request, response).get_user_event(event_id)
     response.text = output
     return response
 
@@ -89,7 +110,7 @@ def myevent(request, response, event_id):
 def myevents(request, response):
     """ A page to display a user's events"""
     print(request.path)
-    output = EventsController(request).get_user_events()
+    output = EventsController(request, response).get_user_events()
     response.text = output
     return response
 
@@ -98,6 +119,6 @@ def myevents(request, response):
 def logout(request, response):
     """ Logs out a user """
     print(request.path)
-    output = NtssController(request).logout()
+    output = NtssController(request, response).logout()
     response = return_output(response, output, 200)
     return response

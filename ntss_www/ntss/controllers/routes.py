@@ -49,11 +49,18 @@ class Routes:
         return accepted_methods
 
     def __set_redirect(self, request, response):
+        """
+        Redirects a request
+        Ensures that any cookies set are included when returning to the browser
+        """
         # Extract the port number from the host
+        base_headers = response.headers
         port = request.referer.split(':')[-1].split('/')[0]
         location = response.location
         response = Response(status=303)
         response.headers['Location'] = f'{request.host_url}:{port}{location}'
+        if 'Set-Cookie' in base_headers:
+            response.headers['Set-Cookie'] = base_headers['Set-Cookie']
         return response
 
     def __call__(self, environ, start_response) -> Any:
@@ -61,10 +68,12 @@ class Routes:
         This handles the incoming request from wsgi.
         """
         request = Request(environ)
-
         response = self.handle_request(request)
 
-        if isinstance(response, HTTPSeeOther):
+        # deny access if the user is trying direct access to a route
+        if not request.referer and request.path != '/':
+            self.denied_response(response)
+        elif isinstance(response, HTTPSeeOther):  # response object is a redirect
             response = self.__set_redirect(request, response)
 
         return response(environ, start_response)
@@ -107,10 +116,17 @@ class Routes:
 
     def default_response(self, response):
         """
-        The default reponse is to load a 404 page
+        The default response is to load a 404 page
         """
         response.status_code = 404
         response.text = RouteViews().error_page()
+
+    def denied_response(self, response):
+        """
+        Deny access if not logged in response is to load a 403 page
+        """
+        response.status_code = 403
+        response.text = RouteViews().access_denied()
 
     def _load_file(self, request, response):
         """

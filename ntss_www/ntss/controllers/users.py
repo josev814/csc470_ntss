@@ -67,5 +67,4 @@ class UsersController(BaseController):
             if remove_item in user_session_data:
                 del user_session_data[remove_item]
         session_id = Session().add_session(user_session_data)
-        print(session_id)
-        Session().delete_session(session_id)
+        return session_id

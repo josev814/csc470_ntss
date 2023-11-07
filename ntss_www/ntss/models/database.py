@@ -10,14 +10,13 @@ class MysqlDatabase:
     The MySQL Datbase class
     """
 
-    def __init__(self):
+    def __init__(self, debug=False):
         db_userpass = f"{getenv('MYSQL_USER')}:{getenv('MYSQL_PWD')}"
         db_port = getenv('MYSQL_PORT') if getenv('MYSQL_PORT') else 3306
         db_host = getenv('MYSQL_HOST')
-        print('Connecting to', f'mysql://{db_userpass}@{db_host}:{db_port}')
         self._engine = create_engine(
             f"mysql://{db_userpass}@{db_host}:{db_port}",
-            echo=True
+            echo=debug
         )
         self._query = ''
         self._table = None
