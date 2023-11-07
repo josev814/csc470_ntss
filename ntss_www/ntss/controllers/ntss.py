@@ -77,7 +77,7 @@ class NtssController(BaseController):
         Gets the session id for the current session
         """
         self._load_cookies()
-        print('cookies: ', cookies)
+        print('cookies: ', self._cookies)
         """
         TODO fix this
         """
