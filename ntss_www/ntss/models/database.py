@@ -23,7 +23,7 @@ class MysqlDatabase:
         self._table_name = None
         self.metadata = None
 
-    def set_table_metadata(self, metadata=None):
+    def set_table_metadata(self):
         """
         Set the table metadata holder
         """
@@ -60,7 +60,7 @@ class MysqlDatabase:
         Method to select data from the database
         """
         records = []
-        combined_filter = __build_query_filter(filters)
+        combined_filter = self.__build_query_filter(filters)
 
         self._query = self._table.select().where(combined_filter)
         table_columns = self._table.columns.keys()
@@ -98,7 +98,7 @@ class MysqlDatabase:
         """
         row_dict = {}
         for i, value in enumerate(row):
-            if columns and table_columns[i] not in return_columns:
+            if return_columns and table_columns[i] not in return_columns:
                 continue
             row_dict[table_columns[i]] = value
         return row_dict

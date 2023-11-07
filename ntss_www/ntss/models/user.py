@@ -72,10 +72,13 @@ class Users(MysqlDatabase):
         )
         return records
     
-    def get_user_roles(self):
+    def get_user_roles(self, user_id):
         """
         Gets the assigned roles for the current user
         """
+        # TODO fix this
+        print(f'Roles for {user_id}')
+        return []
         
 
     def add_user(self, user_email: str, user_password: str) -> int:
