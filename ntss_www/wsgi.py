@@ -48,7 +48,6 @@ def return_output(response, data, http_code=200):
 @application.route(path='/', methods=['GET', 'POST'])
 def home(request, response):
     """ The homepage of the site """
-    print('aa: ', request)
     output = NtssController(request, response).login()
     # print(type(output))
     response = return_output(response, output, 200)

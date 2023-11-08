@@ -54,18 +54,27 @@ class BaseController:
         }
         self._response.set_cookie(**cookie_settings)
         return self._response
+    
+    def _get_cookie(self, cookie_name: str):
+        """
+        Gets a loaded cookie's value
+        """
+        cookiejar.CookieJar().clear_expired_cookies()
+        cookie_value = ''
+        if self._cookies and cookie_name in self._cookies.keys() \
+                and self._cookies.get(cookie_name):
+            cookie_value = self._cookies.get(cookie_name)
+        return cookie_value
 
     def _clear_login_cookie(self):
-        if self._cookies and COOKIE_INFO['name'] in self._cookies.keys() \
-                and self._cookies.get(COOKIE_INFO['name']):
+        if self._cookies and COOKIE_INFO['name'] in self._cookies.keys():
             self._response.delete_cookie(COOKIE_INFO['name'])
 
     def is_logged_in(self):
         """
         Checks if the user is currently logged in
         """
-        if self._cookies and COOKIE_INFO['name'] in self._cookies.keys() \
-                and self._cookies.get(COOKIE_INFO['name']):
+        if self._cookies and COOKIE_INFO['name'] in self._cookies.keys():
             return True
         return False
 

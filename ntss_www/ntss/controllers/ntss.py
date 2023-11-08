@@ -5,6 +5,7 @@ from ntss.controllers.controller import BaseController
 from ntss.views.ntss import NtssViews
 from ntss.controllers.users import UsersController
 from ntss.models.session import Session
+from ntss.config.constants import COOKIE_INFO
 
 
 class NtssController(BaseController):
@@ -76,9 +77,7 @@ class NtssController(BaseController):
         Gets the session id for the current session
         """
         self._load_cookies()
-        print('cookies: ', self._cookies)
-        # TODO fix this
-        session_id = 'xxxx'
+        session_id = self._get_cookie(COOKIE_INFO['name'])
         return session_id
 
     def _get_session_data(self, session_id):
