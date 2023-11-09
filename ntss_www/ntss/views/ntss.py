@@ -13,31 +13,31 @@ class NtssViews(Views):
         Load the login template
         """
         self.set_template('login.html')
-        self.templateVars['pageName'] = 'Login'
+        self.template_vars['pageName'] = 'Login'
         if email:
-            self.templateVars['email'] = email
+            self.template_vars['email'] = email
         if password:
-            self.templateVars['password'] = password
+            self.template_vars['password'] = password
         if errors:
-            self.templateVars['errors'] = errors
-        return self.template.render(self.templateVars)
+            self.template_vars['errors'] = errors
+        return self.template.render(self.template_vars)
     
     def forgot_password(self, email=None, message=None):
         """
         Load the template for forgot password
         """
         self.set_template('forgot_password.html')
-        self.templateVars['pageName'] = 'Forgot Password'
+        self.template_vars['pageName'] = 'Forgot Password'
         if email:
-            self.templateVars['email'] = email
+            self.template_vars['email'] = email
         if message:
-            self.templateVars['message'] = message
-        return self.template.render(self.templateVars)
+            self.template_vars['message'] = message
+        return self.template.render(self.template_vars)
 
     def dashboard(self):
         """
         Load the dashboard template
         """
         self.set_template('dashboard.html')
-        self.templateVars['pageName'] = 'Dashboard'
-        return self.template.render(self.templateVars)
+        self.template_vars['pageName'] = 'Dashboard'
+        return self.template.render(self.template_vars)

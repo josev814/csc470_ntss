@@ -38,7 +38,7 @@ class Users(MysqlDatabase):
         Retrieves a user from the database based on their user_email
         """
         user = {}
-        records = self._get_user_by(email=user_email)
+        records = self.get_user_by(email=user_email)
         for record in records:
             if user_password and self._check_password(user_password, record['password']):
                 user = record
@@ -49,12 +49,12 @@ class Users(MysqlDatabase):
         Retrieves a user from the database based on their user_id
         """
         user = []
-        records = self._get_user_by(user_id=user_id)
+        records = self.get_user_by(user_id=user_id)
         for record in records:
             user = record
         return user
 
-    def _get_user_by(self, user_id=None, email=None):
+    def get_user_by(self, user_id=None, email=None):
         """
         Performs a select query based on the params passed
         """

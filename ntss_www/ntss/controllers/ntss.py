@@ -1,16 +1,17 @@
 """
 The NTSS package is the main controller that users access when first accessing the site.
 """
+# Import smtplib for the actual sending function
+import smtplib
+# Import the email modules we'll need
+from email.message import EmailMessage
+# Our own controllers
 from ntss.controllers.controller import BaseController
 from ntss.views.ntss import NtssViews
 from ntss.controllers.users import UsersController
 from ntss.models.session import Session
 from ntss.config.constants import COOKIE_INFO, SITE_INFO
-# Import smtplib for the actual sending function
-import smtplib
 
-# Import the email modules we'll need
-from email.message import EmailMessage
 
 class NtssController(BaseController):
     """
@@ -88,11 +89,12 @@ class NtssController(BaseController):
         """
         # Create a text/plain message
         email_content = 'Use this link to reset your password\n'
-        email_content = f'{SITE_INFO["protocol"]}{SITE_INFO["hostname"]}:{SITE_INFO["port"]}/reset_password?verification_code={auth_token}'
+        email_content += f'{SITE_INFO["protocol"]}{SITE_INFO["hostname"]}:{SITE_INFO["port"]}"'
+        email_content += f'/reset_password?verification_code={auth_token}'
         msg = EmailMessage()
         msg.set_content(email_content)
 
-        msg['Subject'] = f'NTSS Reset Password'
+        msg['Subject'] = 'NTSS Reset Password'
         msg['From'] = 'noreply@ntss.org'
         msg['To'] = email
 

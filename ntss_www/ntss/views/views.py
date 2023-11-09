@@ -17,7 +17,7 @@ class Views:
     __platformName = 'NTSS'
 
     def __init__(self):
-        self.templateVars = {
+        self.template_vars = {
             'platformName': self.__platformName,
         }
 

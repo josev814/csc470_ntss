@@ -42,7 +42,7 @@ class UsersController(BaseController):
         Checks if a user is valid
         """
         if email:
-            self._user_info = UserModel()._get_user_by(email=email)
+            self._user_info = UserModel().get_user_by(email=email)
         if len(self._user_info) > 0:
             return True
         return False
