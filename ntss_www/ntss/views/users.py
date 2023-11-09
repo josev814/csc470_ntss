@@ -14,5 +14,5 @@ class UserViews(Views):
         Load the the profile for a user
         """
         self.set_template('user_profile.html')
-        self.templateVars['user'] = user_info
-        return self.template.render(self.templateVars)
+        self.template_vars['user'] = user_info
+        return self.template.render(self.template_vars)

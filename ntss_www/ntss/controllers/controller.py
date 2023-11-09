@@ -2,7 +2,9 @@
 The base controller that other controllers should inherit from
 """
 from http import cookiejar
-import os
+import json
+from webob import exc
+from ntss.config.constants import COOKIE_INFO
 
 
 class BaseController:
@@ -10,38 +12,85 @@ class BaseController:
     The base controller
     """
     _cookies = {}
+    _request = None
 
-    def __init__(self):
+    def __init__(self, request, response):
         """
         Checks if the user is logged in and if not redirects them
         Also verifies that the user has access
         """
+        self._request = request
+        self._response = response
         self._load_cookies()
-        if not self.is_logged_in() and not self.get_permissions():
-            # redirect to home to login
-            pass
-        if not self.has_access():
-            # load a view for access denied
-            pass
 
     def _load_cookies(self):
         """
         Load cookies from the browser
         """
         cookiejar.CookieJar().clear_expired_cookies()
-        if 'HTTP_COOKIE' in os.environ:
-            cookies = os.environ['HTTP_COOKIE'].split('; ')
-            for cookie in cookies:
-                cookie = cookie.split('=')
-                self._cookies[cookie[0]] = cookie[1]
+        self._cookies = self._request.cookies
+
+    def _add_cookie(
+            self,
+            cookie_value: str | dict | list,
+            cookie_name: str = None
+            ):
+        """
+        Set a cookie to send to the browser
+        """
+        cookie_data = cookie_value
+        if type(cookie_value) in [dict, list]:
+            cookie_data = json.dumps(cookie_value)
+        if cookie_name is None:
+            cookie_name = COOKIE_INFO['name']
+        cookie_settings = {
+            'name': cookie_name,
+            'value': cookie_data,
+            'path': '/',
+            'secure': True,
+            'httponly': True,
+            'max_age': COOKIE_INFO['max_age'],
+            'samesite': 'strict'
+        }
+        self._response.set_cookie(**cookie_settings)
+        return self._response
+    
+    def _get_cookie(self, cookie_name: str):
+        """
+        Gets a loaded cookie's value
+        """
+        cookiejar.CookieJar().clear_expired_cookies()
+        cookie_value = ''
+        if self._cookies and cookie_name in self._cookies.keys() \
+                and self._cookies.get(cookie_name):
+            cookie_value = self._cookies.get(cookie_name)
+        return cookie_value
+
+    def _clear_login_cookie(self):
+        if self._cookies and COOKIE_INFO['name'] in self._cookies.keys():
+            self._response.delete_cookie(COOKIE_INFO['name'])
 
     def is_logged_in(self):
         """
         Checks if the user is currently logged in
         """
-        if 'logged_in' in self._cookies and self._cookies['logged_in'] == 'True':
+        if self._cookies and COOKIE_INFO['name'] in self._cookies.keys():
             return True
         return False
+
+    def redirect(self, path):
+        """
+        Method to redirect to another path
+        """
+        if not path.startswith('/'):
+            path = '/' + path
+
+        redirect = exc.HTTPSeeOther(
+            location=path,
+            detail=f'Redirecting To {path}',
+            headers=self._response.headers
+            )
+        return redirect
 
     def get_permissions(self):
         """
@@ -49,9 +98,12 @@ class BaseController:
         """
         return False
 
-    def has_access(self):
+    def has_access(self, path: str) -> bool:
         """
         Checks if the user has access for the page requested
         This should be based on the permissions and route
         """
+        role_paths = ['/', '/logout', '/dashbaord']
+        if path in role_paths:
+            return True
         return False

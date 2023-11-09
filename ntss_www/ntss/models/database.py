@@ -2,50 +2,119 @@
 Base package for accessing the database(s)
 """
 from os import getenv
-from sqlalchemy import select, create_engine
-from sqlalchemy.orm import Session
+from sqlalchemy import create_engine, MetaData, Table, and_
 
 
 class MysqlDatabase:
     """
     The MySQL Datbase class
     """
-    table = None
 
-    def __init__(self):
-        db_userpass = f"{getenv('db_user')}:{getenv('db_pass')}"
+    def __init__(self, debug=False):
+        db_userpass = f"{getenv('MYSQL_USER')}:{getenv('MYSQL_PWD')}"
+        db_port = getenv('MYSQL_PORT') if getenv('MYSQL_PORT') else 3306
+        db_host = getenv('MYSQL_HOST')
         self._engine = create_engine(
-            f"mysql://{db_userpass}@{getenv('db_host')}:{getenv('db_port')}",
-            echo=True
+            f"mysql://{db_userpass}@{db_host}:{db_port}",
+            echo=debug
         )
         self._query = ''
+        self._table = None
+        self._table_name = None
+        self.metadata = None
 
-    def create(self, kwdict):
+    def set_table_metadata(self):
+        """
+        Set the table metadata holder
+        """
+        self.metadata = MetaData()
+
+    def set_table(self, table_name, auto_load: bool = True):
+        """
+        Setting the table that we're going to query
+        """
+        self._table_name = table_name
+        if auto_load:
+            self._table = Table(
+                self._table_name, self.metadata,
+                autoload_with=self._engine,
+                schema=getenv('MYSQL_DATABASE')
+            )
+        else:
+            self._table = Table(self._table_name, self.metadata, schema=getenv('MYSQL_DATABASE'))
+
+    def db_create(self, kwdict):
         """
         Method to create a record
         """
+        insert_query = self._table.insert()
+        value_list = [*kwdict]
+        with self._engine.connect() as db_conn:
+            db_exec = db_conn.execute(insert_query, value_list)
+        return db_exec
 
-    def select(self, columns, filters=None):
+    def db_select(self, columns: list = None, filters=None):
         """
         Method to select data from the database
         """
         records = []
-        self._query = select(self.table.c['","'.join(columns)])
-        for query_filter in filters:
-            if query_filter.operator == '=':
-                self._query.where(f'{query_filter.column}' == f'{query_filter.value}')
+        combined_filter = self.__build_query_filter(filters)
 
-        with Session(self._engine) as db_sess:
-            for row in db_sess.execute(self._query):
-                records.append(row)
+        self._query = self._table.select().where(combined_filter)
+        table_columns = self._table.columns.keys()
+        with self._engine.connect() as db_conn:
+            db_exec = db_conn.execute(self._query)
+            try:
+                for row in db_exec.fetchmany(1):
+                    row_dict = self.__create_dict_rows(row, table_columns, columns)
+                    records.append(row_dict)
+            except TypeError as error:
+                print(f'TypeError: {error}')
         return records
 
-    def update(self):
+    def __build_query_filter(self, filters=None):
+        """
+        Sets the query filter
+        """
+        query_filters = []
+        for query_filter in filters:
+            column_name = query_filter['column']
+            value = query_filter['value']
+            match query_filter['operator']:
+                case '=':
+                    filter_condition = self._table.c[column_name] == value
+                case '!=':
+                    filter_condition = self._table.c[column_name] != value
+
+            query_filters.append(filter_condition)
+        combined_filter = and_(*query_filters)
+        return combined_filter
+
+    def __create_dict_rows(self, row, table_columns, return_columns):
+        """
+        Takes the row response and builds a dictionary with column names
+        """
+        row_dict = {}
+        for i, value in enumerate(row):
+            if return_columns and table_columns[i] not in return_columns:
+                continue
+            row_dict[table_columns[i]] = value
+        return row_dict
+
+    def db_update(self, values: dict, filters: dict) -> int:
         """
         Method to update a record in the database
         """
+        combined_filter = self.__build_query_filter(filters)
+        self._query = self._table.update().where(combined_filter).values(values)
+        # Execute the update statement
+        with self._engine.connect() as db_conn:
+            result = db_conn.execute(self._query)
+            db_conn.commit()
+        # return the updated rows
+        return result.rowcount
 
-    def delete(self):
+    def db_delete(self):
         """
         Method to delete a record in the database
         """

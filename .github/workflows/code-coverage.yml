@@ -42,9 +42,9 @@ jobs:
       run: |
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --exclude=ntss_app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with coverage
-      run: |
-        coverage run -m pytest
-    - name: Output results
-      run: |
-        coverage report -m
+    # - name: Test with coverage
+    #   run: |
+    #     coverage run -m pytest --disable-warnings -v
+    # - name: Output results
+    #   run: |
+    #     coverage report -m

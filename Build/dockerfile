@@ -7,7 +7,7 @@ ENV TERM=xterm
 ENV SHELL=bash
 ENV DEBIAN_FRONTEND=noninteractive
 
- RUN echo '#!/bin/sh' > /usr/sbin/policy-rc.d \
+RUN echo '#!/bin/sh' > /usr/sbin/policy-rc.d \
     && echo 'exit 101' >> /usr/sbin/policy-rc.d \
     && chmod +x /usr/sbin/policy-rc.d \
     && dpkg-divert --local --rename --add /sbin/initctl \
@@ -27,7 +27,10 @@ RUN echo 'force-unsafe-io' > /etc/dpkg/dpkg.cfg.d/docker-apt-speedup \
     && apt-config dump | grep -we Recommends -e Suggests | sed s/1/0/ | tee /etc/apt/apt.conf.d/999norecommend
     
 RUN apt-get update \
-    && apt-get install default-mysql-client nginx default-libmysqlclient-dev build-essential supervisor
+    && apt-get install default-mysql-client nginx default-libmysqlclient-dev build-essential supervisor pkg-config \
+               postfix mailutils \
+    && postconf -e "inet_interfaces = all" \
+    && postconf -e "mydestination = localhost.localdomain, localhost"
 
 FROM osinstall as pythoninstall
 WORKDIR /tmp

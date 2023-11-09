@@ -14,10 +14,12 @@ class Views:
     template = None
     _templates_path = f'{WWW_PATH}ntss/templates'
     _env = Environment()
-    platformName = 'NTSS'
-    templateVars = {
-        'platformName': platformName,
-    }
+    __platformName = 'NTSS'
+
+    def __init__(self):
+        self.template_vars = {
+            'platformName': self.__platformName,
+        }
 
     def set_templates_environment(self, templates_path: str = ''):
         """
@@ -28,7 +30,6 @@ class Views:
         """
         if templates_path == '':
             templates_path = self._templates_path
-        print(f'{self._templates_path}')
         self._env = Environment(
             loader=FileSystemLoader(templates_path),
             autoescape=select_autoescape(['html', 'xml'])
