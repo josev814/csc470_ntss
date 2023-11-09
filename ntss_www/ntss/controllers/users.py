@@ -88,3 +88,9 @@ class UsersController(BaseController):
         user_id = self._user_info[0]['user_id']
         user_db.add_auth_token(auth_token, user_id)
         return auth_token
+
+    def add_user(self):
+        """
+        Adds a user into the system
+        """
+        return UserViews().add_user()

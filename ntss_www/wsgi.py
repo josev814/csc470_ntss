@@ -7,7 +7,7 @@ from functools import wraps
 from ntss.controllers.routes import Routes
 from ntss.controllers.ntss import NtssController
 from ntss.controllers.events import EventsController
-# from ntss.controllers.users import UsersController
+from ntss.controllers.users import UsersController
 
 
 application = Routes()
@@ -69,6 +69,14 @@ def dashboard(request, response):
     """ The dashboard that is displayed when users first login"""
     print(request.path)
     output = NtssController(request, response).dashboard()
+    response.text = output
+    return response
+
+@application.route('/users/add_user', methods=['GET','POST'])
+@login_access_required
+def add_user(request, response):
+    """Route to redirect to add user function"""
+    output = UsersController(request, response).add_user()
     response.text = output
     return response
 
