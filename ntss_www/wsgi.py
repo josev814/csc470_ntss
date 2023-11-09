@@ -54,6 +54,15 @@ def home(request, response):
     return response
 
 
+@application.route(path='/forgot_password', methods=['GET', 'POST'])
+def forgot_password(request, response):
+    """ The page for performing a request to reset the password """
+    output = NtssController(request, response).forgot_password()
+    # print(type(output))
+    response = return_output(response, output, 200)
+    return response
+
+
 @application.route('/dashboard', methods=['GET'])
 @login_access_required
 def dashboard(request, response):

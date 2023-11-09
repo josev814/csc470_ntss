@@ -7,6 +7,13 @@ DO NOT put sensitive information in here like usernames, passwords, hashes or se
 WWW_PATH = '/app/ntss_www/'
 
 
+SITE_INFO = {
+    'protocol': 'http://',
+    'hostname': 'localhost',
+    'port': '8080'
+}
+
+
 ALL_HTTP_METHODS = (
     'GET',
     'HEAD',

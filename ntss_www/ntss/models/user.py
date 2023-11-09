@@ -11,11 +11,11 @@ class Users(MysqlDatabase):
     The Users class that interacts with the database
     """
 
-    def __init__(self):
+    def __init__(self, debug=False):
         """
         When initializing the Users model set the default table to users
         """
-        super().__init__()
+        super().__init__(debug)
         self.set_table_metadata()
         self.set_table('users')
 
@@ -91,6 +91,16 @@ class Users(MysqlDatabase):
                 'password': self._set_encrypted_password(user_password)
             }
         )
+    
+    def add_auth_token(self, auth_token: str, user_id: int) -> str:
+        """
+        Sets the auth token for a user
+        """
+        values = {'verification_code': auth_token}
+        where_clause = [{'column': 'user_id', 'operator': '=', 'value': user_id}]
+        records_updated = self.db_update(values, where_clause)
+        print(f'ru: {records_updated}')
+
 
     @staticmethod
     def _set_encrypted_password(password: str):

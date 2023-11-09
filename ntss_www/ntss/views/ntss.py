@@ -21,6 +21,18 @@ class NtssViews(Views):
         if errors:
             self.templateVars['errors'] = errors
         return self.template.render(self.templateVars)
+    
+    def forgot_password(self, email=None, message=None):
+        """
+        Load the template for forgot password
+        """
+        self.set_template('forgot_password.html')
+        self.templateVars['pageName'] = 'Forgot Password'
+        if email:
+            self.templateVars['email'] = email
+        if message:
+            self.templateVars['message'] = message
+        return self.template.render(self.templateVars)
 
     def dashboard(self):
         """

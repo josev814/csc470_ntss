@@ -35,8 +35,17 @@ class UsersController(BaseController):
         self._user_info = UserModel().get_user(email, password)
         if not self._user_info:
             return False
-        print('pass')
         return True
+    
+    def valid_user(self, email: str = None) -> bool:
+        """
+        Checks if a user is valid
+        """
+        if email:
+            self._user_info = UserModel()._get_user_by(email=email)
+        if len(self._user_info) > 0:
+            return True
+        return False
 
     def get_user_info(self, user_id):
         """
@@ -69,3 +78,13 @@ class UsersController(BaseController):
                 del user_session_data[remove_item]
         session_id = Session().add_session(user_session_data)
         return session_id
+
+    def add_auth_token(self):
+        """
+        Adds an auth token into the database
+        """
+        user_db = UserModel()
+        auth_token = user_db.generate_auth_key()
+        user_id = self._user_info[0]['user_id']
+        user_db.add_auth_token(auth_token, user_id)
+        return auth_token

@@ -5,8 +5,12 @@ from ntss.controllers.controller import BaseController
 from ntss.views.ntss import NtssViews
 from ntss.controllers.users import UsersController
 from ntss.models.session import Session
-from ntss.config.constants import COOKIE_INFO
+from ntss.config.constants import COOKIE_INFO, SITE_INFO
+# Import smtplib for the actual sending function
+import smtplib
 
+# Import the email modules we'll need
+from email.message import EmailMessage
 
 class NtssController(BaseController):
     """
@@ -59,6 +63,43 @@ class NtssController(BaseController):
         Session().delete_session(session_id)
         self._clear_login_cookie()
         return self.redirect('/')
+    
+    def forgot_password(self):
+        """
+        Display the forgot password page
+        """
+        user_email = None
+        message = None
+        if self._request.method == 'POST':
+            for request_name, request_value in self._request.params.items():
+                match request_name:
+                    case 'email':
+                        user_email = request_value
+            user_ctrl = UsersController(self._request, self._response)
+            if user_email and user_ctrl.valid_user(email=user_email):
+                auth_token = user_ctrl.add_auth_token()
+                self._send_reset_email(user_email, auth_token)
+                message = 'Check your email to reset your pasword'
+        return NtssViews().forgot_password(user_email, message)
+    
+    def _send_reset_email(self, email: str, auth_token: str):
+        """
+        Sends an email to reset the password
+        """
+        # Create a text/plain message
+        email_content = 'Use this link to reset your password\n'
+        email_content = f'{SITE_INFO["protocol"]}{SITE_INFO["hostname"]}:{SITE_INFO["port"]}/reset_password?verification_code={auth_token}'
+        msg = EmailMessage()
+        msg.set_content(email_content)
+
+        msg['Subject'] = f'NTSS Reset Password'
+        msg['From'] = 'noreply@ntss.org'
+        msg['To'] = email
+
+        # Send the message via our own SMTP server.
+        s = smtplib.SMTP('localhost')
+        s.send_message(msg)
+        s.quit()
 
     def dashboard(self):
         """

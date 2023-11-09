@@ -34,8 +34,6 @@ class MysqlDatabase:
         Setting the table that we're going to query
         """
         self._table_name = table_name
-        print(self._table_name)
-        print(getenv('MYSQL_DATABASE'))
         if auto_load:
             self._table = Table(
                 self._table_name, self.metadata,
@@ -103,10 +101,18 @@ class MysqlDatabase:
             row_dict[table_columns[i]] = value
         return row_dict
 
-    def db_update(self):
+    def db_update(self, values: dict, filters: dict) -> int:
         """
         Method to update a record in the database
         """
+        combined_filter = self.__build_query_filter(filters)
+        self._query = self._table.update().where(combined_filter).values(values)
+        # Execute the update statement
+        with self._engine.connect() as db_conn:
+            result = db_conn.execute(self._query)
+            db_conn.commit()
+        # return the updated rows
+        return result.rowcount
 
     def db_delete(self):
         """
