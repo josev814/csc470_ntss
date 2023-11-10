@@ -81,7 +81,6 @@ def add_user(request, response):
     response = return_output(response, output, 200)
     return response
 
-
 @application.route('/users/edit/{user_guid}', methods=['GET','POST'])
 @login_access_required
 def edit_user(request, response, user_guid: str):
@@ -102,11 +101,12 @@ def profile(request, response, user_guid):
     return response
 
 
-@application.route('/users/list', methods=['GET'])
-def users_list(request, response):
+@application.route('/users/list_users', methods=['GET'])
+def list_users(request, response):
     """ The page to view the list of users"""
     print(request.params)
-    response.text = 'Finish this route to list all users in the system'
+    output = UsersController(request, response).list_users()
+    response.text = output
     return response
 
 

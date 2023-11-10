@@ -28,3 +28,12 @@ class UserViews(Views):
         self.template_vars['form_post'] = posted_values
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
+    
+    def list_users(self, users: list):
+        """
+        List users in the system
+        """
+        self.set_template('list_users.html')
+        self.template_vars['pageName'] = 'List Users'
+        self.template_vars['users'] = users
+        return self.template.render(self.template_vars)
