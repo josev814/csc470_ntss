@@ -17,11 +17,13 @@ class UserViews(Views):
         self.template_vars['user'] = user_info
         return self.template.render(self.template_vars)
     
-    def add_user(self):
+    def add_user(self, posted_values):
         """
         Add a user into system
         """
         self.set_template('add_user.html')
         self.template_vars['pageName'] = 'Add User'
         self.template_vars['states'] = self.US_STATES
+        self.template_vars['roles'] = self.ROLES
+        self.template_vars['form_post'] = posted_values
         return self.template.render(self.template_vars)

@@ -80,6 +80,14 @@ def add_user(request, response):
     response.text = output
     return response
 
+@application.route('/users/edit/{user_guid}', methods=['GET','POST'])
+@login_access_required
+def add_user(request, response, user_guid: str):
+    """Route to redirect to add user function"""
+    output = UsersController(request, response).edit_user(user_guid)
+    response.text = output
+    return response
+
 
 @application.route('/user/{user_id}', methods=['GET'])
 def profile(request, response, user_id):

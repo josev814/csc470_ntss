@@ -81,16 +81,19 @@ class Users(MysqlDatabase):
         return []
         
 
-    def add_user(self, user_email: str, user_password: str) -> int:
+    def add_user(self, user_email: str, user_password: str) -> str:
         """
         Adds a user and returns their user_id from the database
         """
+        user_guid = self.generate_auth_key()
         self.db_create(
             {
                 'user_email': user_email,
-                'password': self._set_encrypted_password(user_password)
+                'password': self._set_encrypted_password(user_password),
+                'user_guid': user_guid
             }
         )
+        return user_guid
     
     def add_auth_token(self, auth_token: str, user_id: int) -> str:
         """
