@@ -1,0 +1,135 @@
+{% include "blocks/admin_top.html" %}
+<div class="row">
+  <!--{% include "blocks/navigation.html" %} -->
+  {% include "blocks/nav/exhibitor.html" %}
+
+  <div class="col-9 px-md-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+      <h1 class="h2">{{pageName}}</h1>
+    </div>
+    {% if errors: %}
+    {% include "blocks/error_modal.html" %}
+    {% endif %}
+    <div class="mb-2 mb-md-0">
+      <div class="col-12">
+        <form method="POST">
+
+          <div class="text-start">
+
+            <div class="row">
+              <div class="col">
+                <label for="floatingInput">Email address</label>
+                <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com"
+                  {% if user.email: %} value="{{ user.email }}" {% endif %} required
+                  oninvalid="setCustomValidity('Please enter a valid email address.')">
+              </div>
+
+            </div>
+
+            <div class="row pt-3">
+              <div class="col">
+                <label for="prefix">Prefix</label>
+                <input type="text" class="form-control" id="prefix" name="prefix" placeholder="Prefix" 
+                  {% if user.prefix_name: %} value="{{ user.prefix_name }}" {% endif %} required>
+              </div>
+
+              <div class="col">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" 
+                  {% if user.first_name: %} value="{{ user.first_name }}" {% endif %} required>
+              </div>
+
+              <div class="col">
+                <label for="middleInitial">Middle Initial</label>
+                <input type="text" class="form-control" id="middleInitial" name="middleInitial"
+                  placeholder="Middle Initial" {% if user.middle_initial: %} value="{{ user.middle_initial }}" {% endif %} required>
+              </div>
+
+              <div class="col">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" 
+                  {% if user.last_name: %} value="{{ user.last_name }}" {% endif %} required>
+              </div>
+
+              <div class="col">
+                <label for="suffix">Suffix</label>
+                <input type="text" class="form-control" id="suffix" name="suffix" placeholder="Suffix" 
+                  {% if user.suffix_name: %} value="{{ user.suffix_name }}" {% endif %} required>
+              </div>
+            </div>
+
+
+            <div class="row pt-3">
+              <div class="col">
+                <label for="address">Address</label>
+                <input type="text" class="form-control" id="address" name="address" placeholder="Address" 
+                  {% if user.address: %} value="{{ user.address }}" {% endif %} required>
+              </div>
+
+              <div class="col">
+                <label for="secondAddress">Second Address</label>
+                <input type="text" class="form-control" id="secondAddress" name="secondAddress"
+                  placeholder="Second Address" {% if user.address2: %} value="{{ user.address2 }}" {% endif %}>
+              </div>
+
+              <div class="col">
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="city" name="city" placeholder="City" 
+                  {% if user.city: %} value="{{ user.city }}" {% endif %} required>
+              </div>
+
+              <div class="col-3">
+                <label for="state" class="form-label mb-0">State</label>
+                <select class="form-select" name="state" id="state" required>
+                  <option {% if not user or user.state: %} selected {% endif %} value="">Choose...</option>
+                  {% for us_state in states: %}
+                  <option value="{{ us_state }}" {% if user and user.state and user.state==us_state: %} selected {% endif %}> {{us_state}}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <div class="col">
+                <label for="zipCode">Zip Code</label>
+                <input type="text" class="form-control" id="zipCode" name="zipCode" placeholder="Zip Code" 
+                  {% if user.zip: %} value="{{ user.zip }}" {% endif %} required>
+              </div>
+            </div>
+
+
+            <div class="row pt-3">
+              <div class="col">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="phone" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number"
+                  {% if user.phone: %} value="{{ user.phone }}" {% endif %} >
+              </div>
+
+              <div class="col">
+                <label for="website">Website</label>
+                <input type="text" class="form-control" id="website" name="website" placeholder="Website" 
+                  {% if user.website: %} value="{{ user.website }}" {% endif %} >
+              </div>
+            </div>
+
+
+            <div class="row py-3">
+              <div class="col">
+                <label for="userRole">User Role</label>
+                <select class="form-select" name="user_role" id="user_role" required>
+                  <option {% if not user.user_role: %} selected {% endif %} value="">Choose...</option>
+                  {% for role in roles: %}
+                  <option value="{{ role }}" {% if user.user_role and user.user_role==role: %} selected {% endif %}> {{role}}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          </div>
+          <button class="w-100 btn btn-lg btn-primary" type="submit">Save</button>
+        </form>
+      </div>
+    </div>
+    </main>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}

@@ -4,7 +4,9 @@ The base controller that other controllers should inherit from
 from http import cookiejar
 import json
 from webob import exc
+from ntss.models.session import Session
 from ntss.config.constants import COOKIE_INFO
+
 
 
 class BaseController:
@@ -107,3 +109,29 @@ class BaseController:
         if path in role_paths:
             return True
         return False
+
+    def _create_session(self, user_ctrl):
+        """
+        Creates a session for the current user
+        """
+        self._session_id = user_ctrl.create_session()
+
+    def _get_session_id(self):
+        """
+        Gets the session id for the current session
+        """
+        self._load_cookies()
+        session_id = self._get_cookie(COOKIE_INFO['name'])
+        return session_id
+
+    def _get_session_data(self, session_id):
+        """
+        Returns the session data
+        """
+        return Session().get_session(session_id)
+
+    def _delete_sessions(self, session_id):
+        """
+        Delete the session data
+        """
+        Session().delete_session(session_id)

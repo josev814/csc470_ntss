@@ -9,7 +9,6 @@ from email.message import EmailMessage
 from ntss.controllers.controller import BaseController
 from ntss.views.ntss import NtssViews
 from ntss.controllers.users import UsersController
-from ntss.models.session import Session
 from ntss.config.constants import COOKIE_INFO, SITE_INFO
 
 
@@ -61,7 +60,7 @@ class NtssController(BaseController):
         Make sure to destroy the session for the user
         """
         session_id = self._get_session_id()
-        Session().delete_session(session_id)
+        self._delete_session(session_id)
         self._clear_login_cookie()
         return self.redirect('/')
     
@@ -111,23 +110,3 @@ class NtssController(BaseController):
         session_data = self._get_session_data(session_id)
         print(session_data)
         return NtssViews().dashboard(session_data["user_guid"])
-
-    def _create_session(self, user_ctrl):
-        """
-        Creates a session for the current user
-        """
-        self._session_id = user_ctrl.create_session()
-
-    def _get_session_id(self):
-        """
-        Gets the session id for the current session
-        """
-        self._load_cookies()
-        session_id = self._get_cookie(COOKIE_INFO['name'])
-        return session_id
-
-    def _get_session_data(self, session_id):
-        """
-        Returns the session data
-        """
-        return Session().get_session(session_id)

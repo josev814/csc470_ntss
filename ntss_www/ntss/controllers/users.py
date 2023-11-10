@@ -26,8 +26,13 @@ class UsersController(BaseController):
         """
         Gets the profile for a user
         """
-        UserViews().get_user_profile(user_guid)
-
+        session_id = self._get_session_id()
+        session_data = self._get_session_data(session_id)
+        if user_guid != session_data["user_guid"]:
+            # TODO: Pull data from database
+            pass
+        return UserViews().get_user_profile(session_data)
+        
     def validate_user(self, email: str, password: str):
         """
         Validate a user that is attempting to log in
