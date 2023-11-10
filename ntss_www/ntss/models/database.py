@@ -107,7 +107,7 @@ class MysqlDatabase:
         """
         combined_filter = self.__build_query_filter(filters)
         self._query = self._table.update().where(combined_filter).values(values)
-        self.__commit_query()
+        return self.__commit_query()
 
     def db_delete(self, filters: dict) -> int:
         """
