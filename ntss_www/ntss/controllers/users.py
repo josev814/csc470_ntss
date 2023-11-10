@@ -142,5 +142,15 @@ class UsersController(BaseController):
         """
         Lists the users in the system
         """
-        users_data = [{'user_id': 1, 'user_guid': '6130393534323135376637623131656561306231303234326163313430303032', 'cust_guid': '6130393463383261376637623131656561306231303234326163313430303032', 'prefix_name': 'Mr.', 'first_name': "Jose'", 'middle_name': '', 'last_name': 'Vargas', 'suffix_name': '', 'address': '1200 Murchison Rd', 'address2': '', 'city': 'Fayetteville', 'state': 'NC', 'zip': '28301', 'email': 'jvargas5@broncos.uncfsu.edu', 'phone': '910-672-1111', 'website': 'https://www.uncfsu.edu/', 'is_active': 1, 'verification_code': None, 'user_roles': 'NTSS_ADMIN'}]
+        users_data = [{'user_id': 1,
+            'user_guid': '6130393534323135376637623131656561306231303234326163313430303032', 
+            'cust_guid': '6130393463383261376637623131656561306231303234326163313430303032', 
+            'prefix_name': 'Mr.', 'first_name': "Jose'", 'middle_name': '', 'last_name': 'Vargas',
+            'suffix_name': '', 
+            'address': '1200 Murchison Rd', 'address2': '', 'city': 'Fayetteville', 'state': 'NC',
+            'zip': '28301', 
+            'email': 'jvargas5@broncos.uncfsu.edu', 'phone': '910-672-1111', 
+            'website': 'https://www.uncfsu.edu/', 
+            'is_active': 1, 'verification_code': None, 
+            'user_roles': 'NTSS_ADMIN'}]
         return UserViews().list_users(users_data)
