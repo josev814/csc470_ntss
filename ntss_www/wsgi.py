@@ -106,7 +106,7 @@ def profile(request, response, user_guid):
 def users_list(request, response):
     """ The page to view the list of users"""
     print(request.params)
-    response.text = f'Finish this route to list all users in the system'
+    response.text = 'Finish this route to list all users in the system'
     return response
 
 

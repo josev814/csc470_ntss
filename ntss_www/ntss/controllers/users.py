@@ -1,7 +1,6 @@
 """
 Package to handle Users
 """
-from operator import is_
 import re
 from ntss.controllers.controller import BaseController
 from ntss.views.users import UserViews
@@ -102,10 +101,11 @@ class UsersController(BaseController):
                 posted_values[request_name] = request_value.strip()
             is_valid, errors = self._verify_add_user_form(posted_values)
             if is_valid:
-                user_guid = UserModel().add_user(posted_values['email'], posted_values['password'], posted_values)
-                print(f'{user_guid}')
+                user_guid = UserModel().add_user(
+                    posted_values['email'], posted_values['password'], posted_values
+                )
                 if user_guid:
-                    print(f'redirect {user_guid}')
+                    print(f'redirecting to the edit user page for {user_guid}')
                     return self.redirect(f'/users/edit/{user_guid}')
 
         return UserViews().add_user(posted_values, errors)
@@ -124,7 +124,7 @@ class UsersController(BaseController):
                     elif(len(UserModel().get_user_by(email=form_val)) > 0):
                         errors.append('Email Already Exists')
                 case other:
-                    print(f"{key} isn't being validated on form submission")
+                    print(f"{other} isn't being validated on form submission")
             # TODO: Add more validations for this form
         if len(errors) > 0:
             is_valid = False

@@ -107,15 +107,18 @@ class MysqlDatabase:
         """
         combined_filter = self.__build_query_filter(filters)
         self._query = self._table.update().where(combined_filter).values(values)
-        # Execute the update statement
-        with self._engine.connect() as db_conn:
-            result = db_conn.execute(self._query)
-            db_conn.commit()
-        # return the updated rows
-        return result.rowcount
+        self.__commit_query()
 
-    def db_delete(self):
+    def db_delete(self, filters: dict) -> int:
         """
         Method to delete a record in the database
         """
-        self._table.delete().wh
+        combined_filter = self.__build_query_filter(filters)
+        self._query = self._table.delete().where(combined_filter)
+        return self.__commit_query
+    
+    def __commit_query(self) -> int:
+        with self._engine.connect() as db_conn:
+            result = db_conn.execute(self._query)
+            db_conn.commit()
+        return result.rowcount
