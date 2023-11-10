@@ -7,7 +7,7 @@ from functools import wraps
 from ntss.controllers.routes import Routes
 from ntss.controllers.ntss import NtssController
 from ntss.controllers.events import EventsController
-# from ntss.controllers.users import UsersController
+from ntss.controllers.users import UsersController
 
 
 application = Routes()
@@ -73,11 +73,12 @@ def dashboard(request, response):
     return response
 
 
-@application.route('/user/{user_id}', methods=['GET'])
-def profile(request, response, user_id):
+@application.route('/user/view/{user_guid}', methods=['GET'])
+def profile(request, response, user_guid):
     """ The page to view a user's profile"""
     print(request.params)
-    response.text = f'This is the profile management page for {user_id}'
+    output = UsersController(request, response).get_user_profile(user_guid)
+    response.text = output
     return response
 
 

@@ -22,11 +22,11 @@ class UsersController(BaseController):
         roles = UserModel().get_user_roles(user_id)
         return roles
 
-    def get_user_profile(self, user_id: int):
+    def get_user_profile(self, user_guid: str):
         """
         Gets the profile for a user
         """
-        UserViews().get_user_profile(user_id)
+        UserViews().get_user_profile(user_guid)
 
     def validate_user(self, email: str, password: str):
         """
