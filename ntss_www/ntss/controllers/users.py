@@ -130,3 +130,5 @@ class UsersController(BaseController):
         """
         Load a page to edit the user
         """
+        print(user_guid)
+        # TODO: this method needs to be flushed out
