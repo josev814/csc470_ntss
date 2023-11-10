@@ -43,14 +43,14 @@ class MysqlDatabase:
         else:
             self._table = Table(self._table_name, self.metadata, schema=getenv('MYSQL_DATABASE'))
 
-    def db_create(self, kwdict):
+    def db_create(self, kwdict: dict):
         """
         Method to create a record
         """
         insert_query = self._table.insert()
-        value_list = [*kwdict]
         with self._engine.connect() as db_conn:
-            db_exec = db_conn.execute(insert_query, value_list)
+            db_exec = db_conn.execute(insert_query, kwdict)
+            db_conn.commit()
         return db_exec
 
     def db_select(self, columns: list = None, filters=None):
@@ -118,3 +118,4 @@ class MysqlDatabase:
         """
         Method to delete a record in the database
         """
+        self._table.delete().wh

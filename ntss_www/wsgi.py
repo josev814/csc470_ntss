@@ -78,7 +78,7 @@ def dashboard(request, response):
 def add_user(request, response):
     """Route to direct to add user function"""
     output = UsersController(request, response).add_user()
-    response.text = output
+    response = return_output(response, output, 200)
     return response
 
 
