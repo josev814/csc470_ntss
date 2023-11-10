@@ -43,14 +43,14 @@ class MysqlDatabase:
         else:
             self._table = Table(self._table_name, self.metadata, schema=getenv('MYSQL_DATABASE'))
 
-    def db_create(self, kwdict):
+    def db_create(self, kwdict: dict):
         """
         Method to create a record
         """
         insert_query = self._table.insert()
-        value_list = [*kwdict]
         with self._engine.connect() as db_conn:
-            db_exec = db_conn.execute(insert_query, value_list)
+            db_exec = db_conn.execute(insert_query, kwdict)
+            db_conn.commit()
         return db_exec
 
     def db_select(self, columns: list = None, filters=None):
@@ -107,14 +107,18 @@ class MysqlDatabase:
         """
         combined_filter = self.__build_query_filter(filters)
         self._query = self._table.update().where(combined_filter).values(values)
-        # Execute the update statement
-        with self._engine.connect() as db_conn:
-            result = db_conn.execute(self._query)
-            db_conn.commit()
-        # return the updated rows
-        return result.rowcount
+        return self.__commit_query()
 
-    def db_delete(self):
+    def db_delete(self, filters: dict) -> int:
         """
         Method to delete a record in the database
         """
+        combined_filter = self.__build_query_filter(filters)
+        self._query = self._table.delete().where(combined_filter)
+        return self.__commit_query
+    
+    def __commit_query(self) -> int:
+        with self._engine.connect() as db_conn:
+            result = db_conn.execute(self._query)
+            db_conn.commit()
+        return result.rowcount

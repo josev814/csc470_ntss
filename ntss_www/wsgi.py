@@ -72,20 +72,41 @@ def dashboard(request, response):
     response.text = output
     return response
 
+
 @application.route('/users/add_user', methods=['GET','POST'])
 @login_access_required
 def add_user(request, response):
-    """Route to redirect to add user function"""
+    """Route to direct to add user function"""
     output = UsersController(request, response).add_user()
+    response = return_output(response, output, 200)
+    return response
+
+
+@application.route('/users/edit/{user_guid}', methods=['GET','POST'])
+@login_access_required
+def edit_user(request, response, user_guid: str):
+    """
+    Route to direct to edit user
+    """
+    # TODO: The methods for this need to be built out
+    output = UsersController(request, response).edit_user(user_guid)
     response.text = output
     return response
 
 
-@application.route('/user/{user_id}', methods=['GET'])
-def profile(request, response, user_id):
+@application.route('/users/view/{user_guid}', methods=['GET'])
+def profile(request, response, user_guid):
     """ The page to view a user's profile"""
     print(request.params)
-    response.text = f'This is the profile management page for {user_id}'
+    response.text = f'This is the profile management page for {user_guid}'
+    return response
+
+
+@application.route('/users/list', methods=['GET'])
+def users_list(request, response):
+    """ The page to view the list of users"""
+    print(request.params)
+    response.text = 'Finish this route to list all users in the system'
     return response
 
 

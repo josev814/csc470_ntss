@@ -3,7 +3,7 @@ This is the base module for Views
 All Views should inherit from this class
 """
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-from ntss.config.constants import WWW_PATH, US_STATES
+from ntss.config.constants import WWW_PATH, US_STATES, ROLES
 
 
 class Views:
@@ -16,6 +16,7 @@ class Views:
     _env = Environment()
     __platformName = 'NTSS'
     US_STATES = US_STATES
+    ROLES = ROLES
 
 
     def __init__(self):
