@@ -34,6 +34,9 @@ class Users(MysqlDatabase):
         return permissions
 
     def get_users(self, start=0, limit=20):
+        """
+        Gets all users free m the database 
+        """
         user_records = self.db_select(start=start, limit=limit)
         return user_records
 
