@@ -53,19 +53,22 @@ class MysqlDatabase:
             db_conn.commit()
         return db_exec
 
-    def db_select(self, columns: list = None, filters=None):
+    def db_select(self, columns: list = None, filters=None, start: int=0, limit: int = 25):
         """
         Method to select data from the database
         """
         records = []
-        combined_filter = self.__build_query_filter(filters)
-
-        self._query = self._table.select().where(combined_filter)
+        self._query = self._table.select()
+        if filters:
+            combined_filter = self.__build_query_filter(filters)
+            self._query.where(combined_filter)
+        
+        self._query.limit(limit).offset(start)
         table_columns = self._table.columns.keys()
         with self._engine.connect() as db_conn:
             db_exec = db_conn.execute(self._query)
             try:
-                for row in db_exec.fetchmany(1):
+                for row in db_exec.fetchall():
                     row_dict = self.__create_dict_rows(row, table_columns, columns)
                     records.append(row_dict)
             except TypeError as error:

@@ -138,19 +138,17 @@ class UsersController(BaseController):
         return f'Update the UserController::edit_user method to allow editing of user: {user_guid}'
         # TODO: this method needs to be flushed out
 
-    def list_users(self):
+    def list_users(self, start: int=0):
         """
         Lists the users in the system
         """
-        users_data = [{'user_id': 1,
-            'user_guid': '6130393534323135376637623131656561306231303234326163313430303032', 
-            'cust_guid': '6130393463383261376637623131656561306231303234326163313430303032', 
-            'prefix_name': 'Mr.', 'first_name': "Jose'", 'middle_name': '', 'last_name': 'Vargas',
-            'suffix_name': '', 
-            'address': '1200 Murchison Rd', 'address2': '', 'city': 'Fayetteville', 'state': 'NC',
-            'zip': '28301', 
-            'email': 'jvargas5@broncos.uncfsu.edu', 'phone': '910-672-1111', 
-            'website': 'https://www.uncfsu.edu/', 
-            'is_active': 1, 'verification_code': None, 
-            'user_roles': 'NTSS_ADMIN'}]
-        return UserViews().list_users(users_data)
+        users_data = UserModel().get_users(start)
+        # Get current user session
+        # pass the user info to views
+        # Ensure that the role for the user is detected in the navigation
+        # TODO: use session to load current user info
+        #sid = self._get_session_id()
+        #session_data = self._get_session_data(sid)
+        user_info = {'user_roles': 'NTSS_ADMIN'}
+        print(users_data)
+        return UserViews().list_users(users_data, user_info)

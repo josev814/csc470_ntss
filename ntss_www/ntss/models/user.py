@@ -33,6 +33,10 @@ class Users(MysqlDatabase):
         )
         return permissions
 
+    def get_users(self, start=0, limit=20):
+        user_records = self.db_select(start=start, limit=limit)
+        return user_records
+
     def get_user(self, user_email: str, user_password: None) -> dict:
         """
         Retrieves a user from the database based on their user_email
@@ -54,7 +58,7 @@ class Users(MysqlDatabase):
             user = record
         return user
 
-    def get_user_by(self, user_id=None, email=None):
+    def get_user_by(self, user_id=None, email=None, limit=1):
         """
         Performs a select query based on the params passed
         """
@@ -68,7 +72,8 @@ class Users(MysqlDatabase):
                 {'column': 'email', 'operator': '=', 'value': email}
             )
         records = self.db_select(
-            filters=query_filter
+            filters=query_filter,
+            limit=limit
         )
         return records
     

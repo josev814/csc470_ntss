@@ -5,12 +5,14 @@
 
     <div class="col-9 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Home</h1>
+        <h1 class="h2">{{ pageName }}</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
-          
+          Welcome back {{ user.first_name }} {{ user.last_name }}
         </div>
       </div>
-      
+      <div class="text-start">
+        Enter other dashboard info here
+      </div>
     </main>
   </div>
 </div>
