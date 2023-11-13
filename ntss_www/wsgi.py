@@ -7,7 +7,7 @@ from functools import wraps
 from ntss.controllers.routes import Routes
 from ntss.controllers.ntss import NtssController
 from ntss.controllers.events import EventsController
-# from ntss.controllers.users import UsersController
+from ntss.controllers.users import UsersController
 
 
 application = Routes()
@@ -73,11 +73,40 @@ def dashboard(request, response):
     return response
 
 
-@application.route('/user/{user_id}', methods=['GET'])
-def profile(request, response, user_id):
+@application.route('/users/add_user', methods=['GET','POST'])
+@login_access_required
+def add_user(request, response):
+    """Route to direct to add user function"""
+    output = UsersController(request, response).add_user()
+    response = return_output(response, output, 200)
+    return response
+
+@application.route('/users/edit/{user_guid}', methods=['GET','POST'])
+@login_access_required
+def edit_user(request, response, user_guid: str):
+    """
+    Route to direct to edit user
+    """
+    # TODO: The methods for this need to be built out
+    output = UsersController(request, response).edit_user(user_guid)
+    response.text = output
+    return response
+
+
+@application.route('/users/view/{user_guid}', methods=['GET'])
+def profile(request, response, user_guid):
     """ The page to view a user's profile"""
     print(request.params)
-    response.text = f'This is the profile management page for {user_id}'
+    response.text = f'This is the profile management page for {user_guid}'
+    return response
+
+
+@application.route('/users/list_users', methods=['GET'])
+def list_users(request, response):
+    """ The page to view the list of users"""
+    print(request.params)
+    output = UsersController(request, response).list_users()
+    response.text = output
     return response
 
 
