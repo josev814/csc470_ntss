@@ -97,7 +97,8 @@ def edit_user(request, response, user_guid: str):
 def profile(request, response, user_guid):
     """ The page to view a user's profile"""
     print(request.params)
-    response.text = f'This is the profile management page for {user_guid}'
+    output = UsersController(request, response).get_user_profile(user_guid)
+    response.text = output
     return response
 
 

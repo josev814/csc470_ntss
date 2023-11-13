@@ -40,5 +40,5 @@ class NtssViews(Views):
         """
         self.set_template('dashboard.html')
         self.template_vars['pageName'] = 'Dashboard'
-        self.template_vars['user'] = user_info
+        self.template_vars['current_user'] = user_info
         return self.template.render(self.template_vars)

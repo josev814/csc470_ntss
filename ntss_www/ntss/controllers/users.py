@@ -23,12 +23,15 @@ class UsersController(BaseController):
         roles = UserModel().get_user_roles(user_id)
         return roles
 
-    def get_user_profile(self, user_id: int):
+    def get_user_profile(self, user_guid: str):
         """
         Gets the profile for a user
         """
-        UserViews().get_user_profile(user_id)
-
+        user_data = UserModel().get_user_by(user_guid=user_guid)
+        if len(user_data) == 1:
+            user_data = user_data[0]
+        return UserViews().get_user_profile(self._session_data, user_data)
+        
     def validate_user(self, email: str, password: str):
         """
         Validate a user that is attempting to log in
@@ -108,7 +111,7 @@ class UsersController(BaseController):
                     print(f'redirecting to the edit user page for {user_guid}')
                     return self.redirect(f'/users/edit/{user_guid}')
 
-        return UserViews().add_user(posted_values, errors)
+        return UserViews().add_user(self._session_data, posted_values, errors)
 
     def _verify_add_user_form(self, posted_values):
         """

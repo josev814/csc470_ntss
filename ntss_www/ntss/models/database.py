@@ -61,9 +61,9 @@ class MysqlDatabase:
         self._query = self._table.select()
         if filters:
             combined_filter = self.__build_query_filter(filters)
-            self._query.where(combined_filter)
+            self._query = self._query.where(combined_filter)
         
-        self._query.limit(limit).offset(start)
+        self._query = self._query.limit(limit).offset(start)
         table_columns = self._table.columns.keys()
         with self._engine.connect() as db_conn:
             db_exec = db_conn.execute(self._query)
