@@ -93,7 +93,7 @@ def edit_user(request, response, user_guid: str):
     return response
 
 
-@application.route('/user/view/{user_guid}', methods=['GET'])
+@application.route('/users/view/{user_guid}', methods=['GET'])
 def profile(request, response, user_guid):
     """ The page to view a user's profile"""
     print(request.params)

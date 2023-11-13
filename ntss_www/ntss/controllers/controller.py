@@ -25,6 +25,11 @@ class BaseController:
         self._response = response
         self._load_cookies()
         self._session_id = None
+        self._session_data = None
+        sid = self._get_session_id()
+        if sid != '':
+            self._session_data = self._get_session_data(sid)
+        
 
     def _load_cookies(self):
         """

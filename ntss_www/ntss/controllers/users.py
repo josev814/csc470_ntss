@@ -27,12 +27,10 @@ class UsersController(BaseController):
         """
         Gets the profile for a user
         """
-        session_id = self._get_session_id()
-        session_data = self._get_session_data(session_id)
-        if user_guid != session_data["user_guid"]:
-            # TODO: Pull data from database
-            pass
-        return UserViews().get_user_profile(session_data)
+        user_data = UserModel().get_user_by(user_guid=user_guid)
+        if len(user_data) == 1:
+            user_data = user_data[0]
+        return UserViews().get_user_profile(self._session_data, user_data)
         
     def validate_user(self, email: str, password: str):
         """
@@ -113,7 +111,7 @@ class UsersController(BaseController):
                     print(f'redirecting to the edit user page for {user_guid}')
                     return self.redirect(f'/users/edit/{user_guid}')
 
-        return UserViews().add_user(posted_values, errors)
+        return UserViews().add_user(self._session_data, posted_values, errors)
 
     def _verify_add_user_form(self, posted_values):
         """
