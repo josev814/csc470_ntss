@@ -17,7 +17,7 @@ class Views:
     __platformName = 'NTSS'
     US_STATES = US_STATES
     ROLES = ROLES
-    
+
     def __init__(self):
         self.template_vars = {
             'platformName': self.__platformName,

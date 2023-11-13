@@ -6,7 +6,15 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        {{ errors }}
+        {% if errors.__class__.__name__ == 'list': %}
+          <ul>
+          {% for error in errors: %}
+            <li>{{ error }}</li>
+          {% endfor %}
+          </ul>
+        {% else %}
+          {{ errors }}
+        {% endif %}
       </div>
     </div>
   </div>

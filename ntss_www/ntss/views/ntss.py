@@ -34,11 +34,12 @@ class NtssViews(Views):
             self.template_vars['message'] = message
         return self.template.render(self.template_vars)
 
-    def dashboard(self, user_guid):
+    def dashboard(self, user_info):
         """
         Load the dashboard template
         """
-        self.template_vars['user_guid'] = user_guid
         self.set_template('dashboard.html')
         self.template_vars['pageName'] = 'Dashboard'
+        self.template_vars['user'] = user_info
+        self.template_vars['user_guid'] = user_info['user_guid']
         return self.template.render(self.template_vars)

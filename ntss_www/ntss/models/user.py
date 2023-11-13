@@ -33,6 +33,13 @@ class Users(MysqlDatabase):
         )
         return permissions
 
+    def get_users(self, start=0, limit=20):
+        """
+        Gets all users free m the database 
+        """
+        user_records = self.db_select(start=start, limit=limit)
+        return user_records
+
     def get_user(self, user_email: str, user_password: None) -> dict:
         """
         Retrieves a user from the database based on their user_email
@@ -54,7 +61,7 @@ class Users(MysqlDatabase):
             user = record
         return user
 
-    def get_user_by(self, user_id=None, email=None):
+    def get_user_by(self, user_id=None, email=None, limit=1):
         """
         Performs a select query based on the params passed
         """
@@ -68,7 +75,8 @@ class Users(MysqlDatabase):
                 {'column': 'email', 'operator': '=', 'value': email}
             )
         records = self.db_select(
-            filters=query_filter
+            filters=query_filter,
+            limit=limit
         )
         return records
     
@@ -81,16 +89,38 @@ class Users(MysqlDatabase):
         return []
         
 
-    def add_user(self, user_email: str, user_password: str) -> int:
+    def add_user(self, user_email: str, user_password: str, *args) -> str|bool:
         """
         Adds a user and returns their user_id from the database
         """
-        self.db_create(
-            {
-                'user_email': user_email,
-                'password': self._set_encrypted_password(user_password)
-            }
-        )
+        if len(args) == 1:
+            args = args[0]
+        else:
+            raise IndexError('Too many indexes in the Tuple')
+
+        user_guid = self.generate_auth_key()
+        user_values = {
+            'email': user_email,
+            'password': self._set_encrypted_password(user_password),
+            'user_guid': user_guid,
+            'prefix_name': args.get('prefix'),
+            'first_name': args.get('firstName'),
+            'middle_name': args.get('middleInitial'),
+            'last_name': args.get('lastName'),
+            'suffix_name': args.get('suffix'),
+            'address': args.get('address'),
+            'address2': args.get('secondAddress'),
+            'city': args.get('city'),
+            'state': args.get('state'),
+            'zip': args.get('zipCode'),
+            'phone': args.get('phoneNumber'),
+            'website': args.get('website'),
+            'user_roles': args.get('user_role'),
+            'is_active': 1
+        }
+        if self.db_create(user_values):
+            return user_guid
+        return False
     
     def add_auth_token(self, auth_token: str, user_id: int) -> str:
         """

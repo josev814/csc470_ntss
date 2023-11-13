@@ -1,6 +1,7 @@
 """
 Package to handle Users
 """
+import re
 from ntss.controllers.controller import BaseController
 from ntss.views.users import UserViews
 from ntss.models.user import Users as UserModel
@@ -93,3 +94,66 @@ class UsersController(BaseController):
         user_id = self._user_info[0]['user_id']
         user_db.add_auth_token(auth_token, user_id)
         return auth_token
+
+    def add_user(self):
+        """
+        Adds a user into the system
+        """
+        posted_values = {}
+        errors = None
+        if self._request.method == 'POST':
+            for request_name, request_value in self._request.params.items():
+                posted_values[request_name] = request_value.strip()
+            is_valid, errors = self._verify_add_user_form(posted_values)
+            if is_valid:
+                user_guid = UserModel().add_user(
+                    posted_values['email'], posted_values['password'], posted_values
+                )
+                if user_guid:
+                    print(f'redirecting to the edit user page for {user_guid}')
+                    return self.redirect(f'/users/edit/{user_guid}')
+
+        return UserViews().add_user(posted_values, errors)
+
+    def _verify_add_user_form(self, posted_values):
+        """
+        Verifies that we have all the data for the add user form
+        """
+        errors = []
+        is_valid = True
+        for key, form_val in posted_values.items():
+            match key:
+                case 'email':
+                    if not re.match(r'[a-z0-9_\-\.]+@[a-z0-9_\-\.]+.[a-z0-9_\-]+', form_val, re.I):
+                        errors.append('Email is invalid')
+                    elif(len(UserModel().get_user_by(email=form_val)) > 0):
+                        errors.append('Email Already Exists')
+                case other:
+                    print(f"{other} isn't being validated on form submission")
+            # TODO: Add more validations for this form
+        if len(errors) > 0:
+            is_valid = False
+        print(errors)
+        return is_valid, errors
+
+    def edit_user(self, user_guid):
+        """
+        Load a page to edit the user
+        """
+        return f'Update the UserController::edit_user method to allow editing of user: {user_guid}'
+        # TODO: this method needs to be flushed out
+
+    def list_users(self, start: int=0):
+        """
+        Lists the users in the system
+        """
+        users_data = UserModel().get_users(start)
+        # Get current user session
+        # pass the user info to views
+        # Ensure that the role for the user is detected in the navigation
+        # TODO: use session to load current user info
+        #sid = self._get_session_id()
+        #session_data = self._get_session_data(sid)
+        user_info = {'user_roles': 'NTSS_ADMIN'}
+        print(users_data)
+        return UserViews().list_users(users_data, user_info)

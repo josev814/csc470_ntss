@@ -106,7 +106,6 @@ class NtssController(BaseController):
         """
         Load the Dashboard for a User
         """
-        session_id = self._get_session_id()
-        session_data = self._get_session_data(session_id)
-        print(session_data)
-        return NtssViews().dashboard(session_data["user_guid"])
+        sid = self._get_session_id()
+        session_data = self._get_session_data(sid)
+        return NtssViews().dashboard(session_data)
