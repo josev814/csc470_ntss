@@ -9,7 +9,7 @@ from email.message import EmailMessage
 from ntss.controllers.controller import BaseController
 from ntss.views.ntss import NtssViews
 from ntss.controllers.users import UsersController
-from ntss.config.constants import COOKIE_INFO, SITE_INFO
+from ntss.config.constants import SITE_INFO
 
 
 class NtssController(BaseController):

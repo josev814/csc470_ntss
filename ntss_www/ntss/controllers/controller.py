@@ -24,6 +24,7 @@ class BaseController:
         self._request = request
         self._response = response
         self._load_cookies()
+        self._session_id = None
 
     def _load_cookies(self):
         """
@@ -130,7 +131,7 @@ class BaseController:
         """
         return Session().get_session(session_id)
 
-    def _delete_sessions(self, session_id):
+    def _delete_session(self, session_id):
         """
         Delete the session data
         """
