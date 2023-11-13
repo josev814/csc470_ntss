@@ -109,7 +109,7 @@ class UsersController(BaseController):
                 )
                 if user_guid:
                     print(f'redirecting to the edit user page for {user_guid}')
-                    return self.redirect(f'/users/edit/{user_guid}')
+                    return self.redirect('/users/list_users')
 
         return UserViews().add_user(self._session_data, posted_values, errors)
 
