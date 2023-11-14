@@ -173,7 +173,7 @@ class UsersController(BaseController):
             # TODO: Add more validations for this form
         if len(errors) > 0:
             is_valid = False
-        print(errors)
+
         return is_valid, errors
 
     def delete_user(self, user_guid):
