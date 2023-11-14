@@ -189,7 +189,7 @@ def get_venue(request, response, guid: str):
     """
     Gets the venue in the system based on the guid
     """
-    response.text = VenuesController(request, response).view()
+    response.text = VenuesController(request, response).view(guid)
     return response
 
 ### END VENUES ###

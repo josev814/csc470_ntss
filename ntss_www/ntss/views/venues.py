@@ -18,7 +18,7 @@ class VenueViews(Views):
         """
         Load the venue page
         """
-        self.set_template('venues/profile.html')
+        self.set_template('venues/view.html')
         self.template_vars['states'] = self.US_STATES
         self.template_vars['venue'] = venue_info
         self.template_vars['current_user'] = self._user_session

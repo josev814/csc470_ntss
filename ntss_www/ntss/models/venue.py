@@ -26,12 +26,12 @@ class Venue(MysqlDatabase):
         else:
             return self.db_select(start=start, limit=limit)
 
-    def get_venue(self, venue_guid: str) -> dict:
+    def get_venue(self, guid: str) -> dict:
         """
         Retrieves a venue from the database based on the venue guid
         """
         venue = {}
-        records = self.get_venue_by(venue_guid=venue_guid)
+        records = self.get_venue_by(guid=guid)
         return records[0]
 
     def get_venue_by(self, name=None, city=None, state=None, guid=None, limit: int=1):

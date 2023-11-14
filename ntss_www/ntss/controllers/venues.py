@@ -62,3 +62,10 @@ class VenuesController(BaseController):
         columns = ['venue_guid', 'name', 'city', 'state', 'create_date', 'is_active']
         venue_data = VenueModel().get_venues(columns=columns, start=start)
         return VenueViews(self._session_data).list(venue_data)
+
+    def view(self, guid):
+        """
+        Load a page to view the venue
+        """
+        venue_data = VenueModel().get_venue(guid)
+        return VenueViews(self._session_data).get_venue(venue_data)
