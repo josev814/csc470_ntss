@@ -28,7 +28,7 @@ class VenueViews(Views):
         """
         Add a venue into system
         """
-        self.set_template('venues/add.html')
+        self.set_template('venues/add_edit.html')
         self.template_vars['pageName'] = 'Add Venue'
         self.template_vars['states'] = self.US_STATES
         self.template_vars['current_user'] = self._user_session

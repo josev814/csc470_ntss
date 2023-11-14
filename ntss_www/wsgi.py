@@ -183,4 +183,13 @@ def add_venue(request, response):
     response = return_output(response, controller_response, 200)
     return response
 
+@application.route('/venue/view/{guid}', methods=['GET'])
+@login_access_required
+def get_venue(request, response, guid: str):
+    """
+    Gets the venue in the system based on the guid
+    """
+    response.text = VenuesController(request, response).view()
+    return response
+
 ### END VENUES ###
