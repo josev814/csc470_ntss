@@ -156,20 +156,14 @@ class Users(MysqlDatabase):
 
         where_clause = [{'column': 'user_guid', 'operator': '=', 'value': args.get('user_guid')}]
 
-        if self.db_update(user_values, where_clause) > 0:
-            return True
-        else:
-            return False
+        return bool(self.db_update(user_values, where_clause))
 
     def delete_user(self, user_guid):
         """
         Deletes the user from system
         """
         where_clause = [{'column': 'user_guid', 'operator': '=', 'value': user_guid}]
-        if self.db_delete(where_clause) > 0:
-            return True
-        else:
-            return False
+        return bool(self.db_delete(where_clause))
 
     def add_auth_token(self, auth_token: str, user_id: int) -> str:
         """
