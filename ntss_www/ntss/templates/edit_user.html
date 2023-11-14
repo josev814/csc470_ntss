@@ -154,18 +154,15 @@
 </div>
 
 <script type="text/javascript">
-  const del_button = document.getElementById('DeleteUser');
   
   var currentURL = window.location;
-  var scheme = currentURL.protocol;
-  var host = currentURL.hostname;
-  var port = currentURL.port;
-  console.log("Scheme: " + scheme);
-  console.log("Host: " + host);
-  console.log("Port: " + port);
-  del_button.addEventListener('click', 
-    function() 
-      {window.location(currentURL.protocol + currentURL.hostname + ':' + currentURL.port + '/users/delete_user/{{ form_post.user_guid}}');});
+
+  const del_button = document.getElementById('DeleteUser');
+  del_button.addEventListener('click', function(){
+    delUrl = '//' + currentURL.hostname + ':' + currentURL.port + '/users/delete/{{ form_post.user_guid}}';
+    console.log(delUrl);
+    window.location.href = delUrl;
+  });
 </script>
 
 {% include "blocks/admin_bottom.html" %}

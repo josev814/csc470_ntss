@@ -92,7 +92,7 @@ def edit_user(request, response, user_guid: str):
     response.text = output
     return response
 
-@application.route('/users/delete_user/{user_guid}', methods=['GET','POST'])
+@application.route('/users/delete/{user_guid}', methods=['GET','POST'])
 @login_access_required
 def delete_user(request, response, user_guid: str):
     """
