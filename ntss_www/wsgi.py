@@ -8,6 +8,7 @@ from ntss.controllers.routes import Routes
 from ntss.controllers.ntss import NtssController
 from ntss.controllers.events import EventsController
 from ntss.controllers.users import UsersController
+from ntss.controllers.venues import VenuesController
 
 
 application = Routes()
@@ -160,3 +161,26 @@ def logout(request, response):
     output = NtssController(request, response).logout()
     response = return_output(response, output, 200)
     return response
+
+
+### VENUES ###
+@application.route('/venues/list', methods=['GET'])
+@login_access_required
+def list_venues(request, response):
+    """
+    Lists the venues in the system
+    """
+    response.text = VenuesController(request, response).list()
+    return response
+
+@application.route('/venues/add', methods=['GET', 'POST'])
+@login_access_required
+def add_venue(request, response):
+    """
+    Adds a venue in the system
+    """
+    controller_response = VenuesController(request, response).add()
+    response = return_output(response, controller_response, 200)
+    return response
+
+### END VENUES ###

@@ -2,6 +2,7 @@
 Base package for accessing the database(s)
 """
 from os import getenv
+from uuid import uuid4
 from sqlalchemy import create_engine, MetaData, Table, and_
 
 
@@ -125,3 +126,11 @@ class MysqlDatabase:
             result = db_conn.execute(self._query)
             db_conn.commit()
         return result.rowcount
+
+    @staticmethod
+    def generate_guid() -> str:
+        """
+        Generates a hex unique identifier
+        :return: str
+        """
+        return uuid4().hex

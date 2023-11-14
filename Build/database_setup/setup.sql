@@ -55,6 +55,39 @@ CREATE TABLE IF NOT EXISTS `users` (
     KEY `user_roles` (`user_roles`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+CREATE TABLE IF NOT EXISTS `events` (
+    `event_guid` VARCHAR(75) NOT NULL,
+    `venue_guid` VARCHAR(75) NOT NULL,
+    `website` varchar(255) DEFAULT NULL,
+    `is_active` int(1) DEFAULT 0,
+    `create_date` timestamp DEFAULT CURRENT_TIMESTAMP,
+    `updated_date` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY `user_guid` (`user_guid`),
+    KEY `is_active` (`is_active`),
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `venues` (
+    `venue_guid` VARCHAR(75) NOT NULL,
+    `name` VARCHAR(75) NOT NULL,
+    `address` varchar(255) NOT NULL,
+    `address2` varchar(255) DEFAULT NULL,
+    `city` varchar(75) NOT NULL,
+    `state` varchar(75) NOT NULL,
+    `zip` varchar(25) NOT NULL,
+    `booths` INT(10) NOT NULL,
+    `conference_rooms` INT(10) NOT NULL,
+    `website` varchar(255) DEFAULT NULL,
+    `phone` varchar(25) DEFAULT NULL,
+    `is_active` int(1) DEFAULT 0,
+    `create_date` timestamp DEFAULT CURRENT_TIMESTAMP,
+    `updated_date` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY `venue_guid` (`venue_guid`),
+    KEY `is_active` (`is_active`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 -- insert the default customer
 INSERT INTO `customers` (
     `cust_guid`, `name`,
