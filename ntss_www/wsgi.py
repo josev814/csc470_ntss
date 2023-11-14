@@ -93,6 +93,15 @@ def edit_user(request, response, user_guid: str):
     response.text = output
     return response
 
+@application.route('/users/delete/{user_guid}', methods=['GET','POST'])
+@login_access_required
+def delete_user(request, response, user_guid: str):
+    """
+    Route to delete a user
+    """
+    output = UsersController(request, response).delete_user(user_guid)
+    response = return_output(response, output, 200)
+    return response
 
 @application.route('/users/view/{user_guid}', methods=['GET'])
 def profile(request, response, user_guid):
