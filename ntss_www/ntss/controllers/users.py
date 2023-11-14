@@ -185,7 +185,10 @@ class UsersController(BaseController):
         #otherwise, load the user model
         #then statement is called to delete from user model with the user_guid
         #on success, redirect to user's page
-        return f'Deleting User {user_guid}'
+
+        if UserModel(True).delete_user(user_guid):
+            return self.redirect('/users/list_users')
+        return self.redirect(f'/users/edit_user{user_guid}')
 
     def list_users(self, start: int=0):
         """
