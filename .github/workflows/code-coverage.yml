@@ -13,10 +13,11 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - name: checkout code
+      uses: actions/checkout@v3
     - name: Setup Env Vars
       run: |
         cat >> Build/.appenvvars << EOF
@@ -39,14 +40,14 @@ jobs:
     - name: Lint with flake8 check for syntax errors or undefined vars
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        docker exec -it ntss_app /bin/bash -c 'source ntss_app/bin/activate; cd ntss_www; flake8 . --exclude=ntss_app --count --select=E9,F63,F7,F82 --show-source --statistics'
+        docker exec ntss_app /bin/bash -c 'source ntss_app/bin/activate; cd ntss_www; flake8 . --exclude=ntss_app --count --select=E9,F63,F7,F82 --show-source --statistics'
     - name: Lint with flake8
       run: |
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        docker exec -it ntss_app /bin/bash -c 'source ntss_app/bin/activate; cd ntss_www; flake8 . --exclude=ntss_app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics'
+        docker exec ntss_app /bin/bash -c 'source ntss_app/bin/activate; cd ntss_www; flake8 . --exclude=ntss_app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics'
     - name: Test with coverage
       run: |
-        docker exec -it ntss_app /bin/bash -c 'source ntss_app/bin/activate; cd ntss_www; coverage run -m pytest --disable-warnings -v ../'
+        docker exec ntss_app /bin/bash -c 'source ntss_app/bin/activate; cd ntss_www; coverage run -m pytest --disable-warnings -v ../'
     - name: Output results
       run: |
-        docker exec -it ntss_app /bin/bash -c 'source ntss_app/bin/activate; cd ntss_www; coverage report -m'
+        docker exec ntss_app /bin/bash -c 'source ntss_app/bin/activate; cd ntss_www; coverage report -m'
