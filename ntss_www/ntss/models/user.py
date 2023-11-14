@@ -83,7 +83,7 @@ class Users(MysqlDatabase):
             limit=limit
         )
         return records
-    
+
     def get_user_roles(self, user_id):
         """
         Gets the assigned roles for the current user
@@ -91,7 +91,6 @@ class Users(MysqlDatabase):
         # TODO fix this
         print(f'Roles for {user_id}')
         return []
-        
 
     def add_user(self, user_email: str, user_password: str, *args) -> str|bool:
         """
@@ -125,7 +124,53 @@ class Users(MysqlDatabase):
         if self.db_create(user_values):
             return user_guid
         return False
-    
+
+    def edit_user(self, *args) -> bool:
+        """
+        Edits user in database
+        """
+        if len(args) == 1:
+            args = args[0]
+        else:
+            raise IndexError('Too many indexes in the Tuple')
+
+        user_values = {
+            'email': args.get('email'),
+            'prefix_name': args.get('prefix'),
+            'first_name': args.get('firstName'),
+            'middle_name': args.get('middleInitial'),
+            'last_name': args.get('lastName'),
+            'suffix_name': args.get('suffix'),
+            'address': args.get('address'),
+            'address2': args.get('secondAddress'),
+            'city': args.get('city'),
+            'state': args.get('state'),
+            'zip': args.get('zipCode'),
+            'phone': args.get('phoneNumber'),
+            'website': args.get('website'),
+            'user_roles': args.get('user_role'),
+            'is_active': args.get('is_active')
+        }
+        if args.get('password') is not None:
+            user_values['password'] = self._set_encrypted_password(args.get('password'))
+
+        where_clause = [{'column': 'user_guid', 'operator': '=', 'value': args.get('user_guid')}]
+
+        if self.db_update(user_values, where_clause) > 0:
+            return True
+        else:
+            return False
+
+    def delete_user(self, user_guid):
+        """
+        Deletes the user from system
+        """
+        where_clause = [{'column': 'user_guid', 'operator': '=', 'value': user_guid}]
+        if self.db_delete(where_clause) > 0:
+            return True
+        else:
+            return False
+
     def add_auth_token(self, auth_token: str, user_id: int) -> str:
         """
         Sets the auth token for a user

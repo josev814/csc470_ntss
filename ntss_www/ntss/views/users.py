@@ -20,7 +20,7 @@ class UserViews(Views):
         self.template_vars['current_user'] = user_session
         self.template_vars['disable_form'] = True
         return self.template.render(self.template_vars)
-    
+
     def add_user(self, user_session, posted_values, errors: list):
         """
         Add a user into system
@@ -33,7 +33,20 @@ class UserViews(Views):
         self.template_vars['form_post'] = posted_values
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
-    
+
+    def edit_user(self, user_session, user_values, errors: list):
+        """
+        Edit a user in the system
+        """
+        self.set_template('edit_user.html')
+        self.template_vars['pageName'] = 'Edit User'
+        self.template_vars['states'] = self.US_STATES
+        self.template_vars['roles'] = self.ROLES
+        self.template_vars['current_user'] = user_session
+        self.template_vars['form_post'] = user_values
+        self.template_vars['errors'] = errors
+        return self.template.render(self.template_vars)
+
     def list_users(self, users: list, current_user: dict):
         """
         List users in the system

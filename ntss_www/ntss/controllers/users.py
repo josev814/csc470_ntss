@@ -31,7 +31,7 @@ class UsersController(BaseController):
         if len(user_data) == 1:
             user_data = user_data[0]
         return UserViews().get_user_profile(self._session_data, user_data)
-        
+
     def validate_user(self, email: str, password: str):
         """
         Validate a user that is attempting to log in
@@ -40,7 +40,7 @@ class UsersController(BaseController):
         if not self._user_info:
             return False
         return True
-    
+
     def valid_user(self, email: str = None) -> bool:
         """
         Checks if a user is valid
@@ -138,8 +138,54 @@ class UsersController(BaseController):
         """
         Load a page to edit the user
         """
-        return f'Update the UserController::edit_user method to allow editing of user: {user_guid}'
-        # TODO: this method needs to be flushed out
+        errors = None
+        user_info = UserModel().get_user_by(user_guid=user_guid)
+        if len(user_info) > 0:
+            user_info = user_info[0]
+        else:
+            errors = ['Invalid User']
+
+        if self._request.method == 'POST':
+            user_info = {}
+            for request_name, request_value in self._request.params.items():
+                user_info[request_name] = request_value.strip()
+            is_valid, errors = self._verify_edit_user_form(user_info)
+            if is_valid:
+                if UserModel(True).edit_user(user_info):
+                    errors = ['User Saved to System']
+                else:
+                    errors = ['Failed to save user info, try again']
+        return UserViews().edit_user(self._session_data, user_info, errors)
+
+    def _verify_edit_user_form(self, posted_values):
+        """
+        Verifies that we have all the data for the edit user form
+        """
+        errors = []
+        is_valid = True
+        for key, form_val in posted_values.items():
+            match key:
+                case 'email':
+                    if not re.match(r'[a-z0-9_\-\.]+@[a-z0-9_\-\.]+.[a-z0-9_\-]+', form_val, re.I):
+                        errors.append('Email is invalid')
+                case other:
+                    print(f"{other} isn't being validated on form submission")
+            # TODO: Add more validations for this form
+        if len(errors) > 0:
+            is_valid = False
+        print(errors)
+        return is_valid, errors
+
+    def delete_user(self, user_guid):
+        """
+        Delete User from system
+        """
+        # TODO: check if user exists
+        #If the user doesn't exist, go back to the edit page
+        #otherwise, load the user model
+        #then statement is called to delete from user model with the user_guid
+        #on success, redirect to user's page
+        return f'Deleting User {user_guid}'
 
     def list_users(self, start: int=0):
         """
