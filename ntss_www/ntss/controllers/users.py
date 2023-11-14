@@ -202,5 +202,4 @@ class UsersController(BaseController):
         #sid = self._get_session_id()
         #session_data = self._get_session_data(sid)
         user_info = {'user_roles': 'NTSS_ADMIN'}
-        print(users_data)
         return UserViews().list_users(users_data, user_info)
