@@ -153,6 +153,16 @@
                 </select>
               </div>
             </div>
+
+            <div class="row py-3">
+              <div class="col">
+                <label for="userRole">Is Active</label>
+                <select class="form-select" name="is_active" id="is_active" required {% if disable_form: %} disabled {% endif %}>
+                  <option value='1' {% if user.is_active == '1' %} selected {% endif %}>Yes</option>
+                  <option value='0' {% if user.is_active == '0' %} selected {% endif %}>No</option>
+                </select>
+              </div>
+            </div>
           </div>
         {% if not disable_form: %}
           <button class="w-100 btn btn-lg btn-primary" type="submit">Save</button>
