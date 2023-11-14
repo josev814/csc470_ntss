@@ -59,6 +59,6 @@ class VenuesController(BaseController):
         """
         Lists the venues in the system
         """
-        columns = ['venue_guid', 'name', 'city', 'state', 'create_date']
+        columns = ['venue_guid', 'name', 'city', 'state', 'create_date', 'is_active']
         venue_data = VenueModel().get_venues(columns=columns, start=start)
         return VenueViews(self._session_data).list(venue_data)

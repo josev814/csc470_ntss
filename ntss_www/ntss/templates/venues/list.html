@@ -38,7 +38,9 @@
                   {%- if not column.endswith('_guid'): -%}
                     {%- if column == 'is_active': -%}
                 <td>{% if value == 1 %} Yes {% else %} No {% endif %}</td>
-                    {%- else: -%}
+                   {%- elif column.endswith('date'): -%}
+                <td>{{ value.strftime('%B %d, %Y') }} </td>
+                   {%- else: -%}
                 <td>{{ value }} </td>
                     {% endif %}
                   {% endif %}
