@@ -2,7 +2,7 @@
 <div class="row">
 {% include "blocks/navigation.html" %}
 
-    <div class="col-9 px-md-4">
+    <div class="col-9 px-md-4 text-start">
       <div class="row">
         <h1 class="h2">{{pageName}}</h1>
       </div>
@@ -14,7 +14,7 @@
                 <th scope="col"></th>
                 {%- for column in venues[0].keys(): -%}
                 {%- if not column.endswith('_guid'): -%}
-                <th scope="col">{{ column }}</th>
+                <th scope="col">{{ column.capitalize() }}</th>
                 {%- endif -%}
                 {%- endfor -%}
               </tr>
