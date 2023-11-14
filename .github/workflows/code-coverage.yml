@@ -42,9 +42,12 @@ jobs:
       run: |
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --exclude=ntss_app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    # - name: Test with coverage
-    #   run: |
-    #     coverage run -m pytest --disable-warnings -v
-    # - name: Output results
-    #   run: |
-    #     coverage report -m
+    - name: Compose docker
+      run: |
+        docker compose -f Build/docker-compose.yml up -d --build --remove-orphans
+    - name: Test with coverage
+      run: |
+        docker exec -it ntss_app /bin/bash -c 'source ntss_app/bin/activate; cd ntss_www; coverage run -m pytest --disable-warnings -v ../'
+    - name: Output results
+      run: |
+        docker exec -it ntss_app /bin/bash -c 'source ntss_app/bin/activate; cd ntss_www; coverage report -m'

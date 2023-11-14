@@ -4,7 +4,7 @@ Testing Session functionality
 import unittest
 import time
 
-from ntss_www.ntss.models.session import Session
+from ntss.models.session import Session
 
 
 class NTSSSessions(unittest.TestCase):
