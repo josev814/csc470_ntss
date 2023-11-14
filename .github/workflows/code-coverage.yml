@@ -42,6 +42,22 @@ jobs:
       run: |
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --exclude=ntss_app --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Setup Env Vars
+      run: |
+        cat >> Build/.appenvvars << EOF
+          MYSQL_HOST=ntss_database
+          MYSQL_DATABASE=ntss
+          MYSQL_USER=unittestUser
+          MYSQL_PASSWORD=unittestUserPasword
+          MYSQL_PWD=unittestUserPasword
+        EOF
+        cat >> Build/.dbenvvars << EOF
+          MYSQL_ROOT_PASSWORD=unittestRootPassword
+          MYSQL_DATABASE=ntss
+          MYSQL_USER=unittestUser
+          MYSQL_PASSWORD=unittestUserPasword
+          MYSQL_PWD=unittestUserPasword
+        EOF
     - name: Compose docker
       run: |
         docker compose -f Build/docker-compose.yml up -d --build --remove-orphans
