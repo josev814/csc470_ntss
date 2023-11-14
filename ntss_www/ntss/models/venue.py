@@ -88,3 +88,39 @@ class Venue(MysqlDatabase):
         if self.db_create(values):
             return guid
         return False
+
+    def update(self, guid, *args) -> str|bool:
+        """
+        Updates a venue based on its guid
+        """
+        if len(args) == 1:
+            args = args[0]
+        else:
+            raise IndexError('Too many indexes in the Tuple')
+        
+        values = {
+            'name': args.get('name'),
+            'address': args.get('address'),
+            'address2': args.get('address2'),
+            'city': args.get('city'),
+            'state': args.get('state'),
+            'zip': args.get('zip'),
+            'booths': args.get('booths'),
+            'conference_rooms': args.get('conference_rooms'),
+            'phone': args.get('phone'),
+            'website': args.get('website'),
+            'is_active': args.get('is_active')
+        }
+        filters = [
+            {'column': 'venue_guid', 'operator': '=', 'value': f'{guid}'}
+        ]
+        return bool(self.db_update(values, filters))
+
+    def delete(self, guid):
+        """
+        Deletes a venue from the database
+        """
+        filter = [
+            {'column': 'venue_guid', 'operator': '=', 'value': f'{guid}'}
+        ]
+        return self.db_delete(filter)

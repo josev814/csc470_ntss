@@ -192,4 +192,23 @@ def get_venue(request, response, guid: str):
     response.text = VenuesController(request, response).view(guid)
     return response
 
+@application.route('/venue/edit/{guid}', methods=['GET', 'POST'])
+@login_access_required
+def edit_venue(request, response, guid: str):
+    """
+    Processes an edit for a venue in the system based on the guid
+    """
+    response.text = VenuesController(request, response).edit(guid)
+    return response
+
+@application.route('/venue/delete/{guid}', methods=['GET', 'POST'])
+@login_access_required
+def delete_venue(request, response, guid: str):
+    """
+    Deletes a venue in the system based on the guid
+    """
+    controller_response = VenuesController(request, response).delete(guid)
+    response = return_output(response, controller_response, 200)
+    return response
+
 ### END VENUES ###

@@ -1,0 +1,19 @@
+{% include "blocks/admin_top.html" %}
+<div class="row">
+{% include "blocks/navigation.html" %}
+
+  <div class="col-9 px-md-4 text-start">
+    <div class="row">
+      <h1 class="h2">{{pageName}}</h1>
+    </div>
+    <div class="row">
+      <p>We didn't find any venue with the identifier: {{ guid }}</p>
+    </div>
+    <div class="row">
+      <div class="col-2">
+        <a onclick="history.back()" class="btn btn-primary">Back</a>          
+      </div>
+    </div>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}

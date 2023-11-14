@@ -22,6 +22,7 @@ class VenueViews(Views):
         self.template_vars['states'] = self.US_STATES
         self.template_vars['venue'] = venue_info
         self.template_vars['current_user'] = self._user_session
+        self.template_vars['pageName'] = f'Venue: {venue_info["name"]}'
         return self.template.render(self.template_vars)
     
     def add(self, form_values, errors: list) -> str:
@@ -30,6 +31,18 @@ class VenueViews(Views):
         """
         self.set_template('venues/add_edit.html')
         self.template_vars['pageName'] = 'Add Venue'
+        self.template_vars['states'] = self.US_STATES
+        self.template_vars['current_user'] = self._user_session
+        self.template_vars['form_post'] = form_values
+        self.template_vars['errors'] = errors
+        return self.template.render(self.template_vars)
+
+    def edit(self, form_values, errors: list) -> str:
+        """
+        Edit a venue in the system
+        """
+        self.set_template('venues/add_edit.html')
+        self.template_vars['pageName'] = 'Edit Venue'
         self.template_vars['states'] = self.US_STATES
         self.template_vars['current_user'] = self._user_session
         self.template_vars['form_post'] = form_values
@@ -48,4 +61,14 @@ class VenueViews(Views):
             return self.template.render(self.template_vars)
         self.set_template('venues/no_items.html')
         self.template_vars['controller_type'] = self._controller_type
+        return self.template.render(self.template_vars)
+
+    def not_found(self, guid) -> str:
+        """
+        The requested venue wasn't found
+        """
+        self.set_template('venues/not_found.html')
+        self.template_vars['pageName'] = 'Invalid Venue'
+        self.template_vars['current_user'] = self._user_session
+        self.template_vars['guid'] = guid
         return self.template.render(self.template_vars)

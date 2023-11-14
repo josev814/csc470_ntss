@@ -41,7 +41,7 @@ class VenuesController(BaseController):
         """
         errors = []
         is_valid = True
-        if(len(VenueModel(True).get_venue_by(name=posted_values.get('name'), city=posted_values.get('city'), state=posted_values.get('state'))) > 0):
+        if(len(VenueModel().get_venue_by(name=posted_values.get('name'), city=posted_values.get('city'), state=posted_values.get('state'))) > 0):
             errors.append('Venue already exists in this city')
             # TODO: Add more validations for this form
         if len(errors) > 0:
@@ -52,8 +52,39 @@ class VenuesController(BaseController):
         """
         Load a page to edit the venue
         """
-        # TODO: this method needs to be flushed out
-        return f'Update the VenueController::edit_venue method to allow editing of venue: {guid}'
+        venue_data = {}
+        errors = None
+        try:
+            venue_data = VenueModel().get_venue_by(guid=guid)
+            if len(venue_data) == 0:
+                raise Exception
+            venue_data = venue_data[0]
+        except:
+            return VenueViews(self._session_data).not_found(guid)
+
+        if self._request.method == 'POST':
+            form_data = {}
+            for request_name, request_value in self._request.params.items():
+                form_data[request_name] = request_value.strip()
+            is_valid, errors = self._verify_edit_form(form_data)
+            if is_valid:
+                if VenueModel().update(guid, form_data):
+                    venue_data = form_data
+                    venue_data['venue_guid'] = guid
+                    errors.append('Record Successfully Updated')
+        return VenueViews(self._session_data).edit(venue_data, errors)
+    
+    def _verify_edit_form(self, posted_values):
+        """
+        Verifies that we have all the data for the add user form
+        """
+        errors = []
+        is_valid = True
+        if len(posted_values) < 12:
+            errors.append('Invalid form post')
+        if len(errors) > 0:
+            is_valid = False
+        return is_valid, errors
 
     def list(self, start: int=0):
         """
@@ -67,5 +98,22 @@ class VenuesController(BaseController):
         """
         Load a page to view the venue
         """
-        venue_data = VenueModel().get_venue(guid)
-        return VenueViews(self._session_data).get_venue(venue_data)
+        try:
+            venue_data = VenueModel().get_venue(guid)
+            return VenueViews(self._session_data).get_venue(venue_data)
+        except:
+            return VenueViews(self._session_data).not_found(guid)
+    
+    def delete(self, guid):
+        """
+        Delete a venue
+        """
+        try:
+            venue_data = VenueModel().get_venue_by(guid=guid)
+            if len(venue_data) == 0:
+                raise Exception
+            if not VenueModel().delete(guid):
+                raise Exception
+            return self.redirect('/venues/list')
+        except:
+            return VenueViews(self._session_data).not_found(guid)
