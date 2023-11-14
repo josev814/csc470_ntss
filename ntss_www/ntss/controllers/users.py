@@ -140,6 +140,7 @@ class UsersController(BaseController):
         """
         errors = None
         user_info = UserModel().get_user_by(user_guid=user_guid)
+        print(user_info)
         if len(user_info) > 0:
             user_info = user_info[0]
         else:
@@ -149,6 +150,7 @@ class UsersController(BaseController):
             user_info = {}
             for request_name, request_value in self._request.params.items():
                 user_info[request_name] = request_value.strip()
+            print(user_info)
             is_valid, errors = self._verify_edit_user_form(user_info)
             if is_valid:
                 if UserModel(True).edit_user(user_info):

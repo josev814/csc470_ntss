@@ -136,19 +136,19 @@ class Users(MysqlDatabase):
 
         user_values = {
             'email': args.get('email'),
-            'prefix_name': args.get('prefix'),
-            'first_name': args.get('firstName'),
-            'middle_name': args.get('middleInitial'),
-            'last_name': args.get('lastName'),
-            'suffix_name': args.get('suffix'),
+            'prefix_name': args.get('prefix_name'),
+            'first_name': args.get('first_name'),
+            'middle_name': args.get('middle_name'),
+            'last_name': args.get('last_name'),
+            'suffix_name': args.get('suffix_name'),
             'address': args.get('address'),
-            'address2': args.get('secondAddress'),
+            'address2': args.get('address2'),
             'city': args.get('city'),
             'state': args.get('state'),
-            'zip': args.get('zipCode'),
-            'phone': args.get('phoneNumber'),
+            'zip': args.get('zip'),
+            'phone': args.get('phone'),
             'website': args.get('website'),
-            'user_roles': args.get('user_role'),
+            'user_roles': args.get('user_roles'),
             'is_active': args.get('is_active')
         }
         if args.get('password') is not None:

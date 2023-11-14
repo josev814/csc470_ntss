@@ -35,32 +35,32 @@
             <div class="row pt-3">
               <div class="col">
                 <label for="prefix">Prefix</label>
-                <input type="text" class="form-control" id="prefix" name="prefix" placeholder="Prefix" 
-                  {% if form_post.prefix: %} value="{{ form_post.prefix }}" {% endif %}>
+                <input type="text" class="form-control" id="prefix" name="prefix_name" placeholder="Prefix" 
+                  {% if form_post.prefix_name: %} value="{{ form_post.prefix_name }}" {% endif %}>
               </div>
 
               <div class="col">
                 <label for="firstName">First Name</label>
-                <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" 
-                  {% if form_post.firstName: %} value="{{ form_post.firstName }}" {% endif %} required>
+                <input type="text" class="form-control" id="firstName" name="first_name" placeholder="First Name" 
+                  {% if form_post.first_name: %} value="{{ form_post.first_name }}" {% endif %} required>
               </div>
 
               <div class="col">
                 <label for="middleInitial">Middle Initial</label>
-                <input type="text" class="form-control" id="middleInitial" name="middleInitial"
-                  placeholder="Middle Initial" {% if form_post.middleInitial: %} value="{{ form_post.middleInitial }}" {% endif %}>
+                <input type="text" class="form-control" id="middleInitial" name="middle_name"
+                  placeholder="Middle Initial" {% if form_post.middle_name: %} value="{{ form_post.middle_name }}" {% endif %}>
               </div>
 
               <div class="col">
                 <label for="lastName">Last Name</label>
-                <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" 
-                  {% if form_post.lastName: %} value="{{ form_post.lastName }}" {% endif %} required>
+                <input type="text" class="form-control" id="lastName" name="last_name" placeholder="Last Name" 
+                  {% if form_post.last_name: %} value="{{ form_post.last_name }}" {% endif %} required>
               </div>
 
               <div class="col">
                 <label for="suffix">Suffix</label>
-                <input type="text" class="form-control" id="suffix" name="suffix" placeholder="Suffix" 
-                  {% if form_post.suffix: %} value="{{ form_post.suffix }}" {% endif %}>
+                <input type="text" class="form-control" id="suffix" name="suffix_name" placeholder="Suffix" 
+                  {% if form_post.suffix_name: %} value="{{ form_post.suffix_name }}" {% endif %}>
               </div>
             </div>
 
@@ -74,8 +74,8 @@
 
               <div class="col">
                 <label for="secondAddress">Second Address</label>
-                <input type="text" class="form-control" id="secondAddress" name="secondAddress"
-                  placeholder="Second Address" {% if form_post.secondAddress: %} value="{{ form_post.secondAddress }}" {% endif %}>
+                <input type="text" class="form-control" id="secondAddress" name="address2"
+                  placeholder="Second Address" {% if form_post.address2: %} value="{{ form_post.address2 }}" {% endif %}>
               </div>
 
               <div class="col">
@@ -97,8 +97,8 @@
 
               <div class="col">
                 <label for="zipCode">Zip Code</label>
-                <input type="text" class="form-control" id="zipCode" name="zipCode" placeholder="Zip Code" 
-                  {% if form_post.zipCode: %} value="{{ form_post.zipCode }}" {% endif %} required>
+                <input type="text" class="form-control" id="zipCode" name="zip" placeholder="Zip Code" 
+                  {% if form_post.zip: %} value="{{ form_post.zip }}" {% endif %} required>
               </div>
             </div>
 
@@ -106,8 +106,8 @@
             <div class="row pt-3">
               <div class="col">
                 <label for="phoneNumber">Phone Number</label>
-                <input type="phone" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number"
-                  {% if form_post.phoneNumber: %} value="{{ form_post.phoneNumber }}" {% endif %} >
+                <input type="phone" class="form-control" id="phoneNumber" name="phone" placeholder="Phone Number"
+                  {% if form_post.phone: %} value="{{ form_post.phone }}" {% endif %} >
               </div>
 
               <div class="col">
@@ -121,10 +121,10 @@
             <div class="row py-3">
               <div class="col">
                 <label for="userRole">User Role</label>
-                <select class="form-select" name="user_role" id="user_role" required>
-                  <option {% if not form_post.user_role: %} selected {% endif %} value="">Choose...</option>
+                <select class="form-select" name="user_roles" id="userRole" required>
+                  <option {% if not form_post.user_roles: %} selected {% endif %} value="">Choose...</option>
                   {% for role in roles: %}
-                  <option value="{{ role }}" {% if form_post.user_role and form_post.user_role==role: %} selected {% endif %}> {{role}}
+                  <option value="{{ role }}" {% if form_post.user_roles and form_post.user_roles==role: %} selected {% endif %}> {{role}}
                   </option>
                   {% endfor %}
                 </select>
