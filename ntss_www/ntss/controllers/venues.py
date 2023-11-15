@@ -5,7 +5,6 @@ import re
 from ntss.controllers.controller import BaseController
 from ntss.views.venues import VenueViews
 from ntss.models.venue import Venue as VenueModel
-from ntss.models.session import Session
 
 
 class VenuesController(BaseController):

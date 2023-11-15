@@ -21,8 +21,11 @@ class MysqlDatabase:
         )
         self._query = ''
         self._table = None
+        self._join_table = None
         self._table_name = None
+        self._join_table_name = None
         self.metadata = None
+        self.join_metadata = None
 
     def set_table_metadata(self):
         """
@@ -43,6 +46,20 @@ class MysqlDatabase:
             )
         else:
             self._table = Table(self._table_name, self.metadata, schema=getenv('MYSQL_DATABASE'))
+    
+    def set_join_table(self, table_name, auto_load: bool = True):
+        """
+        Setting the table that we're going to join with
+        """
+        self._join_table_name = table_name
+        if auto_load:
+            self._join_table = Table(
+                self._join_table_name, MetaData(),
+                autoload_with=self._engine,
+                schema=getenv('MYSQL_DATABASE')
+            )
+        else:
+            self._join_table = Table(self._join_table_name, MetaData(), schema=getenv('MYSQL_DATABASE'))
 
     def db_create(self, kwdict: dict):
         """
@@ -54,23 +71,28 @@ class MysqlDatabase:
             db_conn.commit()
         return db_exec
 
-    def db_select(self, columns: list = None, filters=None, start: int=0, limit: int = 25):
+    def db_select(self, columns: list = None, joins: list = None, filters=None, start: int=0, limit: int = 25):
         """
         Method to select data from the database
         """
         records = []
-        self._query = self._table.select()
+        if joins:
+            for join in joins:
+                self.set_join_table(join['table'])
+                self._query = self._table.select().add_columns(self._join_table.c)
+                self._query.join_from(self._table, self._join_table, self._table.c[join['src_column']] == self._join_table.c[join['join_column']])
+        else:
+            self._query = self._table.select()
         if filters:
             combined_filter = self.__build_query_filter(filters)
             self._query = self._query.where(combined_filter)
         
         self._query = self._query.limit(limit).offset(start)
-        table_columns = self._table.columns.keys()
         with self._engine.connect() as db_conn:
-            db_exec = db_conn.execute(self._query)
             try:
+                db_exec = db_conn.execute(self._query)
                 for row in db_exec.fetchall():
-                    row_dict = self.__create_dict_rows(row, table_columns, columns)
+                    row_dict = self.__create_dict_rows(row, columns, self._query.exported_columns)
                     records.append(row_dict)
             except TypeError as error:
                 print(f'TypeError: {error}')
@@ -94,11 +116,12 @@ class MysqlDatabase:
         combined_filter = and_(*query_filters)
         return combined_filter
 
-    def __create_dict_rows(self, row, table_columns, return_columns):
+    def __create_dict_rows(self, row, return_columns, table_columns):
         """
         Takes the row response and builds a dictionary with column names
         """
         row_dict = {}
+        table_columns = [str(exported_column) for exported_column in self._query.exported_columns.keys()]
         for i, value in enumerate(row):
             if return_columns and table_columns[i] not in return_columns:
                 continue

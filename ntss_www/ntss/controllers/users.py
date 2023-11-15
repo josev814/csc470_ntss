@@ -153,7 +153,7 @@ class UsersController(BaseController):
             print(user_info)
             is_valid, errors = self._verify_edit_user_form(user_info)
             if is_valid:
-                if UserModel(True).edit_user(user_info):
+                if UserModel().edit_user(user_info):
                     errors = ['User Saved to System']
                 else:
                     errors = ['Failed to save user info, try again']
@@ -188,7 +188,7 @@ class UsersController(BaseController):
         #then statement is called to delete from user model with the user_guid
         #on success, redirect to user's page
 
-        if UserModel(True).delete_user(user_guid):
+        if UserModel().delete_user(user_guid):
             return self.redirect('/users/list_users')
         return self.redirect(f'/users/edit_user{user_guid}')
 

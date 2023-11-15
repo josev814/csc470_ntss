@@ -59,12 +59,19 @@ CREATE TABLE IF NOT EXISTS `users` (
 CREATE TABLE IF NOT EXISTS `events` (
     `event_guid` VARCHAR(75) NOT NULL,
     `venue_guid` VARCHAR(75) NOT NULL,
+    `user_guid` VARCHAR(75) NOT NULL,
+    `name` VARCHAR(75) NOT NULL,
+    `theme` VARCHAR(255) NOT NULL,
+    `booths` int(5) NOT NULL,
+    `conference_rooms` int(3) NOT NULL,
+    `start_date` timestamp NOT NULL,
+    `end_date` timestamp NOT NULL,
     `website` varchar(255) DEFAULT NULL,
-    `is_active` int(1) DEFAULT 0,
     `create_date` timestamp DEFAULT CURRENT_TIMESTAMP,
     `updated_date` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY `event_guid` (`event_guid`),
-    KEY `is_active` (`is_active`)
+    KEY `venue_guid` (`venue_guid`),
+    KEY `user_guid` (`user_guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
