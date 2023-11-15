@@ -17,20 +17,18 @@ class Venue(MysqlDatabase):
         self.set_table_metadata()
         self.set_table('venues')
 
-    def get_venues(self, columns: list=[], start: int=0, limit: int=20) -> list:
+    def get_venues(self, columns: list=None, start: int=0, limit: int=20) -> list:
         """
         Gets all venues from the database 
         """
         if columns:
             return self.db_select(columns, start=start, limit=limit)
-        else:
-            return self.db_select(start=start, limit=limit)
+        return self.db_select(start=start, limit=limit)
 
     def get_venue(self, guid: str) -> dict:
         """
         Retrieves a venue from the database based on the venue guid
         """
-        venue = {}
         records = self.get_venue_by(guid=guid)
         return records[0]
 
@@ -120,7 +118,7 @@ class Venue(MysqlDatabase):
         """
         Deletes a venue from the database
         """
-        filter = [
+        filters = [
             {'column': 'venue_guid', 'operator': '=', 'value': f'{guid}'}
         ]
-        return self.db_delete(filter)
+        return self.db_delete(filters)

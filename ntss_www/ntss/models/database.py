@@ -25,7 +25,6 @@ class MysqlDatabase:
         self._table_name = None
         self._join_table_name = None
         self.metadata = None
-        self.join_metadata = None
 
     def set_table_metadata(self):
         """
@@ -59,7 +58,11 @@ class MysqlDatabase:
                 schema=getenv('MYSQL_DATABASE')
             )
         else:
-            self._join_table = Table(self._join_table_name, MetaData(), schema=getenv('MYSQL_DATABASE'))
+            self._join_table = Table(
+                self._join_table_name, 
+                MetaData(), 
+                schema=getenv('MYSQL_DATABASE')
+            )
 
     def db_create(self, kwdict: dict):
         """
@@ -80,7 +83,11 @@ class MysqlDatabase:
             for join in joins:
                 self.set_join_table(join['table'])
                 self._query = self._table.select().add_columns(self._join_table.c)
-                self._query.join_from(self._table, self._join_table, self._table.c[join['src_column']] == self._join_table.c[join['join_column']])
+                self._query.join_from(
+                    self._table, 
+                    self._join_table, 
+                    self._table.c[join['src_column']] == self._join_table.c[join['join_column']]
+                )
         else:
             self._query = self._table.select()
         if filters:
@@ -121,7 +128,10 @@ class MysqlDatabase:
         Takes the row response and builds a dictionary with column names
         """
         row_dict = {}
-        table_columns = [str(exported_column) for exported_column in self._query.exported_columns.keys()]
+        exported_columns = self._query.exported_columns.keys()
+        table_columns = [
+            str(exported_column) for exported_column in exported_columns
+        ]
         for i, value in enumerate(row):
             if return_columns and table_columns[i] not in return_columns:
                 continue

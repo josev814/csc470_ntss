@@ -2,7 +2,6 @@
 This package handles interactions with the database pertaining to users
 """
 from ntss.models.database import MysqlDatabase
-from ntss.models.venue import Venue
 
 
 class Event(MysqlDatabase):
@@ -18,24 +17,22 @@ class Event(MysqlDatabase):
         self.set_table_metadata()
         self.set_table('events')
 
-    def get_events(self, columns: list=[], joins: list=[], start: int=0, limit: int=20) -> list:
+    def get_events(self, columns: list=None, joins: list=None, start: int=0, limit: int=20) -> list:
         """
         Gets all events from the database 
         """
         if columns and joins:
             return self.db_select(columns=columns, joins=joins, start=start, limit=limit)
-        elif joins:
+        if joins:
             return self.db_select(joins=joins, start=start, limit=limit)
-        elif columns:
+        if columns:
             return self.db_select(columns, start=start, limit=limit)
-        else:
-            return self.db_select(start=start, limit=limit)
+        return self.db_select(start=start, limit=limit)
 
     def get_event(self, guid: str) -> dict:
         """
         Retrieves a event from the database based on the event guid
         """
-        event = {}
         records = self.get_event_by(guid=guid)
         return records[0]
 
@@ -122,7 +119,7 @@ class Event(MysqlDatabase):
         """
         Deletes a event from the database
         """
-        filter = [
+        filters = [
             {'column': 'event_guid', 'operator': '=', 'value': f'{guid}'}
         ]
-        return self.db_delete(filter)
+        return self.db_delete(filters)

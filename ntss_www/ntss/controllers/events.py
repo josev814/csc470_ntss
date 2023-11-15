@@ -71,6 +71,9 @@ class EventsController(BaseController):
         return EventViews(self._session_data).edit(event_info, venues, users, errors)
 
     def view_event(self, event_guid):
+        """
+        Controller to view an event
+        """
         event_info = EventModel().get_event_by(guid=event_guid)
         if len(event_info) == 0:
             return EventViews(self._session_data).not_found(event_guid)
@@ -90,7 +93,7 @@ class EventsController(BaseController):
             if not EventModel().delete(guid):
                 raise Exception
             return self.redirect('/events/list')
-        except:
+        except Exception:
             return EventViews(self._session_data).not_found(guid)
 
     def __verify_add_form(self, posted_values):
@@ -99,7 +102,7 @@ class EventsController(BaseController):
         """
         errors = []
         is_valid = True
-        if(posted_values.get('venue_guid') == ''):
+        if posted_values.get('venue_guid') == '':
             errors.append('You must select a venue')
             # TODO: Add more validations for this form
             # are we trying to reserve a venue that doesn't have enough booths or rooms?
@@ -113,9 +116,9 @@ class EventsController(BaseController):
         """
         errors = []
         is_valid = True
-        if(posted_values.get('venue_guid') == ''):
+        if posted_values.get('venue_guid') == '':
             errors.append('You must select a venue')
-        if(posted_values.get('user_guid') == ''):
+        if posted_values.get('user_guid') == '' :
             errors.append('You must select an owner')
             # TODO: Add more validations for this form
             # are we trying to reserve a venue that doesn't have enough booths or rooms?
@@ -139,13 +142,13 @@ class EventsController(BaseController):
             'location': 'Fayetteville, NC',
             'venue': 'Fayetteville State University'
         }
-        return EventViews().user_event(event_info)
+        return EventViews(self._session_data).user_event(event_info)
 
     def get_user_events(self):
         """
         Gets events that is associated with a user
         """
-        return EventViews().user_events()
+        return EventViews(self._session_data).user_events()
 
     def get_exhibitor_booth_invoice(self, event_id, invoice_id):
         """
@@ -190,5 +193,5 @@ class EventsController(BaseController):
             'customer': customer_info,
             'invoice_details': invoice_details
         }
-        return EventViews().display_invoice(invoice_information)
+        return EventViews(self._session_data).display_invoice(invoice_information)
     # add other methods below

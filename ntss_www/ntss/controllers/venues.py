@@ -1,7 +1,6 @@
 """
 Package to handle Users
 """
-import re
 from ntss.controllers.controller import BaseController
 from ntss.views.venues import VenueViews
 from ntss.models.venue import Venue as VenueModel
@@ -40,7 +39,13 @@ class VenuesController(BaseController):
         """
         errors = []
         is_valid = True
-        if(len(VenueModel().get_venue_by(name=posted_values.get('name'), city=posted_values.get('city'), state=posted_values.get('state'))) > 0):
+        if len(
+                VenueModel().get_venue_by(
+                    name=posted_values.get('name'),
+                    city=posted_values.get('city'),
+                    state=posted_values.get('state')
+                )
+            ) > 0:
             errors.append('Venue already exists in this city')
             # TODO: Add more validations for this form
         if len(errors) > 0:
@@ -58,7 +63,7 @@ class VenuesController(BaseController):
             if len(venue_data) == 0:
                 raise Exception
             venue_data = venue_data[0]
-        except:
+        except Exception:
             return VenueViews(self._session_data).not_found(guid)
 
         if self._request.method == 'POST':
@@ -100,7 +105,7 @@ class VenuesController(BaseController):
         try:
             venue_data = VenueModel().get_venue(guid)
             return VenueViews(self._session_data).get_venue(venue_data)
-        except:
+        except Exception:
             return VenueViews(self._session_data).not_found(guid)
     
     def delete(self, guid):
@@ -114,5 +119,5 @@ class VenuesController(BaseController):
             if not VenueModel().delete(guid):
                 raise Exception
             return self.redirect('/venues/list')
-        except:
+        except Exception:
             return VenueViews(self._session_data).not_found(guid)

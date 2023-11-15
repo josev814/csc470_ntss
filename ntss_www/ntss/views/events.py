@@ -66,6 +66,9 @@ class EventViews(Views):
         return self.template.render(self.template_vars)
 
     def not_found(self, event_guid):
+        """
+        Shows the not found page if the event doesn't exist
+        """
         self.set_template('events/not_found.html')
         self.template_vars['pageName'] = 'Event Not Found'
         self.template_vars['guid'] = event_guid
