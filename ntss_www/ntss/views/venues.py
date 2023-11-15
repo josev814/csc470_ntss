@@ -26,14 +26,14 @@ class VenueViews(Views):
         self.template_vars['pageName'] = f'Venue: {venue_info["name"]}'
         return self.template.render(self.template_vars)
     
-    def add(self, form_values, errors: list) -> str:
+    def add(self, form_values, errors_list: list) -> str:
         """
         Add a venue into system
         """
         self.set_template('venues/add_edit.html')
         self.template_vars['pageName'] = 'Add Venue'
         self.template_vars['form_post'] = form_values
-        self.template_vars['errors'] = errors
+        self.template_vars['errors'] = errors_list
         return self.template.render(self.template_vars)
 
     def edit(self, form_values, errors: list) -> str:
