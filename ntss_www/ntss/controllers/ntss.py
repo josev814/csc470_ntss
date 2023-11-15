@@ -63,25 +63,32 @@ class NtssController(BaseController):
         self._delete_session(session_id)
         self._clear_login_cookie()
         return self.redirect('/')
-    
+
     def forgot_password(self):
         """
         Display the forgot password page
         """
         user_email = None
+        password = None
         message = None
         if self._request.method == 'POST':
             for request_name, request_value in self._request.params.items():
                 match request_name:
                     case 'email':
                         user_email = request_value
+                    case 'password':
+                        password = request_value
             user_ctrl = UsersController(self._request, self._response)
-            if user_email and user_ctrl.valid_user(email=user_email):
-                auth_token = user_ctrl.add_auth_token()
-                self._send_reset_email(user_email, auth_token)
-                message = 'Check your email to reset your pasword'
+            if not password:
+                message = 'Input new password'
+            elif not user_email or not user_ctrl.valid_user(email=user_email):
+                message = 'Invalid Email Address'
+            elif user_ctrl.change_password(user_email, password):
+                message = 'Password successfully changed'
+            else:
+                message = 'Failed to update password'
         return NtssViews().forgot_password(user_email, message)
-    
+
     def _send_reset_email(self, email: str, auth_token: str):
         """
         Sends an email to reset the password

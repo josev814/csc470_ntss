@@ -205,3 +205,8 @@ class UsersController(BaseController):
         #session_data = self._get_session_data(sid)
         user_info = {'user_roles': 'NTSS_ADMIN'}
         return UserViews().list_users(users_data, user_info)
+
+    def change_password(self, email, password) -> bool: 
+        user_db = UserModel(True)
+        encrypted_pass = user_db._set_encrypted_password(password)
+        return user_db.change_password(email, encrypted_pass)
