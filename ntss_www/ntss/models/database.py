@@ -74,7 +74,11 @@ class MysqlDatabase:
             db_conn.commit()
         return db_exec
 
-    def db_select(self, columns: list = None, joins: list = None, filters=None, start: int=0, limit: int = 25):
+    def db_select(
+            self, columns: list = None, 
+            joins: list = None, filters=None, 
+            start: int=0, limit: int = 25
+        ):
         """
         Method to select data from the database
         """
