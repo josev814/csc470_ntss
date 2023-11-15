@@ -1,0 +1,109 @@
+{% include "blocks/admin_top.html" %}
+<div class="row text-start">
+  {% include "blocks/navigation.html" %}
+
+  <div class="col-9 px-md-4">
+    <div class="row border-bottom">
+      <h1 class="h2">{{pageName}}</h1>
+    </div>
+    {% if errors: %}
+    {% include "blocks/error_modal.html" %}
+    {% endif %}
+    <div class="row my-4 mb-md-0">
+      <div class="col">
+        <form method="POST" class="d-grid gap-3">
+            <div class="row">
+              <div class="col">
+                <label>Name</label>
+                <input type="text" class="form-control" name="name" placeholder="Event Name"
+                  {% if form_post.name: %} value="{{ form_post.name }}" {% endif %} required>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col">
+                <label for="venues">Venue</label>
+                <select class="form-select" name="venue_guid" id="venues" required>
+                  <option {% if not form_post.venue_guid: %} selected {% endif %} value="">Choose...</option>
+                  {% for venue in venues: %}
+                  <option value="{{ venue.venue_guid }}" {% if form_post.venue_guid and form_post.venue_guid==venue.venue_guid: %} selected {% endif %}>
+                    {{ venue.name }} (Booths: {{ venue.booths }}, Rooms: {{ venue.conference_rooms }})
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <input type="hidden" name="user_guid" value="{{ current_user.user_guid }}" />
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label for="theme">Theme</label>
+                <input type="text" class="form-control" id="theme" name="theme" placeholder="Theme" 
+                  {% if form_post.theme: %} value="{{ form_post.theme }}" {% endif %} >
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col">
+                <label for="website">Website</label>
+                <input type="text" class="form-control" id="website" name="website" placeholder="Website" 
+                  {% if form_post.website: %} value="{{ form_post.website }}" {% endif %} >
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label for="boothRequired">Booths Required</label>
+                <input type="number" class="form-control" id="boothsRequired" name="booths" placeholder="Booths Required #"
+                  {% if form_post.booths: %} value="{{ form_post.booths }}" {% endif %} >
+              </div>
+
+              <div class="col">
+                <label for="conferenceRooms">Conference Rooms Required</label>
+                <input type="text" class="form-control" id="conferenceRooms" name="conference_rooms" placeholder="Conference Rooms Required #" 
+                  {% if form_post.conference_rooms: %} value="{{ form_post.conference_rooms }}" {% endif %} >
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label for="startDate">Event Start</label>
+                <input type="datetime-local" class="form-control" id="startDate" name="start_date" placeholder="Start Date"
+                  {% if form_post.start_date: %} value="{{ form_post.start_date }}" {% endif %} >
+              </div>
+
+              <div class="col">
+                <label for="endDate">Event End</label>
+                <input type="datetime-local" class="form-control" id="endDate" name="end_date" placeholder="End Date"
+                  {% if form_post.end_date: %} value="{{ form_post.end_date }}" {% endif %} >
+              </div>
+            </div>
+
+            {% if pageName.startswith('Edit ') %}
+            <div class="row">
+              <input type="hidden" name="event_guid" value="{{ form_post.event_guid }}" />
+            </div>
+            {% endif %}
+            
+            <div class="row">
+              <div class="col-2">
+                <button class="btn btn-lg btn-primary" type="submit">Save</button>
+              </div>
+              <div class="col-2">
+                <a onclick="history.back()" class="btn btn-lg btn-info">Cancel</a>
+              </div>
+              {% if pageName.startswith('Edit ') %}
+              <div class="col-2">
+                <a href="/myevents/delete/{{ form_post.event_guid }}" class="btn btn-lg btn-danger">Delete</a>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}
