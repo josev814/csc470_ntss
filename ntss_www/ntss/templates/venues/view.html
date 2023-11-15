@@ -1,0 +1,60 @@
+{% include "blocks/admin_top.html" %}
+<div class="row text-start">
+  {% include "blocks/navigation.html" %}
+
+  <div class="col-9 px-md-4">
+    <div class="row border-bottom">
+      <h1 class="h2">{{pageName}}</h1>
+    </div>
+    {% if errors: %}
+    {% include "blocks/error_modal.html" %}
+    {% endif %}
+    <div class="row my-4 mb-md-0">
+      <div class="col d-grid gap-3">
+        <div class="row">
+          <div class="col">
+            <b>Address:</b><br />
+            {{ venue.address }} <br />
+            {% if venue.address2: %}
+            {{ venue.address2 }}
+            {% endif %}
+            {{ venue.city }}, {{ venue.state }} {{ venue.zip }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <b>Phone Number: </b>{{ venue.phone }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <b>Website: </b>{{ venue.website }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <b>Booth Capacity: </b>{{ venue.booths }}
+          </div>
+        </div>
+        <div class="row">
+
+          <div class="col">
+            <b>Conference Rooms: </b>{{ venue.conference_rooms }}
+          </div>
+        </div>
+
+        <div class="row border-top pt-3">
+          <div class="col-2">
+            <a onclick="history.back()" class="btn btn-primary" type="button">Venue List</a>
+          </div>
+          <div class="col-2">
+            <a href="/venue/edit/{{venue.venue_guid}}" class="btn btn-primary" type="button">Edit</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}

@@ -1,0 +1,166 @@
+{% include "blocks/admin_top.html" %}
+<div class="row text-start">
+  {% include "blocks/navigation.html" %}
+
+  <div class="col-9 px-md-4">
+    <div class="row border-bottom">
+      <h1 class="h2">{{pageName}}</h1>
+    </div>
+    <div class="row my-4 mb-md-0">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="event-tab" data-bs-toggle="tab" data-bs-target="#event" type="button"
+            role="tab" aria-controls="event" aria-selected="true">Event</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="venue-tab" data-bs-toggle="tab" data-bs-target="#venue" type="button" role="tab"
+            aria-controls="venue" aria-selected="false">Venue</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="customer-tab" data-bs-toggle="tab" data-bs-target="#customer" type="button"
+            role="tab" aria-controls="customer" aria-selected="false">Customer</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="event" role="tabpanel" aria-labelledby="event-tab">
+          <div class="d-grid gap-3 text-start">
+            <div class="row mt-3">
+              <div class="col-2"><b>Theme:</b></div>
+              <div class="col">{{ event.theme }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Website:</b></div>
+              <div class="col">{{ event.website }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Booths:</b></div>
+              <div class="col">{{ event.booths }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Conference Rooms:</b></div>
+              <div class="col">{{ event.conference_rooms }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Dates:</b></div>
+              <div class="col">{{ event.start_date.strftime('%B %d, %Y %H:%M:%S') }} - {{ event.end_date.strftime('%B
+                %d, %Y %H:%M:%S') }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Created:</b></div>
+              <div class="col">{{ event.create_date.strftime('%B %d, %Y %H:%M:%S') }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Updated:</b></div>
+              <div class="col">{{ event.updated_date.strftime('%B %d, %Y %H:%M:%S') }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="venue" role="tabpanel" aria-labelledby="venue-tab">
+          <div class="d-grid gap-3 text-start">
+            <div class="row mt-3">
+              <div class="col-2"><b>Name:</b></div>
+              <div class="col">{{ venue.name }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Address:</b></div>
+              <div class="col">
+                {{ venue.address }}<br />
+                {% if venue.address2: %}
+                {{ venue.address2 }}<br />
+                {% endif %}
+                {{ venue.city }}, {{ venue.state }} {{ venue.zip }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Phone:</b></div>
+              <div class="col">{{ venue.phone }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Website:</b></div>
+              <div class="col">{{ venue.website }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Available Booths:</b></div>
+              <div class="col">{{ venue.booths }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Available Rooms:</b></div>
+              <div class="col">{{ venue.conference_rooms }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Created:</b></div>
+              <div class="col">{{ venue.create_date.strftime('%B %d, %Y %H:%M:%S') }}</div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Updated:</b></div>
+              <div class="col">{{ venue.updated_date.strftime('%B %d, %Y %H:%M:%S') }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="customer" role="tabpanel" aria-labelledby="customer-tab">
+          <div class="d-grid gap-3 text-start">
+            <div class="row mt-3">
+              <div class="col-2"><b>Name:</b></div>
+              <div class="col">
+                {{ customer.prefix_name }} {{ customer.first_name }} {{ customer.middle_name }} {{ customer.last_name }}
+                {{ customer.suffix_name }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Address:</b></div>
+              <div class="col">
+                {{ customer.address }}<br />
+                {% if customer.address2: %}
+                {{ customer.address2 }}<br />
+                {% endif %}
+                {{ customer.city }}, {{ customer.state }} {{ customer.zip }}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-2"><b>Phone:</b></div>
+              <div class="col">
+                {{ customer.phone }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-2"><b>Website:</b></div>
+              <div class="col">
+                {{ customer.website }}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-2"><b>Role:</b></div>
+              <div class="col">
+                {{ customer.user_roles }}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-2"><b>Is Active:</b></div>
+              <div class="col">
+                {% if customer.is_active == 1: %}
+                Yes
+                {% else %}
+                No
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-2"><b>Created:</b></div>
+              <div class="col">{{ customer.create_date.strftime('%B %d, %Y %H:%M:%S') }}</div>
+            </div>
+
+            <div class="row">
+              <div class="col-2"><b>Updated:</b></div>
+              <div class="col">{{ customer.updated_date.strftime('%B %d, %Y %H:%M:%S') }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}

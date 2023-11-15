@@ -1,0 +1,56 @@
+{% include "blocks/admin_top.html" %}
+<div class="row">
+  {% include "blocks/navigation.html" %}
+
+  <div class="col-9 px-md-4 text-start">
+    <div class="row">
+      <h1 class="h2">Events List</h1>
+    </div>
+    <div class="row">
+      <div class="table-responsive col">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              {%- for column in events[0].keys(): -%}
+              {%- if not column.endswith('_guid'): -%}
+              <th scope="col">{{ column.capitalize() }}</th>
+              {%- endif -%}
+              {%- endfor -%}
+            </tr>
+          </thead>
+          <tbody>
+            {% for event in events: %}
+            <tr>
+              <td scope="col">
+                <a href="/event/view/{{ event.event_guid }}" class="btn btn-link-dark p-0">
+                  <span class="material-symbols-outlined">
+                    preview
+                  </span>
+                </a>
+                <a href="/event/edit/{{ event.event_guid}}" class="btn btn-link-dark p-0">
+                  <span class="material-symbols-outlined">
+                    edit
+                  </span>
+                </a>
+              </td>
+              {% for column, value in event.items(): %}
+              {%- if not column.endswith('_guid'): -%}
+              {%- if column == 'is_active': -%}
+              <td>{% if value == 1 %} Yes {% else %} No {% endif %}</td>
+              {%- elif column.endswith('date'): -%}
+              <td>{{ value.strftime('%B %d, %Y') }} </td>
+              {%- else: -%}
+              <td>{{ value }} </td>
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}

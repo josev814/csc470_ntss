@@ -8,6 +8,7 @@ from ntss.controllers.routes import Routes
 from ntss.controllers.ntss import NtssController
 from ntss.controllers.events import EventsController
 from ntss.controllers.users import UsersController
+from ntss.controllers.venues import VenuesController
 
 
 application = Routes()
@@ -120,19 +121,54 @@ def list_users(request, response):
     return response
 
 
-@application.route('/events', methods=['GET'])
-def events(request, response):
-    """ The page to list events """
-    print(request.params)
-    response.text = 'This is the events management page'
+### START Event Specific Routes ###
+@application.route('/events/list', methods=['GET'])
+@login_access_required
+def list_events(request, response):
+    """
+    Lists the events in the system
+    """
+    response.text = EventsController(request, response).list()
     return response
 
+@application.route('/events/add', methods=['GET', 'POST'])
+@login_access_required
+def add_event(request, response):
+    """
+    Adds a event in the system
+    """
+    controller_response = EventsController(request, response).add()
+    response = return_output(response, controller_response, 200)
+    return response
 
-@application.route('/event/{event_id}', methods=['GET', 'POST', 'PATCH', 'DELETE'])
-def event(request, response, event_id):
-    """ A page to list a particular event """
-    print(request.params)
-    response.text = f'This is the event management page for {event_id}'
+@application.route('/event/view/{guid}', methods=['GET'])
+@login_access_required
+def get_event(request, response, guid: str):
+    """
+    Gets the event in the system based on the guid
+    """
+    response.text = EventsController(request, response).view_event(guid)
+    return response
+
+@application.route('/event/edit/{guid}', methods=['GET', 'POST'])
+@login_access_required
+def edit_event(request, response, guid: str):
+    """
+    Processes an edit for a event in the system based on the guid
+    """
+    response.text = EventsController(request, response).edit(guid)
+    return response
+
+@application.route('/event/delete/{guid}', methods=['GET', 'POST'])
+@login_access_required
+def delete_event(request, response, guid: str):
+    """
+    Deletes a event in the system based on the guid
+    """
+    controller_response = EventsController(request, response).delete(guid)
+    response = return_output(response, controller_response, 200)
+    return response
+### END Event Specific Routes ###
 
 
 @application.route('/myevent/{event_id}/invoice/{invoice_id}', methods=['GET'])
@@ -169,3 +205,54 @@ def logout(request, response):
     output = NtssController(request, response).logout()
     response = return_output(response, output, 200)
     return response
+
+
+### VENUES ###
+@application.route('/venues/list', methods=['GET'])
+@login_access_required
+def list_venues(request, response):
+    """
+    Lists the venues in the system
+    """
+    response.text = VenuesController(request, response).list()
+    return response
+
+@application.route('/venues/add', methods=['GET', 'POST'])
+@login_access_required
+def add_venue(request, response):
+    """
+    Adds a venue in the system
+    """
+    controller_response = VenuesController(request, response).add()
+    response = return_output(response, controller_response, 200)
+    return response
+
+@application.route('/venue/view/{guid}', methods=['GET'])
+@login_access_required
+def get_venue(request, response, guid: str):
+    """
+    Gets the venue in the system based on the guid
+    """
+    response.text = VenuesController(request, response).view(guid)
+    return response
+
+@application.route('/venue/edit/{guid}', methods=['GET', 'POST'])
+@login_access_required
+def edit_venue(request, response, guid: str):
+    """
+    Processes an edit for a venue in the system based on the guid
+    """
+    response.text = VenuesController(request, response).edit(guid)
+    return response
+
+@application.route('/venue/delete/{guid}', methods=['GET', 'POST'])
+@login_access_required
+def delete_venue(request, response, guid: str):
+    """
+    Deletes a venue in the system based on the guid
+    """
+    controller_response = VenuesController(request, response).delete(guid)
+    response = return_output(response, controller_response, 200)
+    return response
+
+### END VENUES ###

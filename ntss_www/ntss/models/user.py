@@ -33,11 +33,11 @@ class Users(MysqlDatabase):
         )
         return permissions
 
-    def get_users(self, start=0, limit=20):
+    def get_users(self, columns: list=None, start=0, limit=20):
         """
         Gets all users free m the database 
         """
-        user_records = self.db_select(start=start, limit=limit)
+        user_records = self.db_select(columns=columns, start=start, limit=limit)
         return user_records
 
     def get_user(self, user_email: str, user_password: None) -> dict:
