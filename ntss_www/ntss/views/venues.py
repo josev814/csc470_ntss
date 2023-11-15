@@ -26,14 +26,15 @@ class VenueViews(Views):
         self.template_vars['pageName'] = f'Venue: {venue_info["name"]}'
         return self.template.render(self.template_vars)
     
-    def add(self, form_values, errors_list: list) -> str:
+    #pylint: disable=E0601
+    def add(self, form_values, errors: list) -> str:
         """
         Add a venue into system
         """
         self.set_template('venues/add_edit.html')
         self.template_vars['pageName'] = 'Add Venue'
         self.template_vars['form_post'] = form_values
-        self.template_vars['errors'] = errors_list
+        self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
 
     def edit(self, form_values, errors: list) -> str:
