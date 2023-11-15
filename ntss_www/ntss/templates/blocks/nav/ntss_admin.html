@@ -1,57 +1,72 @@
-<div class="row">
-    <div class="col-3">
-      <div class="left-nav d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 100%;">
-        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-          <span class="fs-4">Navigation</span>
+<div class="col-3 mx-0 text-start">
+    <div class="row px-1">
+      <span class="fs-4">Navigation</span>
+    </div>
+    <hr>
+    <ul class="list-unstyled ps-0">
+      <li class="mb-1">
+        <a href='/dashboard' class="link-dark rounded text-decoration-none btn btn-toggle" aria-expanded="false">
+          <span class="material-symbols-outlined">home</span>
+          Home
         </a>
-        <hr>
-        <ul class="list-unstyled ps-0">
-          <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
-              <span class="material-symbols-outlined">home</span>
-              Home
-            </button>
-            <div class="collapse" id="home-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="#" class="link-dark rounded">Overview</a></li>
-                <li><a href="#" class="link-dark rounded">Updates</a></li>
-                <li><a href="#" class="link-dark rounded">Reports</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#user-management-collapse" aria-expanded="false">
-              <span class="material-symbols-outlined"> manage_accounts </span>
-              User Management
-            </button>
-            <div class="collapse" id="user-management-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="/users/list_users" class="link-dark rounded">List Users</a></li>
-                <li><a href="/users/add_user" class="link-dark rounded">Add Users</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-              <span class="material-symbols-outlined">
-                calendar_month
-              </span>
-              Events
-            </button>
-            <div class="collapse" id="dashboard-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li>
-                  <a href="#" class="link-dark rounded">
-                    <span class="material-symbols-outlined">
-                      app_registration
-                    </span>
-                    Register For Event
-                  </a>
-                </li>
-                
-              </ul>
-            </div>
-          </li>
-        </ul>
-      </div>
-  </div>
+      </li>
+      <li class="mb-1">
+        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+          data-bs-target="#user-management-collapse" aria-expanded="false">
+          <span class="material-symbols-outlined"> manage_accounts </span>
+          User Management
+        </button>
+        <div class="collapse" id="user-management-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li><a href="/users/list_users" class="link-dark rounded">List Users</a></li>
+            <li><a href="/users/add_user" class="link-dark rounded">Add Users</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="mb-1">
+        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+          data-bs-target="#dashboard-collapse" aria-expanded="false">
+          <span class="material-symbols-outlined">
+            calendar_month
+          </span>
+          Events
+        </button>
+        <div class="collapse" id="dashboard-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li>
+              <a href="/venues/list" class="link-dark rounded">
+                <span class="material-symbols-outlined">
+                  domain
+                </span>
+                Venues
+              </a>
+            </li>
+            <li>
+              <a href="/venues/add" class="link-dark rounded">
+                <span class="material-symbols-outlined">
+                  domain
+                </span>
+                Add Venue
+              </a>
+            </li>
+            <li>
+              <a href="/events/list" class="link-dark rounded">
+                <span class="material-symbols-outlined">
+                  festival
+                </span>
+                Events
+              </a>
+            </li>
+            <li>
+              <a href="/events/add" class="link-dark rounded">
+                <span class="material-symbols-outlined">
+                  calendar_add_on
+                  </span>
+                Add Event
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+</div>
