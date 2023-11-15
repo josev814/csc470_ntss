@@ -53,3 +53,9 @@ US_STATES = (
     'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
     'Wisconsin', 'Wyoming'
 )
+
+BOOTHS = {
+    'large': 500, 
+    'medium': 300, 
+    'small': 100
+}

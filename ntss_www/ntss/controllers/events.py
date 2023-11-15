@@ -144,7 +144,7 @@ class EventsController(BaseController):
         }
         return EventViews(self._session_data).user_event(event_info)
 
-    def get_user_events(self):
+    def get_my_events(self):
         """
         Gets events that is associated with a user
         """

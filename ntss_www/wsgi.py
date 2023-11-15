@@ -193,7 +193,7 @@ def myevent(request, response, event_id):
 def myevents(request, response):
     """ A page to display a user's events"""
     print(request.path)
-    output = EventsController(request, response).get_user_events()
+    output = EventsController(request, response).get_my_events()
     response.text = output
     return response
 
