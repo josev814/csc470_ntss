@@ -1,13 +1,22 @@
 {% if current_user.user_roles == 'NTSS_ADMIN' %}
   {% include "blocks/nav/ntss_admin.html" %}
+
+{% elif current_user.user_roles == 'EVENT_CUSTOMER' %}
+  {% include "blocks/nav/event_customer.html" %}
+
 {% elif current_user.user_roles == 'EVENT_STAFF' %}
   {% include "blocks/nav/event_staff.html" %}
+
 {% elif current_user.user_roles == 'EXHIBITOR' %}
   {% include "blocks/nav/exhibitor.html" %}
+
 {% elif current_user.user_roles == 'DOMAIN_EXPERT' %}
   {% include "blocks/nav/domain_expert.html" %}
+
 {% elif current_user.user_roles == 'SELECTED_SPEAKER' %}
   {% include "blocks/nav/selected_speaker.html" %}
+
 {% else %}
   {% include "blocks/nav/observer.html" %}
+  
 {% endif %}
