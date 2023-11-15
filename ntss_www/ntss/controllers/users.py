@@ -207,6 +207,8 @@ class UsersController(BaseController):
         return UserViews().list_users(users_data, user_info)
 
     def change_password(self, email, password) -> bool: 
+        """
+        Function to change password
+        """
         user_db = UserModel(True)
-        encrypted_pass = user_db._set_encrypted_password(password)
-        return user_db.change_password(email, encrypted_pass)
+        return user_db.change_password(email, password)

@@ -204,6 +204,9 @@ class Users(MysqlDatabase):
         return uuid4().hex
 
     def change_password(self, email, password):
-        values = {'password': password}
+        """
+        Function to change password
+        """
+        values = {'password': self._set_encrypted_password(password)}
         where_clause = [{'column': 'email', 'operator': '=', 'value': email}]
         return self.db_update(values, where_clause)
