@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS `events` (
     `user_guid` VARCHAR(75) NOT NULL,
     `name` VARCHAR(75) NOT NULL,
     `theme` VARCHAR(255) NOT NULL,
+    `slogan` VARCHAR(50) NOT NULL,
     `booths` int(5) NOT NULL,
     `conference_rooms` int(3) NOT NULL,
     `start_date` timestamp NOT NULL,
