@@ -45,7 +45,6 @@ class EventViews(Views):
         """
         Edits an event in the system
         """
-        print('fv: ', form_values)
         self.set_template('events/add_edit.html')
         self.template_vars['pageName'] = 'Edit Event'
         self.template_vars['form_post'] = form_values
@@ -74,7 +73,6 @@ class EventViews(Views):
         self.template_vars['guid'] = event_guid
         return self.template.render(self.template_vars)
 
-    
     def user_event(self, event_info):
         """
         Load the events for a user
@@ -83,12 +81,50 @@ class EventViews(Views):
         self.template_vars['event'] = event_info
         return self.template.render(self.template_vars)
 
-    def user_events(self):
+    def user_events(self, events_info):
         """
         Load the events for a user
         """
-        self.set_template('events_list.html')
+
         self.template_vars['pageName'] = 'Events'
+        self.template_vars['events'] = events_info
+        if len(events_info) > 0:
+            self.set_template('/events/user_events_list.html')
+        else:
+            self.set_template('events/no_items.html')
+            self.template_vars['controller_type'] = self._controller_type
+        return self.template.render(self.template_vars)
+
+    def add_customer_event(self, form_values, venues, errors: list) -> str:
+        """
+        Customer Creates Event
+        """
+        self.set_template('/events/add_edit_event.html')
+        self.template_vars['pageName'] = 'Add Event'
+        self.template_vars['form_post'] = form_values
+        self.template_vars['venues'] = venues
+        self.template_vars['errors'] = errors
+        return self.template.render(self.template_vars)
+
+    def edit_customer_event(self, form_values, venues, errors: list) -> str:
+        """
+        Edit Customer Event
+        """
+        self.set_template('/events/add_edit_event.html')
+        self.template_vars['pageName'] = 'Edit Event'
+        self.template_vars['form_post'] = form_values
+        self.template_vars['venues'] = venues
+        self.template_vars['errors'] = errors
+        return self.template.render(self.template_vars)
+
+    def view_customer_event(self, event_data, venue_data) -> str:
+        """
+        View Customer Event
+        """
+        self.set_template('/events/customer_event_info.html')
+        self.template_vars['pageName'] = f'Event: {event_data["name"]}'
+        self.template_vars['event'] = event_data
+        self.template_vars['venue'] = venue_data
         return self.template.render(self.template_vars)
 
     def display_invoice(self, invoice_information):

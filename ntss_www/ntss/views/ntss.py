@@ -31,7 +31,7 @@ class NtssViews(Views):
         if email:
             self.template_vars['email'] = email
         if message:
-            self.template_vars['message'] = message
+            self.template_vars['errors'] = message
         return self.template.render(self.template_vars)
 
     def dashboard(self, user_info):

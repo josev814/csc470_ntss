@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS `events` (
     `user_guid` VARCHAR(75) NOT NULL,
     `name` VARCHAR(75) NOT NULL,
     `theme` VARCHAR(255) NOT NULL,
+    `slogan` VARCHAR(50) NOT NULL,
     `booths` int(5) NOT NULL,
     `conference_rooms` int(3) NOT NULL,
     `start_date` timestamp NOT NULL,
@@ -137,6 +138,12 @@ INSERT INTO `users` (
     'Mr.', "Caileb", '', 'Carter', '',
     '1200 Murchison Rd', '', 'Fayetteville', 'North Carolina', '28301',
     'ccarter10@broncos.uncfsu.edu', '910-672-1111', 'https://www.uncfsu.edu/', 1, 'NTSS_ADMIN'
+),
+(
+    hex(REPLACE(uuid(),'-','')), @cust_guid, '$argon2id$v=19$m=65536,t=3,p=4$Uajfa42Shy/FoK8DroIbPQ$l/Twf9FIXIjAkvaqXwyHujqf4ZUt+WhT9Y0h2t91vw4',
+    'Mr.', "Joe", '', 'Smack', '',
+    '1200 Murchison Rd', '', 'Fayetteville', 'North Carolina', '28301',
+    'joe.smack@aol.com', '910-672-1111', 'https://www.uncfsu.edu/', 1, 'EVENT_CUSTOMER'
 );
 
 

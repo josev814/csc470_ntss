@@ -78,6 +78,7 @@ class EventsController(BaseController):
         if len(event_info) == 0:
             return EventViews(self._session_data).not_found(event_guid)
         event_info = event_info[0]
+        print(event_info)
         venue_info = VenueModel().get_venue_by(guid=event_info['venue_guid'])[0]
         owner_info = UsersModel().get_user_by(user_guid=event_info['user_guid'])[0]
         return EventViews(self._session_data).view(event_info, venue_info, owner_info)
@@ -144,11 +145,64 @@ class EventsController(BaseController):
         }
         return EventViews(self._session_data).user_event(event_info)
 
-    def get_user_events(self):
+    def get_my_events(self):
         """
         Gets events that is associated with a user
         """
-        return EventViews(self._session_data).user_events()
+        event_data = EventModel().get_event_by(user_guid=self._session_data['user_guid'])
+        return EventViews(self._session_data).user_events(event_data)
+    
+    def add_customer_event(self):
+        """
+        Event Customer Creates Event
+        """
+        posted_values = {}
+        errors = None
+        if self._request.method == 'POST':
+            for request_name, request_value in self._request.params.items():
+                posted_values[request_name] = request_value.strip()
+            is_valid, errors = self.__verify_add_form(posted_values)
+            if is_valid:
+                venue_guid = EventModel().add(
+                    posted_values
+                )
+                if venue_guid:
+                    return self.redirect('/myevents')
+        venues = VenueModel().get_venues(['venue_guid', 'name', 'booths', 'conference_rooms'])
+        return EventViews(self._session_data).add_customer_event(posted_values, venues, errors)
+    
+    def edit_customer_event(self, event_guid):
+        """
+        Edit Customer Event
+        """
+        posted_values = {}
+        errors = None
+        event_info = EventModel().get_event_by(guid=event_guid)
+        if len(event_info) == 0:
+            return EventViews(self._session_data).not_found(event_guid)
+        event_info = event_info[0]
+        
+        if self._request.method == 'POST':
+            for request_name, request_value in self._request.params.items():
+                posted_values[request_name] = request_value.strip()
+            event_info = posted_values
+            is_valid, errors = self.__verify_edit_form(posted_values)
+            if is_valid and EventModel().update(event_guid, posted_values):
+                errors.append('Event was successfully Updated')
+        venues = VenueModel().get_venues(['venue_guid', 'name', 'booths', 'conference_rooms'])
+        return EventViews(self._session_data).edit_customer_event(event_info, venues, errors)
+
+    def view_customer_event(self, event_guid):
+        """
+        View Customer Event
+        """
+        event_info = EventModel().get_event_by(guid=event_guid)
+        if len(event_info) == 0:
+            return EventViews(self._session_data).not_found(event_guid)
+        event_info = event_info[0]
+        venue_info = VenueModel().get_venue_by(guid=event_info['venue_guid'])[0]
+        return EventViews(self._session_data).view_customer_event(event_info, venue_info)
+
 
     def get_exhibitor_booth_invoice(self, event_id, invoice_id):
         """

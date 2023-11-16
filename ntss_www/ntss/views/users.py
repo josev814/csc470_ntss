@@ -56,3 +56,19 @@ class UserViews(Views):
         self.template_vars['users'] = users
         self.template_vars['current_user'] = current_user
         return self.template.render(self.template_vars)
+
+    def register_user(self, posted_values, errors):
+        """
+        Register user into system
+        """
+        self.set_template('ntss/register.html')
+        self.template_vars['pageName'] = 'Register'
+        self.template_vars['states'] = self.US_STATES
+        new_roles = []
+        for role in self.ROLES:
+            if role not in ['NTSS_ADMIN', 'EVENT_STAFF']:
+                new_roles.append(role) 
+        self.template_vars['roles'] = new_roles
+        self.template_vars['form_post'] = posted_values
+        self.template_vars['errors'] = errors
+        return self.template.render(self.template_vars)

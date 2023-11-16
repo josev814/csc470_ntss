@@ -35,17 +35,7 @@
             </div>
 
             <div class="row">
-              <div class="col">
-                <label for="users">Customer</label>
-                <select class="form-select" name="user_guid" id="users" required>
-                  <option {% if not form_post.user_guid: %} selected {% endif %} value="">Choose...</option>
-                  {% for user in users: %}
-                  <option value="{{ user.user_guid }}" {% if form_post.user_guid and form_post.user_guid==user.user_guid: %} selected {% endif %}>
-                    {{ user.first_name }} {{ user.last_name }}
-                  </option>
-                  {% endfor %}
-                </select>
-              </div>
+              <input type="hidden" name="user_guid" value="{{ current_user.user_guid }}" />
             </div>
 
             <div class="row">
@@ -55,7 +45,6 @@
                   {% if form_post.slogan: %} value="{{ form_post.slogan }}" {% endif %} >
               </div>
             </div>
-
 
             <div class="row">
               <div class="col">
@@ -116,7 +105,7 @@
               </div>
               {% if pageName.startswith('Edit ') %}
               <div class="col-2">
-                <a href="/event/delete/{{ form_post.event_guid }}" class="btn btn-lg btn-danger">Delete</a>
+                <a href="/myevents/delete/{{ form_post.event_guid }}" class="btn btn-lg btn-danger">Delete</a>
               </div>
               {% endif %}
             </div>
