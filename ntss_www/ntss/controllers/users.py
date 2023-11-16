@@ -251,3 +251,4 @@ class UsersController(BaseController):
         """
         user_db = UserModel(True)
         return user_db.change_password(email, password)
+        
