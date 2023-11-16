@@ -72,6 +72,3 @@ class UserViews(Views):
         self.template_vars['form_post'] = posted_values
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
-
-
-        
