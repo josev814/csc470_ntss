@@ -86,6 +86,12 @@
                 <input type="text" class="form-control" id="conferenceRooms" name="conference_rooms" placeholder="Conference Rooms #" 
                   {% if form_post.conference_rooms: %} value="{{ form_post.conference_rooms }}" {% endif %} >
               </div>
+
+              <div class="col">
+                <label for="cost">Cost $</label>
+                <input type="text" class="form-control" id="cost" name="cost" placeholder="Cost (0.00)" 
+                  {% if form_post.cost: %} value="{{ form_post.cost }}" {% endif %} required>
+              </div>
             </div>
 
             {% if pageName.startswith('Edit ') %}
