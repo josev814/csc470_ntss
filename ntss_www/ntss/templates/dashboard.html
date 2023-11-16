@@ -1,21 +1,21 @@
 {% include "blocks/admin_top.html" %}
 <div class="row">
-{% include "blocks/navigation.html" %}
+  {% include "blocks/navigation.html" %}
 
-    <div class="col-9 px-md-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">{{ pageName }}</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-          Welcome back, {{ current_user.first_name }} {{ current_user.last_name }}
-        </div>
+  <div class="col-9 px-md-4">
+    <div
+      class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">{{ pageName }}</h1>
+      <div class="btn-toolbar mb-2 mb-md-0">
+        Welcome back
       </div>
-      <div class="text-start">
-        {% if current_user.user_roles == 'EVENT_CUSTOMER' or current_user.user_roles == 'EXHIBITOR' %}
-          <u>Calendar: </u>
-        {% endif %}
-        <!--Enter other dashboard info here-->
-      </div>
-    </main>
+    </div>
+    <div class="text-start">
+      {% if current_user.user_roles == 'EVENT_CUSTOMER' or current_user.user_roles == 'EXHIBITOR' %}
+      <u>Calendar: </u>
+      {% endif %}
+      <!--Enter other dashboard info here-->
+    </div>
   </div>
 </div>
 {% include "blocks/admin_bottom.html" %}

@@ -8,6 +8,9 @@
                 </h1>
                 <div class="navbar-nav">
                     <div class="nav-item text-nowrap">
+                        <span class="nav-link px-3 text-dark">{{ current_user.first_name }} {{ current_user.last_name }}</span>
+                    </div>
+                    <div class="nav-item text-nowrap">
                         <a class="nav-link px-3" href="/users/view/{{current_user.user_guid}}">My Profile</a>
                     </div>
                     <div class="nav-item text-nowrap">
