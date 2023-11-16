@@ -111,6 +111,7 @@ class Event(MysqlDatabase):
             'slogan': args.get('slogan'),
             'booths': args.get('booths'),
             'conference_rooms': args.get('conference_rooms'),
+            'ticket_price': args.get('ticket_price'),
             'website': args.get('website'),
             'theme': args.get('theme'),
             'start_date': args.get('start_date'),
