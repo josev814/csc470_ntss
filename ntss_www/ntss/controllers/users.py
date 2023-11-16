@@ -93,6 +93,45 @@ class UsersController(BaseController):
         user_db.add_auth_token(auth_token, user_id)
         return auth_token
 
+    def register_user(self):
+        """
+        Register a user into the system
+        """
+        posted_values = {}
+        message = None
+        if self._request.method == 'POST':
+            for request_name, request_value in self._request.params.items():
+                posted_values[request_name] = request_value.strip()
+            is_valid, message = self._verify_add_user_form(posted_values)
+            if is_valid:
+                user_guid = UserModel(True).add_user(
+                    posted_values['email'], posted_values['password'], posted_values
+                )
+                if user_guid:
+                    message = "User registered successfully."
+        return UserViews().register_user(posted_values, message)
+
+    def _verify_register_user_form(self, posted_values):
+        """
+        Verifies that we have all the data for the register user form
+        """
+        errors = []
+        is_valid = True
+        for key, form_val in posted_values.items():
+            match key:
+                case 'email':
+                    if not re.match(r'[a-z0-9_\-\.]+@[a-z0-9_\-\.]+.[a-z0-9_\-]+', form_val, re.I):
+                        errors.append('Email is invalid')
+                    elif(len(UserModel().get_user_by(email=form_val)) > 0):
+                        errors.append('Email Already Exists')
+                case other:
+                    print(f"{other} isn't being validated on form submission")
+            # TODO: Add more validations for this form
+        if len(errors) > 0:
+            is_valid = False
+        print(errors)
+        return is_valid, errors
+
     def add_user(self):
         """
         Adds a user into the system
@@ -200,8 +239,15 @@ class UsersController(BaseController):
         # Get current user session
         # pass the user info to views
         # Ensure that the role for the user is detected in the navigation
-        # TODO: use session to load current user info
+        # TODO: use session to load current user info``
         #sid = self._get_session_id()
         #session_data = self._get_session_data(sid)
         user_info = {'user_roles': 'NTSS_ADMIN'}
         return UserViews().list_users(users_data, user_info)
+
+    def change_password(self, email, password) -> bool: 
+        """
+        Function to change password
+        """
+        user_db = UserModel(True)
+        return user_db.change_password(email, password)
