@@ -36,7 +36,8 @@ class Event(MysqlDatabase):
         records = self.get_event_by(guid=guid)
         return records[0]
 
-    def get_event_by(self, name=None, city=None, state=None, guid=None, limit: int=1):
+    def get_event_by(self, name=None, 
+                     city=None, state=None, guid=None, user_guid = None, limit: int=1):
         """
         Performs a select query based on the params passed
         """
@@ -56,6 +57,10 @@ class Event(MysqlDatabase):
         if state:
             query_filter.append(
                 {'column': 'state', 'operator': '=', 'value': state}
+            )
+        if user_guid:
+            query_filter.append(
+                {'column': 'user_guid', 'operator': '=', 'value': user_guid}
             )
         records = self.db_select(
             filters=query_filter,
