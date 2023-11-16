@@ -108,7 +108,7 @@ class UsersController(BaseController):
                     posted_values['email'], posted_values['password'], posted_values
                 )
                 if user_guid:
-                    message = "User registered successfully. Click here to login."
+                    message = "User registered successfully."
         return UserViews().register_user(posted_values, message)
 
     def _verify_register_user_form(self, posted_values):
@@ -239,7 +239,7 @@ class UsersController(BaseController):
         # Get current user session
         # pass the user info to views
         # Ensure that the role for the user is detected in the navigation
-        # TODO: use session to load current user info
+        # TODO: use session to load current user info``
         #sid = self._get_session_id()
         #session_data = self._get_session_data(sid)
         user_info = {'user_roles': 'NTSS_ADMIN'}

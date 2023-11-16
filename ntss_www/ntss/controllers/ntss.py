@@ -84,7 +84,7 @@ class NtssController(BaseController):
             elif not user_email or not user_ctrl.valid_user(email=user_email):
                 message = 'Invalid Email Address'
             elif user_ctrl.change_password(user_email, password):
-                message = 'Password successfully changed. Click here to login.'
+                message = 'Password successfully changed.'
             else:
                 message = 'Failed to update password'
         return NtssViews().forgot_password(user_email, message)
