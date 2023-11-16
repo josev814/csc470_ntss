@@ -54,6 +54,12 @@ def home(request, response):
     response = return_output(response, output, 200)
     return response
 
+@application.route('/register', methods=['GET','POST'])
+def register_user(request, response):
+    """Route to direct to register user function"""
+    output = UsersController(request, response).register_user()
+    response = return_output(response, output, 200)
+    return response
 
 @application.route(path='/forgot_password', methods=['GET', 'POST'])
 def forgot_password(request, response):

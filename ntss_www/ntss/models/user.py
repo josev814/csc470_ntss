@@ -202,3 +202,11 @@ class Users(MysqlDatabase):
         :return: str
         """
         return uuid4().hex
+
+    def change_password(self, email, password):
+        """
+        Function to change password
+        """
+        values = {'password': self._set_encrypted_password(password)}
+        where_clause = [{'column': 'email', 'operator': '=', 'value': email}]
+        return self.db_update(values, where_clause)
