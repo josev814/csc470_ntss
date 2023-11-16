@@ -74,3 +74,4 @@ class UserViews(Views):
         return self.template.render(self.template_vars)
 
 
+        
