@@ -56,7 +56,7 @@ def home(request, response):
 
 @application.route('/register', methods=['GET','POST'])
 def add_user(request, response):
-    """Route to direct to add user function"""
+    """Route to direct to register user function"""
     output = UsersController(request, response).register_user()
     response = return_output(response, output, 200)
     return response

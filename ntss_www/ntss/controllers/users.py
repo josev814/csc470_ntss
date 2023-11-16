@@ -108,7 +108,7 @@ class UsersController(BaseController):
                     posted_values['email'], posted_values['password'], posted_values
                 )
                 if user_guid:
-                   message = "User registered successfully"
+                   message = "User registered successfully. Click here to login."
         return UserViews().register_user(posted_values, message)
 
     def _verify_register_user_form(self, posted_values):
