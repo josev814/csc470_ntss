@@ -27,6 +27,7 @@ ALL_HTTP_METHODS = (
 
 ROLES = (
     'NTSS_ADMIN',
+    'EVENT_CUSTOMER',
     'EVENT_STAFF',
     'EXHIBITOR',
     'DOMAIN_EXPERT',
@@ -52,3 +53,9 @@ US_STATES = (
     'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
     'Wisconsin', 'Wyoming'
 )
+
+BOOTHS = {
+    'large': 500, 
+    'medium': 300, 
+    'small': 100
+}

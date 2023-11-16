@@ -2,8 +2,10 @@
 Testing the Base Controller functionality
 """
 import unittest
+from os import environ
+from webob import Request, Response
 
-from ntss_www.ntss.controllers.controller import BaseController
+from ntss.controllers.controller import BaseController
 
 
 class NTSSBase(unittest.TestCase):
@@ -15,7 +17,10 @@ class NTSSBase(unittest.TestCase):
         Instead of calling __init__ we call setup
         Anything we define in here is what all the tests need to run
         """
-        self._bc = BaseController()
+        fake_environ = {}
+        for key, val in environ.items():
+            fake_environ[key] = val
+        self._bc = BaseController(Request(fake_environ), Response())
 
     def test_not_logged_in(self):
         """
@@ -33,4 +38,4 @@ class NTSSBase(unittest.TestCase):
         """
         Since the cookies are empty, the user should not have access
         """
-        self.assertFalse(self._bc.has_access())
+        self.assertFalse(self._bc.has_access('/dashboard'))

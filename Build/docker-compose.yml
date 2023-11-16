@@ -7,7 +7,7 @@ services:
     env_file:
       - .dbenvvars
     ports:
-      - "3306:3306"
+      - "33061:3306"
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "mariadb -u $$MYSQL_USER -p$$MYSQL_PWD" ]
