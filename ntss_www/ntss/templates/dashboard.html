@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="text-start">
-      {% if current_user.user_roles == 'NTSS_ADMIN' or current_user.user_roles == 'EXHIBITOR' %}
+      {% if current_user.user_roles == 'NTSS_ADMIN' or current_user.user_roles == 'EXHIBITOR' or current_user.user_roles == 'EVENT_STAFF' %}
       <u>Calendar: </u>
       {% endif %}
       <!--Enter other dashboard info here-->
