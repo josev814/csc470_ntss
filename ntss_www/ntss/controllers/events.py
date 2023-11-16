@@ -78,6 +78,7 @@ class EventsController(BaseController):
         if len(event_info) == 0:
             return EventViews(self._session_data).not_found(event_guid)
         event_info = event_info[0]
+        print(event_info)
         venue_info = VenueModel().get_venue_by(guid=event_info['venue_guid'])[0]
         owner_info = UsersModel().get_user_by(user_guid=event_info['user_guid'])[0]
         return EventViews(self._session_data).view(event_info, venue_info, owner_info)

@@ -50,6 +50,15 @@
 
             <div class="row">
               <div class="col">
+                <label for="slogan">Slogan</label>
+                <input type="text" class="form-control" id="slogan" name="slogan" placeholder="Slogan" 
+                  {% if form_post.slogan: %} value="{{ form_post.slogan }}" {% endif %} >
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col">
                 <label for="theme">Theme</label>
                 <input type="text" class="form-control" id="theme" name="theme" placeholder="Theme" 
                   {% if form_post.theme: %} value="{{ form_post.theme }}" {% endif %} >
