@@ -254,6 +254,10 @@ class EventsController(BaseController):
         return EventViews(self._session_data).display_invoice(invoice_information)
 
     def add_attendee(self, event_guid: str):
+        """
+        Calls the add attendee form
+        Posts the attendee form only when the form contains the payment method
+        """
         errors = []
         form_data = {}
         if self._request.method == 'POST':
@@ -273,16 +277,21 @@ class EventsController(BaseController):
             # TODO: event not found (probably deleted)
             pass
         event_info = event_info[0]
-        return EventViews(self._session_data).form_add_attendee(form_data, event_info, users, errors)
+        return EventViews(self._session_data).form_add_attendee(
+                form_data, event_info, users, errors
+            )
 
     def __verify_checkout_form(self, form_data):
+        """
+        Validation for the checkout form
+        """
         errors = []
         missing_payment = 'Missing Payment information'
         if 'user_guid' in form_data:
-            trxns = TransactionModel().get_transactions_by_filter([{
-                'column': 'event_guid', 'operator': '=', 'value': form_data['event_guid'],
-                'column': 'user_guid', 'operator': '=', 'value': form_data['user_guid']
-            }])
+            trxns = TransactionModel().get_transactions_by_filter([
+                {'column': 'event_guid', 'operator': '=', 'value': form_data['event_guid']},
+                {'column': 'user_guid', 'operator': '=', 'value': form_data['user_guid']}
+            ])
             if len(trxns) > 0:
                 errors.append('User has already registered for the event.')
         if not errors and 'paymentMethod' in form_data:

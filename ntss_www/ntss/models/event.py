@@ -161,7 +161,10 @@ class EventUsers(MysqlDatabase):
         """
         Gets all users for a particular event 
         """
-        columns=['user_guid', 'prefix_name', 'first_name', 'middle_name', 'last_name', 'suffix_name', 'create_date']
+        columns=[
+            'user_guid', 'prefix_name', 'first_name', 'middle_name', 'last_name', 
+            'suffix_name', 'create_date'
+        ]
         joins = [{'table': 'users', 'src_column': 'user_guid', 'join_column': 'user_guid'}]
         filters=[
             {'column': 'event_guid', 'operator': '=', 'value': event_guid}

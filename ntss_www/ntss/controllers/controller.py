@@ -32,7 +32,8 @@ class BaseController:
                 self.redirect('/')
         elif sid:
             self._session_data = self._get_session_data(sid)
-            if not self._session_data and self._request not in ['/', '/forgot_password', '/register']:
+            if not self._session_data and \
+                    self._request not in ['/', '/forgot_password', '/register']:
                 self._delete_session(sid)
                 self._clear_login_cookie()
                 self.redirect('/')

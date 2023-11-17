@@ -29,7 +29,9 @@ class Transaction(MysqlDatabase):
         """
         Retrieves a transaction from the database based on the transaction guid
         """
-        records = self.get_transaction_by(guid=guid)
+        records = self.get_transactions_by_filter([{
+            'column': 'transaction_guid', 'operator': '=', 'value': guid
+        }], 500)
         return records[0]
 
     def get_transactions_by_filter(self, filters: list, limit: int=1):

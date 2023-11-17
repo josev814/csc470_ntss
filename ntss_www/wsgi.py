@@ -208,37 +208,37 @@ def add_user_to_event(request, response, event_guid: str):
     return response
 
 
-@application.route('/event/{event_guid}/list_users', methods=['GET', 'POST'])
-@login_access_required
-def list_users_at_event(request, response, event_guid: str):
-    """
-    Lists users that attended the event
-    """
-    controller_response = EventsController(request, response).list_attendees(event_guid)
-    response = return_output(response, controller_response, 200)
-    return response
+# @application.route('/event/{event_guid}/list_users', methods=['GET'])
+# @login_access_required
+# def list_users_at_event(request, response, event_guid: str):
+#     """
+#     Lists users that attended the event
+#     """
+#     controller_response = EventsController(request, response).list_attendees(event_guid)
+#     response = return_output(response, controller_response, 200)
+#     return response
 
 
-@application.route('/event/{event_guid}/delete_user', methods=['GET', 'POST'])
-@login_access_required
-def delete_user_from_event(request, response, event_guid: str):
-    """
-    Delete user that attended from an event
-    """
-    controller_response = EventsController(request, response).delete_attendee(event_guid)
-    response = return_output(response, controller_response, 200)
-    return response
+# @application.route('/event/{event_guid}/delete_user', methods=['POST'])
+# @login_access_required
+# def delete_user_from_event(request, response, event_guid: str):
+#     """
+#     Delete user that attended from an event
+#     """
+#     controller_response = EventsController(request, response).delete_attendee(event_guid)
+#     response = return_output(response, controller_response, 200)
+#     return response
 
 
-@application.route('/user/{user_guid}/events', methods=['GET', 'POST'])
-@login_access_required
-def list_events_for_user(request, response, user_guid: str):
-    """
-    List events that user attended
-    """
-    controller_response = EventsController(request, response).get_user_events(user_guid)
-    response = return_output(response, controller_response, 200)
-    return response
+# @application.route('/user/{user_guid}/events', methods=['GET'])
+# @login_access_required
+# def list_events_for_user(request, response, user_guid: str):
+#     """
+#     List events that user attended
+#     """
+#     controller_response = EventsController(request, response).get_user_events(user_guid)
+#     response = return_output(response, controller_response, 200)
+#     return response
 ##### END User/Event Routes #####
 ### END Event Specific Routes ###
 
