@@ -110,6 +110,10 @@
               <div class="col">{{ venue.conference_rooms }}</div>
             </div>
             <div class="row">
+              <div class="col-2"><b>Cost:</b></div>
+              <div class="col">${{ venue.cost }}</div>
+            </div>
+            <div class="row">
               <div class="col-2"><b>Created:</b></div>
               <div class="col">{{ venue.create_date.strftime('%B %d, %Y %H:%M:%S') }}</div>
             </div>
