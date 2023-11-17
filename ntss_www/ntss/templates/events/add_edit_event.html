@@ -86,13 +86,13 @@
               <div class="col">
                 <label for="startDate">Event Start</label>
                 <input type="datetime-local" class="form-control" id="startDate" name="start_date" placeholder="Start Date"
-                  {% if form_post.start_date: %} value="{{ form_post.start_date }}" {% endif %} >
+                  {% if form_post.start_date: %} value="{{ form_post.start_date }}" {% endif %} required>
               </div>
 
               <div class="col">
                 <label for="endDate">Event End</label>
                 <input type="datetime-local" class="form-control" id="endDate" name="end_date" placeholder="End Date"
-                  {% if form_post.end_date: %} value="{{ form_post.end_date }}" {% endif %} >
+                  {% if form_post.end_date: %} value="{{ form_post.end_date }}" {% endif %} required>
               </div>
             </div>
 
