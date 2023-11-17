@@ -74,19 +74,25 @@
                 <input type="text" class="form-control" id="conferenceRooms" name="conference_rooms" placeholder="Conference Rooms Required #" 
                   {% if form_post.conference_rooms: %} value="{{ form_post.conference_rooms }}" {% endif %} >
               </div>
+
+              <div class="col">
+                <label for="ticket_price">Ticket Price:</label>
+                <input type="number" step="0.01" class="form-control" id="ticket_price" name="ticket_price" placeholder="0.00"
+                  {% if form_post.ticket_price: %} value="{{ form_post.ticket_price }}" {% endif %} >
+              </div>
             </div>
 
             <div class="row">
               <div class="col">
                 <label for="startDate">Event Start</label>
                 <input type="datetime-local" class="form-control" id="startDate" name="start_date" placeholder="Start Date"
-                  {% if form_post.start_date: %} value="{{ form_post.start_date }}" {% endif %} >
+                  {% if form_post.start_date: %} value="{{ form_post.start_date }}" {% endif %} required>
               </div>
 
               <div class="col">
                 <label for="endDate">Event End</label>
                 <input type="datetime-local" class="form-control" id="endDate" name="end_date" placeholder="End Date"
-                  {% if form_post.end_date: %} value="{{ form_post.end_date }}" {% endif %} >
+                  {% if form_post.end_date: %} value="{{ form_post.end_date }}" {% endif %} required>
               </div>
             </div>
 

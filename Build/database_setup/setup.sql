@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS `events` (
     `slogan` VARCHAR(50) NOT NULL,
     `booths` int(5) NOT NULL,
     `conference_rooms` int(3) NOT NULL,
+    `ticket_price` decimal(6,2) DEFAULT '0.00',
     `start_date` timestamp NOT NULL,
     `end_date` timestamp NOT NULL,
     `website` varchar(255) DEFAULT NULL,
@@ -88,6 +89,7 @@ CREATE TABLE IF NOT EXISTS `venues` (
     `conference_rooms` INT(10) NOT NULL,
     `website` varchar(255) DEFAULT NULL,
     `phone` varchar(25) DEFAULT NULL,
+    `cost` decimal(6,2) DEFAULT '0.00',
     `is_active` int(1) DEFAULT 0,
     `create_date` timestamp DEFAULT CURRENT_TIMESTAMP,
     `updated_date` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -137,19 +139,13 @@ INSERT INTO `users` (
     'Mr.', "Caileb", '', 'Carter', '',
     '1200 Murchison Rd', '', 'Fayetteville', 'North Carolina', '28301',
     'ccarter10@broncos.uncfsu.edu', '910-672-1111', 'https://www.uncfsu.edu/', 1, 'NTSS_ADMIN'
-),
-(
-    hex(REPLACE(uuid(),'-','')), @cust_guid, '$argon2id$v=19$m=65536,t=3,p=4$Uajfa42Shy/FoK8DroIbPQ$l/Twf9FIXIjAkvaqXwyHujqf4ZUt+WhT9Y0h2t91vw4',
-    'Mr.', "Joe", '', 'Smack', '',
-    '1200 Murchison Rd', '', 'Fayetteville', 'North Carolina', '28301',
-    'joe.smack@aol.com', '910-672-1111', 'https://www.uncfsu.edu/', 1, 'EVENT_CUSTOMER'
 );
 
 
 INSERT INTO `venues` (
     `venue_guid`, `name`, `address`, `city`, `state`, `zip`, `booths`, `conference_rooms`,
-    `website`, `is_active`, `phone`
+    `website`, `is_active`, `phone`, `cost`
 ) VALUES (
     '7cb27f06534249c7a57f78cbc159017b', 'MGM Grand Conference Center','3799 Las Vegas Blvd S',
-    'Las Vegas','Nevada','89109',270,12,'https://mgmgrand.mgmresorts.com', 1, '800-929-1112'
+    'Las Vegas','Nevada','89109',270,12,'https://mgmgrand.mgmresorts.com', 1, '800-929-1112', '350.00'
 )

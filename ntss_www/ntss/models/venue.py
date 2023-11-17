@@ -81,6 +81,7 @@ class Venue(MysqlDatabase):
             'conference_rooms': args.get('conference_rooms'),
             'phone': args.get('phone'),
             'website': args.get('website'),
+            'cost': args.get('cost'),
             'is_active': 1
         }
         if self.db_create(values):
@@ -107,6 +108,7 @@ class Venue(MysqlDatabase):
             'conference_rooms': args.get('conference_rooms'),
             'phone': args.get('phone'),
             'website': args.get('website'),
+            'cost': args.get('cost'),
             'is_active': args.get('is_active')
         }
         filters = [
