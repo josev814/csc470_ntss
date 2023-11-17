@@ -269,28 +269,6 @@ def myevents(request, response):
     response.text = output
     return response
 
-
-@application.route('/myevents/add', methods=['GET','POST'])
-@login_access_required
-def create_customer_event(request, response):
-    """
-    Customer create events
-    """
-    controller_response = EventsController(request, response).add_customer_event()
-    response = return_output(response, controller_response, 200)
-    return response
-
-
-@application.route('/myevents/edit/{event_guid}', methods= ['GET','POST'])
-@login_access_required
-def edit_customer_event(request, response, event_guid: str):
-    """
-    Edit Customer Event
-    """
-    response.text = EventsController(request, response).edit_customer_event(event_guid)
-    return response
-
-
 @application.route('/myevents/view/{event_guid}', methods= ['GET','POST'])
 @login_access_required
 def view_customer_event(request, response, event_guid: str):

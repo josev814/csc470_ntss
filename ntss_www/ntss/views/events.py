@@ -96,28 +96,6 @@ class EventViews(Views):
             self.template_vars['controller_type'] = self._controller_type
         return self.template.render(self.template_vars)
 
-    def add_customer_event(self, form_values, venues, errors: list) -> str:
-        """
-        Customer Creates Event
-        """
-        self.set_template('/events/add_edit_event.html')
-        self.template_vars['pageName'] = 'Add Event'
-        self.template_vars['form_post'] = form_values
-        self.template_vars['venues'] = venues
-        self.template_vars['errors'] = errors
-        return self.template.render(self.template_vars)
-
-    def edit_customer_event(self, form_values, venues, errors: list) -> str:
-        """
-        Edit Customer Event
-        """
-        self.set_template('/events/add_edit_event.html')
-        self.template_vars['pageName'] = 'Edit Event'
-        self.template_vars['form_post'] = form_values
-        self.template_vars['venues'] = venues
-        self.template_vars['errors'] = errors
-        return self.template.render(self.template_vars)
-
     def view_customer_event(self, event_data, venue_data) -> str:
         """
         View Customer Event
