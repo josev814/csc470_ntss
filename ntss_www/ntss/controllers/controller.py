@@ -27,9 +27,15 @@ class BaseController:
         self._session_id = None
         self._session_data = None
         sid = self._get_session_id()
-        if sid != '':
+        if not sid:
+            if self._request.path not in ['/', '/forgot_password', '/register']:
+                self.redirect('/')
+        elif sid:
             self._session_data = self._get_session_data(sid)
-        
+            if not self._session_data and self._request not in ['/', '/forgot_password', '/register']:
+                self._delete_session(sid)
+                self._clear_login_cookie()
+                self.redirect('/')
 
     def _load_cookies(self):
         """

@@ -87,7 +87,7 @@ class MysqlDatabase:
             for join in joins:
                 self.set_join_table(join['table'])
                 self._query = self._table.select().add_columns(self._join_table.c)
-                self._query.join_from(
+                self._query = self._query.join_from(
                     self._table, 
                     self._join_table, 
                     self._table.c[join['src_column']] == self._join_table.c[join['join_column']]

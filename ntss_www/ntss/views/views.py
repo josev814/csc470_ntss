@@ -22,6 +22,8 @@ class Views:
         self.template_vars = {
             'platformName': self.__platformName,
         }
+        self.template_vars['states'] = self.US_STATES
+        self.template_vars['roles'] = self.ROLES
 
     def set_templates_environment(self, templates_path: str = ''):
         """

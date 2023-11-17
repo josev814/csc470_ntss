@@ -14,7 +14,6 @@ class EventViews(Views):
         self._user_session = session_info
         self._controller_type = 'events'
         self.template_vars['current_user'] = self._user_session
-        self.template_vars['states'] = self.US_STATES
     
     def list(self, events: list) -> str:
         """
@@ -53,7 +52,7 @@ class EventViews(Views):
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
 
-    def view(self, event_data, venue_data, cust_data) -> str:
+    def view(self, event_data, venue_data, cust_data, attendee_data, transactions) -> str:
         """
         Shows information about an event
         """
@@ -62,6 +61,8 @@ class EventViews(Views):
         self.template_vars['event'] = event_data
         self.template_vars['venue'] = venue_data
         self.template_vars['customer'] = cust_data
+        self.template_vars['attendees'] = attendee_data
+        self.template_vars['trxns'] = transactions
         return self.template.render(self.template_vars)
 
     def not_found(self, event_guid):
@@ -133,4 +134,16 @@ class EventViews(Views):
         """
         self.set_template('print_invoice.html')
         self.template_vars['invoice_information'] = invoice_information
+        return self.template.render(self.template_vars)
+
+    def form_add_attendee(self, form_data, event_info, users, messages):
+        """
+        Load the form for adding a user to an event
+        """
+        self.set_template('events/add_attendee.html')
+        self.template_vars['pageName'] = 'Add Attendee'
+        self.template_vars['form_data'] = form_data
+        self.template_vars['event'] = event_info
+        self.template_vars['users'] = users
+        self.template_vars['errors'] = messages
         return self.template.render(self.template_vars)

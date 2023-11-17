@@ -1,0 +1,84 @@
+{% include "blocks/admin_top.html" %}
+<div class="row text-start">
+  {% include "blocks/navigation.html" %}
+
+  <div class="col-9 px-md-4">
+    <div class="row border-bottom">
+      <h1 class="h2">{{pageName}} to {{ event.name }}</h1>
+    </div>
+    {% if errors: %}
+    {% include "blocks/error_modal.html" %}
+    {% endif %}
+    <div class="row my-4 mb-md-0">
+      <div class="col">
+        <form method="POST" class="d-grid gap-3">
+          <div class="row">
+            <div class="col">
+              <label>User Type</label>
+              <select {% if 'user_role' in form_data %}disabled{% endif %} class="form-select" name="user_role" aria-label="select">
+                <option selected>Select a User Type</option>
+                {% for role in roles: %}
+                {% if role not in ['EVENT_STAFF','NTSS_ADMIN', 'EVENT_CUSTOMER'] %}
+                <option {% if role in form_data.user_role %}selected{% endif %} value="{{ role }}">{{ role }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+              {% if 'user_role' in form_data %}
+              <input type="hidden" name="user_role" value="{{ form_data.user_role }}" />
+              {% endif %}
+            </div>
+          </div>
+          {% if 'user_role' in form_data %}
+          <div class="row">
+            <div class="col">
+              <label>User</label>
+              <select {% if 'user_guid' in form_data %}disabled{% endif %} class="form-select" name="user_guid" aria-label="select">
+                <option selected disabled>Select a user</option>
+                {% for user in users %}
+                {% if user.user_roles == form_data.user_role %}
+                <option {% if user.user_guid == form_data.user_guid %}selected{% endif %} value="{{user.user_guid}}">
+                  {{user.first_name}} {{user.last_name}}
+                </option>
+                {% endif %}
+                {% endfor %}
+              </select>
+              {% if 'user_guid' in form_data %}
+              <input type="hidden" name="user_guid" value="{{ form_data.user_guid }}" />
+              {% endif %}
+            </div>
+          </div>
+          {% if form_data['user_role'] in ['OBSERVER', 'SELECTED_SPEAKER', 'DOMAIN_EXPERT'] %}
+          <div class="row">
+            <div class="col">
+              <label>Ticket Price</label>
+              <span>{{ event.ticket_price }}</span>
+              <input type="hidden" name="payment" value="{{ event.ticket_price }}" />
+              <input type="hidden" name="item_description" value="Ticket" />
+              <input type="hidden" name="checkout" value="True" />
+            </div>
+          </div>
+          {% endif %}
+          {% endif %}
+          {% if 'checkout' in form_data: %}
+          {% include "blocks/payment.html" %}
+          {% endif %}
+          <div class="row mt-3">
+            <div class="col-2">
+              <button class="btn btn-lg btn-primary" type="submit">
+                {% if 'checkout' in form_data: %}
+                Save
+                {% else %}
+                Next
+                {% endif %}
+              </button>
+            </div>
+            <div class="col-2">
+              <a href="/event/view/{{event.event_guid}}" class="btn btn-lg btn-info">Cancel</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}

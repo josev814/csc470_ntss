@@ -109,6 +109,19 @@ CREATE TABLE IF NOT EXISTS `venues` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+CREATE TABLE IF NOT EXISTS `transactions` (
+    `transaction_guid` VARCHAR(75) NOT NULL,
+    `event_guid` VARCHAR(75) NOT NULL,
+    `user_guid` VARCHAR(75) NOT NULL,
+    `item_description` TEXT NOT NULL,
+    `payment` decimal(6,2) NOT NULL,
+    `create_date` timestamp DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY `transaction_guid` (`transaction_guid`),
+  	KEY `event_guid` (`event_guid`),
+    KEY `event_user` (`event_guid`, `user_guid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 -- insert the default customer
 INSERT INTO `customers` (
     `cust_guid`, `name`,
@@ -197,10 +210,12 @@ INSERT INTO `venues` (
     'Las Vegas','Nevada','89109',270,12,'https://mgmgrand.mgmresorts.com', 1, '800-929-1112'
 );
 
+SET @user_guid=(select user_guid from users where USER_ROLES = 'NTSS_ADMIN' order by user_id asc limit 1);
+
 INSERT INTO `events` (
-    `event_guid`, `venue_guid`, `slogan`, `theme`, `website`,
-    `booths`, `conference_rooms`, `start_date`, `end_date`
+    `event_guid`, `user_guid`, `venue_guid`, `name`, `slogan`, `theme`, `website`,
+    `booths`, `conference_rooms`, `ticket_price`, `start_date`, `end_date`
 ) VALUES (
-    '1915731d79ca47a89fadc07064514889', '7cb27f06534249c7a57f78cbc159017b', 'slog', 'theme', 'https://google.com',
-    250, 22, '2023-11-16', '2023-11-25'
+    '1915731d79ca47a89fadc07064514889', @user_guid, '7cb27f06534249c7a57f78cbc159017b', 'La Fiesta', 'slog', 'theme', 'https://google.com',
+    250, 22, 25.00, '2023-11-16', '2023-11-25'
 );

@@ -46,6 +46,7 @@ def return_output(response, data, http_code=200):
     return response
 
 
+### Start NTSS Routes ###
 @application.route(path='/', methods=['GET', 'POST'])
 def home(request, response):
     """ The homepage of the site """
@@ -54,6 +55,7 @@ def home(request, response):
     response = return_output(response, output, 200)
     return response
 
+
 @application.route('/register', methods=['GET','POST'])
 def register_user(request, response):
     """Route to direct to register user function"""
@@ -61,11 +63,21 @@ def register_user(request, response):
     response = return_output(response, output, 200)
     return response
 
+
 @application.route(path='/forgot_password', methods=['GET', 'POST'])
 def forgot_password(request, response):
     """ The page for performing a request to reset the password """
     output = NtssController(request, response).forgot_password()
     # print(type(output))
+    response = return_output(response, output, 200)
+    return response
+
+
+@application.route('/logout', methods=['GET'])
+def logout(request, response):
+    """ Logs out a user """
+    print(request.path)
+    output = NtssController(request, response).logout()
     response = return_output(response, output, 200)
     return response
 
@@ -78,6 +90,7 @@ def dashboard(request, response):
     output = NtssController(request, response).dashboard()
     response.text = output
     return response
+### End NTSS Routes ###
 
 
 @application.route('/users/add_user', methods=['GET','POST'])
@@ -87,6 +100,7 @@ def add_user(request, response):
     output = UsersController(request, response).add_user()
     response = return_output(response, output, 200)
     return response
+
 
 @application.route('/users/edit/{user_guid}', methods=['GET','POST'])
 @login_access_required
@@ -99,6 +113,7 @@ def edit_user(request, response, user_guid: str):
     response.text = output
     return response
 
+
 @application.route('/users/delete/{user_guid}', methods=['GET','POST'])
 @login_access_required
 def delete_user(request, response, user_guid: str):
@@ -108,6 +123,7 @@ def delete_user(request, response, user_guid: str):
     output = UsersController(request, response).delete_user(user_guid)
     response = return_output(response, output, 200)
     return response
+
 
 @application.route('/users/view/{user_guid}', methods=['GET'])
 def profile(request, response, user_guid):
@@ -137,6 +153,7 @@ def list_events(request, response):
     response.text = EventsController(request, response).list()
     return response
 
+
 @application.route('/events/add', methods=['GET', 'POST'])
 @login_access_required
 def add_event(request, response):
@@ -147,6 +164,7 @@ def add_event(request, response):
     response = return_output(response, controller_response, 200)
     return response
 
+
 @application.route('/event/view/{guid}', methods=['GET'])
 @login_access_required
 def get_event(request, response, guid: str):
@@ -155,6 +173,7 @@ def get_event(request, response, guid: str):
     """
     response.text = EventsController(request, response).view_event(guid)
     return response
+
 
 @application.route('/event/edit/{guid}', methods=['GET', 'POST'])
 @login_access_required
@@ -165,6 +184,7 @@ def edit_event(request, response, guid: str):
     response.text = EventsController(request, response).edit(guid)
     return response
 
+
 @application.route('/event/delete/{guid}', methods=['GET', 'POST'])
 @login_access_required
 def delete_event(request, response, guid: str):
@@ -174,6 +194,52 @@ def delete_event(request, response, guid: str):
     controller_response = EventsController(request, response).delete(guid)
     response = return_output(response, controller_response, 200)
     return response
+
+
+##### Start User/Event Routes #####
+@application.route('/event/{event_guid}/add_user', methods=['GET', 'POST'])
+@login_access_required
+def add_user_to_event(request, response, event_guid: str):
+    """
+    Adds a user to the event
+    """
+    controller_response = EventsController(request, response).add_attendee(event_guid)
+    response = return_output(response, controller_response, 200)
+    return response
+
+
+@application.route('/event/{event_guid}/list_users', methods=['GET', 'POST'])
+@login_access_required
+def list_users_at_event(request, response, event_guid: str):
+    """
+    Lists users that attended the event
+    """
+    controller_response = EventsController(request, response).list_attendees(event_guid)
+    response = return_output(response, controller_response, 200)
+    return response
+
+
+@application.route('/event/{event_guid}/delete_user', methods=['GET', 'POST'])
+@login_access_required
+def delete_user_from_event(request, response, event_guid: str):
+    """
+    Delete user that attended from an event
+    """
+    controller_response = EventsController(request, response).delete_attendee(event_guid)
+    response = return_output(response, controller_response, 200)
+    return response
+
+
+@application.route('/user/{user_guid}/events', methods=['GET', 'POST'])
+@login_access_required
+def list_events_for_user(request, response, user_guid: str):
+    """
+    List events that user attended
+    """
+    controller_response = EventsController(request, response).get_user_events(user_guid)
+    response = return_output(response, controller_response, 200)
+    return response
+##### END User/Event Routes #####
 ### END Event Specific Routes ###
 
 
@@ -203,6 +269,7 @@ def myevents(request, response):
     response.text = output
     return response
 
+
 @application.route('/myevents/add', methods=['GET','POST'])
 @login_access_required
 def create_customer_event(request, response):
@@ -213,6 +280,7 @@ def create_customer_event(request, response):
     response = return_output(response, controller_response, 200)
     return response
 
+
 @application.route('/myevents/edit/{event_guid}', methods= ['GET','POST'])
 @login_access_required
 def edit_customer_event(request, response, event_guid: str):
@@ -222,6 +290,7 @@ def edit_customer_event(request, response, event_guid: str):
     response.text = EventsController(request, response).edit_customer_event(event_guid)
     return response
 
+
 @application.route('/myevents/view/{event_guid}', methods= ['GET','POST'])
 @login_access_required
 def view_customer_event(request, response, event_guid: str):
@@ -229,14 +298,6 @@ def view_customer_event(request, response, event_guid: str):
     View Customer Event
     """
     response.text = EventsController(request, response).view_customer_event(event_guid)
-    return response
-
-@application.route('/logout', methods=['GET'])
-def logout(request, response):
-    """ Logs out a user """
-    print(request.path)
-    output = NtssController(request, response).logout()
-    response = return_output(response, output, 200)
     return response
 
 
@@ -250,6 +311,7 @@ def list_venues(request, response):
     response.text = VenuesController(request, response).list()
     return response
 
+
 @application.route('/venues/add', methods=['GET', 'POST'])
 @login_access_required
 def add_venue(request, response):
@@ -260,6 +322,7 @@ def add_venue(request, response):
     response = return_output(response, controller_response, 200)
     return response
 
+
 @application.route('/venue/view/{guid}', methods=['GET'])
 @login_access_required
 def get_venue(request, response, guid: str):
@@ -268,6 +331,7 @@ def get_venue(request, response, guid: str):
     """
     response.text = VenuesController(request, response).view(guid)
     return response
+
 
 @application.route('/venue/edit/{guid}', methods=['GET', 'POST'])
 @login_access_required
@@ -278,6 +342,7 @@ def edit_venue(request, response, guid: str):
     response.text = VenuesController(request, response).edit(guid)
     return response
 
+
 @application.route('/venue/delete/{guid}', methods=['GET', 'POST'])
 @login_access_required
 def delete_venue(request, response, guid: str):
@@ -287,5 +352,4 @@ def delete_venue(request, response, guid: str):
     controller_response = VenuesController(request, response).delete(guid)
     response = return_output(response, controller_response, 200)
     return response
-
 ### END VENUES ###

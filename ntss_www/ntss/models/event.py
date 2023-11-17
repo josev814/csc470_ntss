@@ -134,7 +134,7 @@ class Event(MysqlDatabase):
         return self.db_delete(filters)
 
 
-class Event_Users(MysqlDatabase):
+class EventUsers(MysqlDatabase):
     """
     The Event Users class that adds a user to an event in the database
     """
@@ -155,17 +155,18 @@ class Event_Users(MysqlDatabase):
         filters=[
             {'column': 'user_guid', 'operator': '=', 'value': user_guid}
         ]
-        self.db_select(joins=joins, filters=filters, limit=limit)
+        return self.db_select(joins=joins, filters=filters, limit=limit)
 
     def get_event_users(self, event_guid, limit=20) -> list:
         """
         Gets all users for a particular event 
         """
+        columns=['user_guid', 'prefix_name', 'first_name', 'middle_name', 'last_name', 'suffix_name', 'create_date']
         joins = [{'table': 'users', 'src_column': 'user_guid', 'join_column': 'user_guid'}]
         filters=[
             {'column': 'event_guid', 'operator': '=', 'value': event_guid}
         ]
-        self.db_select(joins=joins, filters=filters, limit=limit)
+        return self.db_select(columns=columns, joins=joins, filters=filters, limit=limit)
     
     def add_user_to_event(self, user_guid: str, event_guid: str) -> bool:
         """
