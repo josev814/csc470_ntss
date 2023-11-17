@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS `events` (
     `slogan` VARCHAR(50) NOT NULL,
     `booths` int(5) NOT NULL,
     `conference_rooms` int(3) NOT NULL,
+    `ticket_price` decimal(6,2) DEFAULT '0.00',
     `start_date` timestamp NOT NULL,
     `end_date` timestamp NOT NULL,
     `website` varchar(255) DEFAULT NULL,
