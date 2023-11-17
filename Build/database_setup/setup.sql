@@ -76,6 +76,18 @@ CREATE TABLE IF NOT EXISTS `events` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+CREATE TABLE IF NOT EXISTS `event_users` (
+    `sys_id` INT(10) AUTO_INCREMENT,
+    `event_guid` VARCHAR(75) NOT NULL,
+    `user_guid` VARCHAR(75) NOT NULL,
+    `create_date` timestamp DEFAULT CURRENT_TIMESTAMP,
+    `updated_date` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY `sys_id` (`sys_id`),
+  	KEY `event_guid` (`event_guid`),
+    KEY `event_user` (`event_guid`, `user_guid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 CREATE TABLE IF NOT EXISTS `venues` (
     `venue_guid` VARCHAR(75) NOT NULL,
     `name` VARCHAR(75) NOT NULL,
@@ -143,6 +155,36 @@ INSERT INTO `users` (
     'Mr.', "Joe", '', 'Smack', '',
     '1200 Murchison Rd', '', 'Fayetteville', 'North Carolina', '28301',
     'joe.smack@aol.com', '910-672-1111', 'https://www.uncfsu.edu/', 1, 'EVENT_CUSTOMER'
+),
+(
+    hex(REPLACE(uuid(),'-','')), @cust_guid, '$argon2id$v=19$m=65536,t=3,p=4$Uajfa42Shy/FoK8DroIbPQ$l/Twf9FIXIjAkvaqXwyHujqf4ZUt+WhT9Y0h2t91vw4',
+    'Mr.', "Observer", '', 'Smack', '',
+    '1200 Murchison Rd', '', 'Fayetteville', 'North Carolina', '28301',
+    'observer@mailinator.com', '910-672-1111', 'https://www.uncfsu.edu/', 1, 'OBSERVER'
+),
+(
+    hex(REPLACE(uuid(),'-','')), @cust_guid, '$argon2id$v=19$m=65536,t=3,p=4$Uajfa42Shy/FoK8DroIbPQ$l/Twf9FIXIjAkvaqXwyHujqf4ZUt+WhT9Y0h2t91vw4',
+    'Mr.', "Selected", '', 'Speaker', '',
+    '1200 Murchison Rd', '', 'Fayetteville', 'North Carolina', '28301',
+    'selected.speaker@mailinator.com', '910-672-1111', 'https://www.uncfsu.edu/', 1, 'SELECTED_SPEAKER'
+),
+(
+    hex(REPLACE(uuid(),'-','')), @cust_guid, '$argon2id$v=19$m=65536,t=3,p=4$Uajfa42Shy/FoK8DroIbPQ$l/Twf9FIXIjAkvaqXwyHujqf4ZUt+WhT9Y0h2t91vw4',
+    'Mr.', "Domain", '', 'Expert', '',
+    '1200 Murchison Rd', '', 'Fayetteville', 'North Carolina', '28301',
+    'domain.expert@mailinator.com', '910-672-1111', 'https://www.uncfsu.edu/', 1, 'DOMAIN_EXPERT'
+),
+(
+    hex(REPLACE(uuid(),'-','')), @cust_guid, '$argon2id$v=19$m=65536,t=3,p=4$Uajfa42Shy/FoK8DroIbPQ$l/Twf9FIXIjAkvaqXwyHujqf4ZUt+WhT9Y0h2t91vw4',
+    'Mr.', "Exhibitor", '', 'Smack', '',
+    '1200 Murchison Rd', '', 'Fayetteville', 'North Carolina', '28301',
+    'exhibitor@mailinator.com', '910-672-1111', 'https://www.uncfsu.edu/', 1, 'EXHIBITOR'
+),
+(
+    hex(REPLACE(uuid(),'-','')), @cust_guid, '$argon2id$v=19$m=65536,t=3,p=4$Uajfa42Shy/FoK8DroIbPQ$l/Twf9FIXIjAkvaqXwyHujqf4ZUt+WhT9Y0h2t91vw4',
+    'Mr.', "Event", '', 'Stagg', '',
+    '1200 Murchison Rd', '', 'Fayetteville', 'North Carolina', '28301',
+    'event.staff@mailinator.com', '910-672-1111', 'https://www.uncfsu.edu/', 1, 'EVENT_STAFF'
 );
 
 
@@ -152,4 +194,12 @@ INSERT INTO `venues` (
 ) VALUES (
     '7cb27f06534249c7a57f78cbc159017b', 'MGM Grand Conference Center','3799 Las Vegas Blvd S',
     'Las Vegas','Nevada','89109',270,12,'https://mgmgrand.mgmresorts.com', 1, '800-929-1112'
-)
+);
+
+INSERT INTO `events` (
+    `event_guid`, `venue_guid`, `slogan`, `theme`, `website`,
+    `booths`, `conference_rooms`, `start_date`, `end_date`
+) VALUES (
+    '1915731d79ca47a89fadc07064514889', '7cb27f06534249c7a57f78cbc159017b', 'slog', 'theme', 'https://google.com',
+    250, 22, '2023-11-16', '2023-11-25'
+);

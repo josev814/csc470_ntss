@@ -4,7 +4,17 @@
 
   <div class="col-9 px-md-4">
     <div class="row border-bottom">
-      <h1 class="h2">{{pageName}}</h1>
+      <div class="col">
+        <h1 class="h2">{{pageName}}</h1>
+      </div>
+      <div class="col text-end">
+        <a class="nav-link px-3" href="/event/{{ event.event_guid }}/add_user">
+          <span class="material-symbols-outlined">
+            event_seat
+          </span>
+          Add User
+        </a>
+      </div>
     </div>
     <div class="row my-4 mb-md-0">
       <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -19,6 +29,10 @@
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="customer-tab" data-bs-toggle="tab" data-bs-target="#customer" type="button"
             role="tab" aria-controls="customer" aria-selected="false">Customer</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="attendees-tab" data-bs-toggle="tab" data-bs-target="#attendees" type="button"
+            role="tab" aria-controls="attendees" aria-selected="false">Attendees</button>
         </li>
       </ul>
       <div class="tab-content" id="myTabContent">
@@ -162,6 +176,9 @@
               <div class="col">{{ customer.updated_date.strftime('%B %d, %Y %H:%M:%S') }}</div>
             </div>
           </div>
+        </div>
+        <div class="tab-pane fade" id="attendees" role="tabpanel" aria-labelledby="attendees">
+          ...
         </div>
       </div>
     </div>
