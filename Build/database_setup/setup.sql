@@ -208,7 +208,7 @@ INSERT INTO `venues` (
     `website`, `is_active`, `phone`, `cost`
 ) VALUES (
     '7cb27f06534249c7a57f78cbc159017b', 'MGM Grand Conference Center','3799 Las Vegas Blvd S',
-    'Las Vegas','Nevada','89109',270,12,'https://mgmgrand.mgmresorts.com', 1, '800-929-1112'
+    'Las Vegas','Nevada','89109',270,12,'https://mgmgrand.mgmresorts.com', 1, '800-929-1112', 225.00
 );
 
 SET @user_guid=(select user_guid from users where USER_ROLES = 'NTSS_ADMIN' order by user_id asc limit 1);

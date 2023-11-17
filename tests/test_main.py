@@ -17,7 +17,9 @@ class NTSSBase(unittest.TestCase):
         Instead of calling __init__ we call setup
         Anything we define in here is what all the tests need to run
         """
-        fake_environ = {}
+        fake_environ = {
+            'PATH_INFO': '/'
+        }
         for key, val in environ.items():
             fake_environ[key] = val
         self._bc = BaseController(Request(fake_environ), Response())
