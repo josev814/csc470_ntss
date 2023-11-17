@@ -29,7 +29,8 @@ class BaseController:
         sid = self._get_session_id()
 
         if not sid:
-            if not hasattr(self._request, 'path') or self._request not in ['/', '/forgot_password', '/register']:
+            if not hasattr(self._request, 'path') or \
+                    self._request not in ['/', '/forgot_password', '/register']:
                 self.redirect('/')
         elif sid:
             self._session_data = self._get_session_data(sid)
