@@ -50,6 +50,15 @@
 
             <div class="row">
               <div class="col">
+                <label for="slogan">Slogan</label>
+                <input type="text" class="form-control" id="slogan" name="slogan" placeholder="Slogan" 
+                  {% if form_post.slogan: %} value="{{ form_post.slogan }}" {% endif %} >
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col">
                 <label for="theme">Theme</label>
                 <input type="text" class="form-control" id="theme" name="theme" placeholder="Theme" 
                   {% if form_post.theme: %} value="{{ form_post.theme }}" {% endif %} >
@@ -75,6 +84,11 @@
                 <label for="conferenceRooms">Conference Rooms Required</label>
                 <input type="text" class="form-control" id="conferenceRooms" name="conference_rooms" placeholder="Conference Rooms Required #" 
                   {% if form_post.conference_rooms: %} value="{{ form_post.conference_rooms }}" {% endif %} >
+              </div>
+              <div class="col">
+                <label for="ticket_price">Ticket Price:</label>
+                <input type="number" step="0.01" class="form-control" id="ticket_price" name="ticket_price" placeholder="0.00"
+                  {% if form_post.ticket_price: %} value="{{ form_post.ticket_price }}" {% endif %} >
               </div>
             </div>
 

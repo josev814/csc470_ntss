@@ -45,7 +45,6 @@ class EventViews(Views):
         """
         Edits an event in the system
         """
-        print('fv: ', form_values)
         self.set_template('events/add_edit.html')
         self.template_vars['pageName'] = 'Edit Event'
         self.template_vars['form_post'] = form_values

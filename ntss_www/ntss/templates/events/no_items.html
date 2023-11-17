@@ -11,7 +11,7 @@
         <p>We don't have any {{ controller_type }}, <a href="/{{ controller_type }}/add">add one</a></p>
       
       {% elif current_user.user_roles == 'EVENT_STAFF' %}
-        <p>You have not created any {{ controller_type }}, <a href="/{{ controller_type }}/add">create {{ controller_type }}</a></p>
+        <p>You have not created any {{ controller_type }}, <a href="/myevents/add">create {{ controller_type }}</a></p>
 
       {% endif %}
     </div>
