@@ -269,6 +269,7 @@ def myevents(request, response):
     response.text = output
     return response
 
+
 @application.route('/myevents/view/{event_guid}', methods= ['GET','POST'])
 @login_access_required
 def view_customer_event(request, response, event_guid: str):

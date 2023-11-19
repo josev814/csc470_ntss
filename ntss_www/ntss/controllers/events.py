@@ -228,6 +228,10 @@ class EventsController(BaseController):
             eum = EventUsersModel()
             if 'paymentMethod' in form_data and not errors and \
                     eum.add_user_to_event(form_data['user_guid'], event_guid):
+                if form_data['paymentMethod'] in ['credit', 'debit']:
+                    form_data['type'] = 'payment'
+                else:
+                    form_data['type'] = 'invoice'
                 transaction_guid = TransactionModel().add(form_data)
                 errors.append('User was added to the event.')
                 errors.append(f'Transaction GUID: {transaction_guid}')

@@ -59,7 +59,8 @@ class Transaction(MysqlDatabase):
             'user_guid': args.get('user_guid'),
             'event_guid': args.get('event_guid'),
             'item_description': args.get('item_description'),
-            'payment': args.get('payment')
+            'price': args.get('cost'),
+            'type': args.get('transaction_type')
         }
         if self.db_create(values):
             return guid

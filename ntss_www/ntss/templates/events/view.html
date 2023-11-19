@@ -221,7 +221,7 @@
                   {% for trxn in trxns %}
                     {% if trxn.user_guid == attendee.user_guid %}
                     <td>{{ trxn.item_description }}</td>
-                    <td class="text-end">$ {{ trxn.payment }}</td>
+                    <td class="text-end">$ {{ trxn.price }}</td>
                     {% endif %}
                   {% endfor %}
                 </tr>

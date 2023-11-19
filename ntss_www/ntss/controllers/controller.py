@@ -39,6 +39,9 @@ class BaseController:
                 self._delete_session(sid)
                 self._clear_login_cookie()
                 self.redirect('/')
+            elif self._session_data:
+                self._add_cookie(sid)
+                self._extend_session(sid)
 
     def _load_cookies(self):
         """
@@ -150,3 +153,9 @@ class BaseController:
         Delete the session data
         """
         Session().delete_session(session_id)
+
+    def _extend_session(self, session_id):
+        """
+        Extend the expiration of the session data
+        """
+        Session().set_key_expiration(session_id)

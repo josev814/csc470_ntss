@@ -52,9 +52,30 @@
             <div class="col">
               <label>Ticket Price</label>
               <span>{{ event.ticket_price }}</span>
-              <input type="hidden" name="payment" value="{{ event.ticket_price }}" />
+              <input type="hidden" name="cost" value="{{ event.ticket_price }}" />
               <input type="hidden" name="item_description" value="Ticket" />
               <input type="hidden" name="checkout" value="True" />
+            </div>
+          </div>
+          {% endif %}
+          {% if form_data['user_role'] == 'EXHIBITOR' and 'user_guid' in form_data %}
+          <div class="row">
+            <div class="col">
+              <label>Booth Size</label>
+              <select {% if 'booth' in form_data %}disabled{% endif %} class="form-select" name="booth" aria-label="select">
+                <option selected disabled>Select a booth</option>
+                {% for size, cost in booths.items() %}
+                <option {% if size == form_data.booth %}selected{% endif %} value="{{ size }}">
+                  {{ size }} (${{ cost }})
+                </option>
+                {% endfor %}
+              </select>
+              <input type="hidden" name="checkout" value="True" />
+              {% if 'booth' in form_data %}
+              <input type="hidden" name="booth" value="{{ form_data.booth }}" />
+              <input type="hidden" name="item_description" value="{{ form_data.booth }}" />
+              <input type="hidden" name="cost" value="{{ booths[form_data.booth] }}" />
+              {% endif %}
             </div>
           </div>
           {% endif %}
