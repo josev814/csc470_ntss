@@ -14,7 +14,7 @@ class EventsController(BaseController):
     The controller for events
     """
 
-    def list(self, start: int=0):
+    def list(self, start: int = 0):
         """
         Lists the events in the system
         """
@@ -48,7 +48,7 @@ class EventsController(BaseController):
         venues = VenueModel().get_venues(['venue_guid', 'name', 'booths', 'conference_rooms'])
         users = UsersModel().get_users(['user_guid', 'first_name', 'last_name'])
         return EventViews(self._session_data).add(posted_values, venues, users, errors)
-    
+
     def edit(self, event_guid):
         """
         Adds an event into the system
@@ -59,7 +59,7 @@ class EventsController(BaseController):
         if len(event_info) == 0:
             return EventViews(self._session_data).not_found(event_guid)
         event_info = event_info[0]
-        
+
         if self._request.method == 'POST':
             for request_name, request_value in self._request.params.items():
                 posted_values[request_name] = request_value.strip()
@@ -83,11 +83,11 @@ class EventsController(BaseController):
         owner_info = UsersModel().get_user_by(user_guid=event_info['user_guid'])[0]
         users = EventUsersModel(True).get_event_users(event_info['event_guid'])
         trxs = TransactionModel().get_transactions_by_filter(
-            [{'column': 'event_guid','operator': '=', 'value': event_guid}], 
+            [{'column': 'event_guid', 'operator': '=', 'value': event_guid}],
             500
         )
         return EventViews(self._session_data).view(event_info, venue_info, owner_info, users, trxs)
-    
+
     def delete(self, guid):
         """
         Delete a venue
@@ -115,7 +115,7 @@ class EventsController(BaseController):
         if len(errors) > 0:
             is_valid = False
         return is_valid, errors
-    
+
     def __verify_edit_form(self, posted_values):
         """
         Verifies that we have all the data for the edit event form
@@ -124,14 +124,13 @@ class EventsController(BaseController):
         is_valid = True
         if posted_values.get('venue_guid') == '':
             errors.append('You must select a venue')
-        if posted_values.get('user_guid') == '' :
+        if posted_values.get('user_guid') == '':
             errors.append('You must select an owner')
             # TODO: Add more validations for this form
             # are we trying to reserve a venue that doesn't have enough booths or rooms?
         if len(errors) > 0:
             is_valid = False
         return is_valid, errors
-    
 
     def get_user_event(self, event_id):
         """

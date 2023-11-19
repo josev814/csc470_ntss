@@ -39,13 +39,11 @@ class VenuesController(BaseController):
         """
         errors = []
         is_valid = True
-        if len(
-                VenueModel().get_venue_by(
+        if len(VenueModel().get_venue_by(
                     name=posted_values.get('name'),
                     city=posted_values.get('city'),
                     state=posted_values.get('state')
-                )
-            ) > 0:
+                )) > 0:
             errors.append('Venue already exists in this city')
             # TODO: Add more validations for this form
         if len(errors) > 0:
@@ -77,7 +75,7 @@ class VenuesController(BaseController):
                     venue_data['venue_guid'] = guid
                     errors.append('Record Successfully Updated')
         return VenueViews(self._session_data).edit(venue_data, errors)
-    
+
     def _verify_edit_form(self, posted_values):
         """
         Verifies that we have all the data for the add user form
@@ -90,7 +88,7 @@ class VenuesController(BaseController):
             is_valid = False
         return is_valid, errors
 
-    def list(self, start: int=0):
+    def list(self, start: int = 0):
         """
         Lists the venues in the system
         """
@@ -107,7 +105,7 @@ class VenuesController(BaseController):
             return VenueViews(self._session_data).get_venue(venue_data)
         except Exception:
             return VenueViews(self._session_data).not_found(guid)
-    
+
     def delete(self, guid):
         """
         Delete a venue

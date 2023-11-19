@@ -122,7 +122,7 @@ class UsersController(BaseController):
                 case 'email':
                     if not re.match(r'[a-z0-9_\-\.]+@[a-z0-9_\-\.]+.[a-z0-9_\-]+', form_val, re.I):
                         errors.append('Email is invalid')
-                    elif(len(UserModel().get_user_by(email=form_val)) > 0):
+                    elif len(UserModel().get_user_by(email=form_val)) > 0:
                         errors.append('Email Already Exists')
                 case other:
                     print(f"{other} isn't being validated on form submission")
@@ -163,7 +163,7 @@ class UsersController(BaseController):
                 case 'email':
                     if not re.match(r'[a-z0-9_\-\.]+@[a-z0-9_\-\.]+.[a-z0-9_\-]+', form_val, re.I):
                         errors.append('Email is invalid')
-                    elif(len(UserModel().get_user_by(email=form_val)) > 0):
+                    elif len(UserModel().get_user_by(email=form_val)) > 0:
                         errors.append('Email Already Exists')
                 case other:
                     print(f"{other} isn't being validated on form submission")
@@ -222,16 +222,16 @@ class UsersController(BaseController):
         Delete User from system
         """
         # TODO: check if user exists
-        #If the user doesn't exist, go back to the edit page
-        #otherwise, load the user model
-        #then statement is called to delete from user model with the user_guid
-        #on success, redirect to user's page
+        # If the user doesn't exist, go back to the edit page
+        # otherwise, load the user model
+        # then statement is called to delete from user model with the user_guid
+        # on success, redirect to user's page
 
         if UserModel().delete_user(user_guid):
             return self.redirect('/users/list_users')
         return self.redirect(f'/users/edit_user{user_guid}')
 
-    def list_users(self, start: int=0):
+    def list_users(self, start: int = 0):
         """
         Lists the users in the system
         """
@@ -240,12 +240,12 @@ class UsersController(BaseController):
         # pass the user info to views
         # Ensure that the role for the user is detected in the navigation
         # TODO: use session to load current user info``
-        #sid = self._get_session_id()
-        #session_data = self._get_session_data(sid)
+        # sid = self._get_session_id()
+        # session_data = self._get_session_data(sid)
         user_info = {'user_roles': 'NTSS_ADMIN'}
         return UserViews().list_users(users_data, user_info)
 
-    def change_password(self, email, password) -> bool: 
+    def change_password(self, email, password) -> bool:
         """
         Function to change password
         """

@@ -8,7 +8,6 @@ from ntss.models.session import Session
 from ntss.config.constants import COOKIE_INFO
 
 
-
 class BaseController:
     """
     The base controller
@@ -74,7 +73,7 @@ class BaseController:
         }
         self._response.set_cookie(**cookie_settings)
         return self._response
-    
+
     def _get_cookie(self, cookie_name: str):
         """
         Gets a loaded cookie's value
