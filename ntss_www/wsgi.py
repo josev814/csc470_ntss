@@ -332,3 +332,9 @@ def delete_venue(request, response, guid: str):
     response = return_output(response, controller_response, 200)
     return response
 ### END VENUES ###
+
+### START SPEECH ROUTES ###
+
+
+
+### END SPEECH ROUTES ###

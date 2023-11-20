@@ -123,6 +123,11 @@ CREATE TABLE IF NOT EXISTS `transactions` (
     KEY `event_user` (`event_guid`, `user_guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `speeches` (
+    `speech_guid` VARCHAR(75) NOT NULL,
+    `speech_name` VARCHAR(75) NOT NULL,
+    `speech_description` TEXT NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- insert the default customer
 INSERT INTO `customers` (
@@ -170,7 +175,7 @@ INSERT INTO `users` (
     hex(REPLACE(uuid(),'-','')), @cust_guid, '$argon2id$v=19$m=65536,t=3,p=4$Uajfa42Shy/FoK8DroIbPQ$l/Twf9FIXIjAkvaqXwyHujqf4ZUt+WhT9Y0h2t91vw4',
     'Mr.', "Joe", '', 'Smack', '',
     '1200 Murchison Rd', '', 'Fayetteville', 'North Carolina', '28301',
-    'joe.smack@aol.com', '910-672-1111', 'https://www.uncfsu.edu/', 1, 'EVENT_CUSTOMER'
+    'joe.smack@aol.com', '910-672-1111', 'https://www.uncfsu.edu/', 1, 'EVENT_STAFF'
 ),
 (
     hex(REPLACE(uuid(),'-','')), @cust_guid, '$argon2id$v=19$m=65536,t=3,p=4$Uajfa42Shy/FoK8DroIbPQ$l/Twf9FIXIjAkvaqXwyHujqf4ZUt+WhT9Y0h2t91vw4',
