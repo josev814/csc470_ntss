@@ -110,3 +110,12 @@ main {
 .text-right {
   text-align: right;
 }
+
+
+.form-option:disabled {
+  background-color: #e9ecef;
+}
+
+option:disabled {
+  opacity: 1;
+}
