@@ -1,6 +1,7 @@
 """
 The package to handle events
 """
+from re import search
 from ntss.controllers.controller import BaseController
 from ntss.views.events import EventViews
 from ntss.models.event import Event as EventModel, EventUsers as EventUsersModel
@@ -101,6 +102,31 @@ class EventsController(BaseController):
             return self.redirect('/events/list')
         except Exception:
             return EventViews(self._session_data).not_found(guid)
+    
+    def search(self, start: int = 0):
+        """
+        Search the events in the system
+        """
+        posted_values = {}
+        columns = ['event_guid', 'name', 'name_1', 'city', 'state', 'start_date', 'end_date']
+        joins = [{'table': 'venues', 'src_column': 'venue_guid', 'join_column': 'venue_guid'}]
+        if self._request.method == 'POST':
+            for request_name, request_value in self._request.params.items():
+                posted_values[request_name] = request_value.strip()
+            filters = [
+                {'column': 'start_date', 'operator': '<=', 'value': posted_values['search_date']},
+                {'type': 'and', 'column': 'end_date', 'operator': '>=', 'value': posted_values['search_date']}
+            ]
+            db_event_data = EventModel().get_events(columns=columns, joins=joins, filters=filters)
+        else:
+            db_event_data = EventModel().get_events(columns=columns, joins=joins)
+        event_data = []
+        for db_event in db_event_data:
+            venue_name = db_event['name_1']
+            db_event['venue'] = venue_name
+            del db_event['name_1']
+            event_data.append(db_event)
+        return EventViews(self._session_data).search(event_data, posted_values)
 
     def __verify_add_form(self, posted_values):
         """
@@ -236,12 +262,21 @@ class EventsController(BaseController):
                 errors.append(f'Transaction GUID: {transaction_guid}')
         users = UsersModel().get_users()
         event_info = EventModel().get_event_by(guid=event_guid)
+        booth_transactions = TransactionModel(True).get_transactions_by_filter([
+            {'column': 'event_guid', 'operator': '=', 'value': event_guid},
+            {'column': 'item_description', 'operator': 'like', 'value': '#'}
+        ])
+        reserved_booths = []
+        for booth_transaction in booth_transactions:
+            reserved_booths.append(
+                int(booth_transaction['item_description'].split('#')[1])
+            )
         if len(event_info) == 0:
             # TODO: event not found (probably deleted)
             pass
         event_info = event_info[0]
         return EventViews(self._session_data).form_add_attendee(
-                form_data, event_info, users, errors
+                form_data, event_info, users, reserved_booths, errors
             )
 
     def __verify_checkout_form(self, form_data):

@@ -195,6 +195,14 @@ def delete_event(request, response, guid: str):
     response = return_output(response, controller_response, 200)
     return response
 
+@application.route('/events/search', methods=['POST'])
+@login_access_required
+def search_events(request, response):
+    """
+    Search for events in the system
+    """
+    response.text = EventsController(request, response).search()
+    return response
 
 ##### Start User/Event Routes #####
 @application.route('/event/{event_guid}/add_user', methods=['GET', 'POST'])

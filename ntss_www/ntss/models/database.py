@@ -3,7 +3,7 @@ Base package for accessing the database(s)
 """
 from os import getenv
 from uuid import uuid4
-from sqlalchemy import create_engine, MetaData, Table, and_
+from sqlalchemy import create_engine, MetaData, Table, and_, or_
 
 
 class MysqlDatabase:
@@ -113,8 +113,9 @@ class MysqlDatabase:
         """
         Sets the query filter
         """
-        query_filters = []
+        combined_filter = None
         for query_filter in filters:
+            filter_condition = None
             column_name = query_filter['column']
             value = query_filter['value']
             match query_filter['operator']:
@@ -122,9 +123,24 @@ class MysqlDatabase:
                     filter_condition = self._table.c[column_name] == value
                 case '!=':
                     filter_condition = self._table.c[column_name] != value
+                case '>=':
+                    filter_condition = self._table.c[column_name] >= value
+                case '<=':
+                    filter_condition = self._table.c[column_name] <= value
+                case 'like':
+                    filter_condition = self._table.c[column_name].like(f'%{value}%')
+            # Combine filter conditions based on 'type'
+            if 'type' in query_filter and query_filter['type'] == 'or':
+                if combined_filter is None:
+                    combined_filter = filter_condition
+                else:
+                    combined_filter = or_(combined_filter, filter_condition)
+            else:
+                if combined_filter is None:
+                    combined_filter = filter_condition
+                else:
+                    combined_filter = and_(combined_filter, filter_condition)
 
-            query_filters.append(filter_condition)
-        combined_filter = and_(*query_filters)
         return combined_filter
 
     def __create_dict_rows(self, row, return_columns, table_columns):

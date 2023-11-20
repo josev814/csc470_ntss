@@ -64,6 +64,20 @@ class EventViews(Views):
         self.template_vars['attendees'] = attendee_data
         self.template_vars['trxns'] = transactions
         return self.template.render(self.template_vars)
+    
+    def search(self, events: list, form_data: dict) -> str:
+        """
+        List events in the system from a search
+        """
+        self.template_vars['pageName'] = 'List Events'
+        self.template_vars['events'] = events
+        self.template_vars['form_data'] = form_data
+        if len(events) > 0:
+            self.set_template('events/events_list.html')
+            return self.template.render(self.template_vars)
+        self.set_template('events/no_items.html')
+        self.template_vars['controller_type'] = self._controller_type
+        return self.template.render(self.template_vars)
 
     def not_found(self, event_guid):
         """
@@ -114,7 +128,7 @@ class EventViews(Views):
         self.template_vars['invoice_information'] = invoice_information
         return self.template.render(self.template_vars)
 
-    def form_add_attendee(self, form_data, event_info, users, messages):
+    def form_add_attendee(self, form_data, event_info, users, reserved_boths, messages):
         """
         Load the form for adding a user to an event
         """
@@ -122,6 +136,7 @@ class EventViews(Views):
         self.template_vars['pageName'] = 'Add Attendee'
         self.template_vars['form_data'] = form_data
         self.template_vars['event'] = event_info
+        self.template_vars['reserved_booths'] = reserved_boths
         self.template_vars['users'] = users
         self.template_vars['errors'] = messages
         return self.template.render(self.template_vars)

@@ -4,7 +4,18 @@
 
   <div class="col-9 px-md-4 text-start">
     <div class="row">
-      <h1 class="h2">Events List</h1>
+      <div class="col">
+        <h1 class="h2">Events List</h1>
+      </div>
+      <div class="col text-end">
+        <form method="post" action="/events/search">
+          <label for="search_date"><b>Date Filter:</b> </label>
+          <input type="date" name="search_date" value="{%- if form_data and 'search_date' in form_data -%}
+            {{ form_data.search_date }}
+            {%- endif -%}" />
+          <button class="btn btn-primary">Search</button>
+        </form>
+      </div>
     </div>
     <div class="row">
       <div class="table-responsive col">
