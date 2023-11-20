@@ -34,6 +34,16 @@ services:
       interval: 5s
       timeout: 10s
       retries: 10
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+    depends_on:
+      ntss_database:
+        condition: service_healthy
   app:
     container_name: ntss_app
     image: ntss_app
