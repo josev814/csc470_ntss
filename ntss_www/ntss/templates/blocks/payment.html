@@ -1,0 +1,68 @@
+<div class="row">
+    <div class="col">
+        <h4>Payment Information</h4>
+        <div class="my-3">
+            <div class="row">
+                <label class="form-select-label" for="paymentMethod">Payment Method</label>
+                <select name="paymentMethod" id="paymentMethod" class="form-select" required onchange="togglePayment()">
+                    <option selected disabled>Select a payment method</option>
+                    {% if form_data.user_role == 'EXHIBITOR' %}
+                    <option {% if form_data.paymentMethod=='invoice' %}selected{% endif %} value="incoice">Bill Me Later
+                    </option>
+                    {% endif %}
+                    <option {% if form_data.paymentMethod=='credit' %}selected{% endif %} value="credit">Credit card
+                    </option>
+                    <option {% if form_data.paymentMethod=='debit' %}selected{% endif %} value="debit">Debit card
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div id="paymentInformation" class="row gy-3 d-none">
+            <div class="col-6">
+                <label for="cc-name" class="form-label">Name on card</label>
+                <input type="text" class="form-control" id="cc-name" name="cc_name" placeholder="" required {%
+                    if 'cc_name' in form_data %}value="{{ form_data.cc_name }}" {% endif %}>
+                <small class="text-muted">Full name as displayed on card</small>
+            </div>
+            <div class="col-6">
+                <label for="cc-number" class="form-label">Credit card number</label>
+                <input type="text" class="form-control" id="cc-number" name="cc_number" required
+                    pattern="^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$" required {% if 'cc_number' in form_data
+                    %}value="{{ form_data.cc_number }}" {% endif %}>
+                <small class="text-muted">Format is XXXX-XXXX-XXXX-XXXX</small>
+            </div>
+            <div class="col-3">
+                <label for="cc-expiration" class="form-label">Expiration</label>
+                <input type="text" class="form-control" id="cc-expiration" name="cc_expiration"
+                    pattern="^(0[0-9]|1[0-2])/(2[3-9]|3[0-9])$" required {% if 'cc_expiration' in form_data
+                    %}value="{{ form_data.cc_expiration }}" {% endif %}>
+                <small class="text-muted">Format is MM/YY</small>
+            </div>
+            <div class="col-3">
+                <label for="cc-cvv" class="form-label">CVV</label>
+                <input type="number" class="form-control" id="cc-cvv" name="cc_cvv" minlength="3" maxlength="5" placeholder="" required="">
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+  // JavaScript to toggle visibility
+  function togglePayment() {
+    var element = document.getElementById("paymentInformation");
+    var selectValue = document.getElementById("paymentMethod").value;
+
+    if (['credit', 'debit'].includes(selectValue)) {
+      element.classList.remove("d-none");
+      setRequired(true);
+    } else {
+      element.classList.add("d-none");
+      setRequired(false);
+    }
+  }
+  function setRequired(isRequired) {
+    var inputs = document.querySelectorAll("#paymentInformation input");
+    inputs.forEach(function(input) {
+      input.required = isRequired;
+    });
+  }
+</script>

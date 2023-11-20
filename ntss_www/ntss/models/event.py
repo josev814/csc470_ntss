@@ -132,3 +132,63 @@ class Event(MysqlDatabase):
             {'column': 'event_guid', 'operator': '=', 'value': f'{guid}'}
         ]
         return self.db_delete(filters)
+
+
+class EventUsers(MysqlDatabase):
+    """
+    The Event Users class that adds a user to an event in the database
+    """
+
+    def __init__(self, debug=False):
+        """
+        When initializing the Users model set the default table to users
+        """
+        super().__init__(debug)
+        self.set_table_metadata()
+        self.set_table('event_users')
+    
+    def get_user_events(self, user_guid, limit=20) -> list:
+        """
+        Gets all events a particular user attended
+        """
+        joins = [{'table': 'events', 'src_column': 'event_guid', 'join_column': 'event_guid'}]
+        filters=[
+            {'column': 'user_guid', 'operator': '=', 'value': user_guid}
+        ]
+        return self.db_select(joins=joins, filters=filters, limit=limit)
+
+    def get_event_users(self, event_guid, limit=20) -> list:
+        """
+        Gets all users for a particular event 
+        """
+        columns=[
+            'user_guid', 'prefix_name', 'first_name', 'middle_name', 'last_name', 
+            'suffix_name', 'create_date'
+        ]
+        joins = [{'table': 'users', 'src_column': 'user_guid', 'join_column': 'user_guid'}]
+        filters=[
+            {'column': 'event_guid', 'operator': '=', 'value': event_guid}
+        ]
+        return self.db_select(columns=columns, joins=joins, filters=filters, limit=limit)
+    
+    def add_user_to_event(self, user_guid: str, event_guid: str) -> bool:
+        """
+        Adds a user to an event
+        """
+        values = {
+            'event_guid': event_guid,
+            'user_guid': user_guid
+        }
+        if self.db_create(values):
+            return True
+        return False
+
+    def delete_user_from_event(self, user_guid: str, event_guid: str) -> bool:
+        """
+        Deletes a user from an event
+        """
+        filters = [
+            {'column': 'event_guid', 'operator': '=', 'value': f'{event_guid}'},
+            {'column': 'user_guid', 'operator': '=', 'value': f'{user_guid}'}
+        ]
+        return self.db_delete(filters)

@@ -54,7 +54,7 @@ US_STATES = (
 )
 
 BOOTHS = {
-    'large': 500, 
-    'medium': 300, 
+    'large': 500,
+    'medium': 300,
     'small': 100
 }

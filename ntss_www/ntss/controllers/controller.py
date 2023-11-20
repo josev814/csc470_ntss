@@ -8,7 +8,6 @@ from ntss.models.session import Session
 from ntss.config.constants import COOKIE_INFO
 
 
-
 class BaseController:
     """
     The base controller
@@ -27,9 +26,21 @@ class BaseController:
         self._session_id = None
         self._session_data = None
         sid = self._get_session_id()
-        if sid != '':
+
+        if not sid:
+            if not hasattr(self._request, 'path') or \
+                    self._request not in ['/', '/forgot_password', '/register']:
+                self.redirect('/')
+        elif sid:
             self._session_data = self._get_session_data(sid)
-        
+            if not self._session_data and \
+                    self._request.path not in ['/', '/forgot_password', '/register']:
+                self._delete_session(sid)
+                self._clear_login_cookie()
+                self.redirect('/')
+            elif self._session_data:
+                self._add_cookie(sid)
+                self._extend_session(sid)
 
     def _load_cookies(self):
         """
@@ -62,7 +73,7 @@ class BaseController:
         }
         self._response.set_cookie(**cookie_settings)
         return self._response
-    
+
     def _get_cookie(self, cookie_name: str):
         """
         Gets a loaded cookie's value
@@ -141,3 +152,9 @@ class BaseController:
         Delete the session data
         """
         Session().delete_session(session_id)
+
+    def _extend_session(self, session_id):
+        """
+        Extend the expiration of the session data
+        """
+        Session().set_key_expiration(session_id)

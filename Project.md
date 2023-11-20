@@ -41,7 +41,7 @@ domains need be added and outdated domains need be removed.
 A trade show is attended by different types of participants including the 
 event organization staff, the invited and/or selected speakers, exhibitors, 
 and observers. 
-Except the event organization staff and the event organizer, all participants 
+**Except the event organization staff and the event organizer**, all participants 
 must register to attend a trade show events. 
 The registration charges a fee, which is different for different trade show 
 events. 
@@ -52,10 +52,13 @@ give a keynote address at the event.
 evaluation of their proposals. 
 - The proposals are usually reviewed by a committee of reviewers, who are 
 experts in the domain and willing to help. 
+
 The Appendix D Project Descriptions 667 status of a proposal includes 
 pending review, accepted, and rejected. 
+
 The exhibitors come to the trade show to exhibit their products or services. 
 The exhibitors have to pay for the booths depending on the size of the 
 booth (large, medium, or small). 
 Booths are requested and rented for the whole duration of the event. 
+
 Finally, the observers come to visit the trade show for various purposes.
