@@ -4,7 +4,7 @@ Package to handle Users
 import re
 from ntss.controllers.controller import BaseController
 from ntss.views.users import UserViews
-from ntss.models.user import Users as UserModel
+from ntss.models.user import Users as UserModel, UserSpeeches as Speeches
 from ntss.models.session import Session
 
 
@@ -251,3 +251,58 @@ class UsersController(BaseController):
         """
         user_db = UserModel(True)
         return user_db.change_password(email, password)
+
+    ### SPEECH ROUTES ###
+
+    def approve_deny_speech(self, speech_guid):
+        """
+        approve or deny the speech (reviewer option)
+        """
+
+    def add_speech(self):
+        """
+        Add speech into system based on user_guid
+        """
+        posted_values = {}
+        errors = None
+        if self._request.method == 'POST':
+            for request_name, request_value in self._request.params.items():
+                posted_values[request_name] = request_value.strip()
+            speech_guid = Speeches().add_speech(posted_values)
+            if speech_guid:
+                print(f'redirecting to the edit user page for {speech_guid}')
+                return self.redirect('/users/speeches/{speech_guid}')
+        return UserViews().add_speech(self._session_data, posted_values, errors)
+
+    def edit_speech(self, speech_guid):
+        """
+        edit speech in system based on user_guid
+        """
+        errors = None
+        speech_info = Speeches().get_speech_by(speech_guid=speech_guid)
+        print(speech_info)
+        if len(speech_info) > 0:
+            speech_info = speech_info[0]
+        else:
+            errors = ['Invalid Speech']
+
+        if self._request.method == 'POST':
+            for request_name, request_value in self._request.params.items():
+                speech_info[request_name] = request_value.strip()
+            print(speech_info)
+            if Speeches().edit_speech(speech_info):
+                errors = ['User Saved to System']
+            else:
+                errors = ['Failed to save speech info, try again']
+        return UserViews().edit_speech(self._session_data, speech_info, errors)
+
+    def view_speeches(self, speech_guid):
+        """
+        lists the speeches in the system
+        """
+        speech_info = Speeches(self._session_data).get_speech_by(speech_guid)
+        if len(speech_info) == 0:
+            return UserViews().no_speech_found(speech_guid)
+        speech_info = speech_info[0]
+        return UserViews().view_speeches(speech_info)
+

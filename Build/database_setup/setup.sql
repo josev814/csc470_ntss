@@ -123,11 +123,21 @@ CREATE TABLE IF NOT EXISTS `transactions` (
     KEY `event_user` (`event_guid`, `user_guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `speeches` (
-    `speech_guid` VARCHAR(75) NOT NULL,
-    `speech_name` VARCHAR(75) NOT NULL,
-    `speech_description` TEXT NOT NULL,
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ntss`.`speeches` 
+(
+    `speech_guid` VARCHAR(75) NOT NULL , 
+    `speech_name` VARCHAR(75) NOT NULL , 
+    `speech_description` TEXT NOT NULL , 
+    `is_accepted` TINYINT(1) NOT NULL DEFAULT '0' , 
+    `user_guid` VARCHAR(75) NOT NULL , 
+    `event_guid` VARCHAR(75) NOT NULL , 
+    `review_notes` TEXT NOT NULL , 
+    `created_datetime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , 
+    `updated_datetime` TIMESTAMP on update CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP , 
+    PRIMARY KEY (`speech_guid`), 
+    INDEX `user_guid` (`user_guid`), 
+    INDEX `event_guid` (`event_guid`)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 -- insert the default customer
 INSERT INTO `customers` (

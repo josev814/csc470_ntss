@@ -72,3 +72,49 @@ class UserViews(Views):
         self.template_vars['form_post'] = posted_values
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
+
+    def add_speech(self, user_session, posted_values, errors: list):
+        """
+        adds speech into system based on user
+        """
+        self.template('speeches/add_edit_speech.html')
+        self.template_vars['pageName'] = 'Add Speech Proposal'
+        self.template_vars['current_user'] = user_session
+        self.template_vars['form_post'] = posted_values
+        self.template_vars['errors'] = errors
+        return self.template.render(self.template_vars)
+
+    def edit_speech(self, user_session, speech_values, errors: list):
+        """
+        edit speech in system based on user
+        """
+        self.set_template('speeches/add_edit_speech.html')
+        self.template_vars['pageName'] = 'Edit Speech Proposal'
+        self.template_vars['current_user'] = user_session
+        self.template_vars['form_post'] = speech_values
+        self.template_vars['errors'] = errors
+        return self.template.render(self.template_vars)
+
+    def view_speeches(self, speech_info):
+        """
+        Load the speeches for a user
+        """
+
+        self.template_vars['pageName'] = 'My Speech Proposals'
+        self.template_vars['speeches'] = speech_info
+        if len(speech_info) > 0:
+            self.set_template('speeches/speech_list.html')
+        else:
+            self.set_template('speeches/no_speech_found.html')
+            self.template_vars['controller_type'] = self._controller_type
+        return self.template.render(self.template_vars)
+
+
+    def no_speech_found(self, speech_guid):
+        """
+        Shows the not found page if the speech doesn't exist
+        """
+        self.set_template('speeches/no_speech_found.html')
+        self.template_vars['pageName'] = 'Speech Not Found'
+        self.template_vars['guid'] = speech_guid
+        return self.template.render(self.template_vars)
