@@ -335,6 +335,33 @@ def delete_venue(request, response, guid: str):
 
 ### START SPEECH ROUTES ###
 
+@application.route('/speeches/list', methods=['GET'])
+@login_access_required
+def view_speeches(request, response, speech_guid):
+    """
+    Lists the speeches in the system
+    """
+    response.text = UsersController(request, response).view_speeches(speech_guid)
+    return response
 
+
+@application.route('/speeches/add', methods=['GET', 'POST'])
+@login_access_required
+def add_speech(request, response):
+    """
+    Adds a speech in the system
+    """
+    controller_response = UsersController(request, response).add_speech()
+    response = return_output(response, controller_response, 200)
+    return response
+
+@application.route('/speeches/edit/{guid}', methods=['GET', 'POST'])
+@login_access_required
+def edit_speech(request, response, guid: str):
+    """
+    Processes an edit for a speech in the system based on the guid
+    """
+    response.text = UsersController(request, response).edit_speech(guid)
+    return response
 
 ### END SPEECH ROUTES ###

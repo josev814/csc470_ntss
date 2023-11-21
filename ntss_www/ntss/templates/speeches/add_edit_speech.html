@@ -12,26 +12,7 @@
     <div class="row my-4 mb-md-0">
       <div class="col">
         <form method="POST" class="d-grid gap-3">
-            {% if pageName.startswith('Edit ') %}
-            <div class="row">
-              <input type="hidden" name="speech_guid" value="{{ form_post.speech_guid }}" />
-            </div>
-            {% endif %}
             
-            <div class="row">
-              <div class="col-2">
-                <button class="btn btn-lg btn-primary" type="submit">Save</button>
-              </div>
-              <div class="col-2">
-                <a onclick="history.back()" class="btn btn-lg btn-info">Cancel</a>
-              </div>
-              {% if pageName.startswith('Edit ') %}
-              <div class="col-2">
-                <a href="/speeches/delete/{{ form_post.speech_guid }}" class="btn btn-lg btn-danger">Delete</a>
-              </div>
-              {% endif %}
-            </div>
-          </div>
         </form>
     </div>
   </div>
