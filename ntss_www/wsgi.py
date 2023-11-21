@@ -288,6 +288,18 @@ def view_customer_event(request, response, event_guid: str):
     return response
 
 
+### EXHIBITORS ###
+
+@application.route('/myexhibits', methods=['GET'])
+def myevents(request, response):
+    """ A page to display a user's events"""
+    print(request.path)
+    output = EventsController(request, response).get_my_exhibits()
+    response.text = output
+    return response
+
+### END EXHIBITORS ###
+
 ### VENUES ###
 @application.route('/venues/list', methods=['GET'])
 @login_access_required
