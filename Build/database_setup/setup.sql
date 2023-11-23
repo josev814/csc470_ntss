@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
     KEY `event_user` (`event_guid`, `user_guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `ntss`.`speeches` 
+CREATE TABLE IF NOT EXISTS `speeches` 
 (
     `speech_guid` VARCHAR(75) NOT NULL , 
     `speech_name` VARCHAR(75) NOT NULL , 

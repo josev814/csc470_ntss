@@ -6,6 +6,7 @@ from ntss.controllers.controller import BaseController
 from ntss.views.users import UserViews
 from ntss.models.user import Users as UserModel, UserSpeeches as Speeches
 from ntss.models.session import Session
+from ntss.models.event import Event as EventModel
 
 
 class UsersController(BaseController):
@@ -272,7 +273,8 @@ class UsersController(BaseController):
             if speech_guid:
                 print(f'redirecting to the edit user page for {speech_guid}')
                 return self.redirect('/users/speeches/{speech_guid}')
-        return UserViews().add_speech(self._session_data, posted_values, errors)
+        events = EventModel.get_events(['event_guid', 'name']) 
+        return UserViews().add_speech(self._session_data, posted_values, events, errors)
 
     def edit_speech(self, speech_guid):
         """
@@ -305,4 +307,3 @@ class UsersController(BaseController):
             return UserViews().no_speech_found(speech_guid)
         speech_info = speech_info[0]
         return UserViews().view_speeches(speech_info)
-

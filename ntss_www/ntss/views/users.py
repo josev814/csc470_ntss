@@ -73,13 +73,14 @@ class UserViews(Views):
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
 
-    def add_speech(self, user_session, posted_values, errors: list):
+    def add_speech(self, user_session, posted_values, events, errors: list):
         """
         adds speech into system based on user
         """
-        self.template('speeches/add_edit_speech.html')
+        self.set_template('speeches/add_edit_speech.html')
         self.template_vars['pageName'] = 'Add Speech Proposal'
         self.template_vars['current_user'] = user_session
+        self.template_vars['events'] = events
         self.template_vars['form_post'] = posted_values
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
