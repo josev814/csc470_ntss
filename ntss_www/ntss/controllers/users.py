@@ -273,7 +273,8 @@ class UsersController(BaseController):
             if speech_guid:
                 print(f'redirecting to the edit user page for {speech_guid}')
                 return self.redirect('/users/speeches/{speech_guid}')
-        events = EventModel.get_events(['event_guid', 'name']) 
+        columns = ['event_guid', 'name']
+        events = EventModel().get_events(columns=columns)
         return UserViews().add_speech(self._session_data, posted_values, events, errors)
 
     def edit_speech(self, speech_guid):
