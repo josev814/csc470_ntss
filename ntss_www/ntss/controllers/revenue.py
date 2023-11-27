@@ -20,7 +20,7 @@ class RevenueController(BaseController):
         """
         Gets revenue report associated with event
         """
-        columns = ['event_guid', 'event_name', 'transactions', 'name', ]
+        columns = ['event_guid', 'event_name', 'transactions', 'name' ]
         joins = [{'table': 'transactions',
                   'src_column': 'event_guid', 'join_column': 'event_guid'}]
         db_event_data = EventModel(True).get_events(joins=joins, limit=10000)
@@ -39,4 +39,5 @@ class RevenueController(BaseController):
                 revenue += float(event_data['price'])
                 print(float(event_data['price']))
         revenue = revenue - venue_cost
-        return RevenueViews(self._session_data).get_report(date, eventName, eventId, all_transactions,total_transactions,revenue, venue_cost, venue)
+        return RevenueViews(self._session_data).get_report(date, eventName, eventId, 
+        all_transactions,total_transactions,revenue, venue_cost, venue)

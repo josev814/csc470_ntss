@@ -207,6 +207,15 @@ def add_user_to_event(request, response, event_guid: str):
     response = return_output(response, controller_response, 200)
     return response
 
+@application.route('/event/{event_guid}/user_report', methods=['GET'])
+@login_access_required
+def get_user_report(request, response, event_guid: str):
+    """
+    Gets user report for events
+    """
+    controller_response = EventsController(request, response).get_user_report(event_guid)
+    response = return_output(response, controller_response, 200)
+    return response
 
 # @application.route('/event/{event_guid}/list_users', methods=['GET'])
 # @login_access_required
