@@ -223,14 +223,25 @@ class UserSpeeches(MysqlDatabase):
         self.set_table_metadata()
         self.set_table('speeches')
 
-    def get_speeches(self, columns: list=None, start=0, limit=20):
+    def get_speeches(self, columns: list=None, joins: list=None, start=0, limit=20) -> list:
         """
         Gets all speeches from the database 
         """
-        speech_records = self.db_select(columns=columns, start=start, limit=limit)
-        return speech_records
+        if columns and joins:
+            return self.db_select(columns=columns, joins=joins, start=start, limit=limit)
+        if joins:
+            return self.db_select(joins=joins, start=start, limit=limit)
+        if columns:
+            return self.db_select(columns, start=start, limit=limit)
+        return self.db_select(start=start, limit=limit)
 
-
+    def get_speech(self, speech_guid: str) -> dict:
+        """
+        Retrieves a speech from the database based on the speech guid
+        """
+        records = self.get_speech_by(speech_guid)
+        return records[0]
+    
     def get_speech_by(self, speech_guid=None, filters: list[dict]=None, limit=1):
         """
         Performs a select query based on the params passed
@@ -250,7 +261,7 @@ class UserSpeeches(MysqlDatabase):
 
     def add_speech(self, *args) -> str|bool:
         """
-        Adds a speech and returns their speech_guid from the database
+        Adds a speech and returns the speech_guid from the database
         """
         if len(args) == 1:
             args = args[0]
@@ -270,9 +281,9 @@ class UserSpeeches(MysqlDatabase):
             return speech_guid
         return False
 
-    def edit_speech(self, *args) -> bool:
+    def edit_speech(self, speech_guid, *args) -> str|bool:
         """
-        Edits speech in database
+        Edits speech based on its speech_guid
         """
         if len(args) == 1:
             args = args[0]
@@ -291,8 +302,9 @@ class UserSpeeches(MysqlDatabase):
         if args.get('review_notes') is not None:
             speech_values['review_notes'] = args.get('review_notes')
 
-        where_clause = [{'column': 'speech_guid', 'operator': '=',
-                         'value': args.get('speech_guid')}]
+        where_clause = [{'column': 'speech_guid', 'operator': '=','value': f'{speech_guid}'}]
+        
+
 
         return bool(self.db_update(speech_values, where_clause))
 
@@ -300,5 +312,5 @@ class UserSpeeches(MysqlDatabase):
         """
         Deletes the speech from system
         """
-        where_clause = [{'column': 'speech_guid', 'operator': '=', 'value': speech_guid}]
+        where_clause = [{'column': 'speech_guid', 'operator': '=', 'value': f'{speech_guid}'}]
         return bool(self.db_delete(where_clause))

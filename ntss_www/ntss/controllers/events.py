@@ -51,7 +51,7 @@ class EventsController(BaseController):
 
     def edit(self, event_guid):
         """
-        Adds an event into the system
+        Edits an event into the system
         """
         posted_values = {}
         errors = None
