@@ -111,7 +111,8 @@
               Total: 
             </div>
             <div class="col">
-              {% if  %}
+              <!-- TODO: Add ticket to cost breakdown if this is an exhibitor -->
+              {% if booth_id==booths %}
                 {{ booths[form_data.booth] }}
               {% endif %}
             </div>
