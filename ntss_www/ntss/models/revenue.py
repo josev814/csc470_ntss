@@ -16,6 +16,3 @@ class RevenueModel(MysqlDatabase):
     #     self.set_table_metadata()
     #     self.set_table('revenues')
 
-    def get_report(self):
-        
-        return

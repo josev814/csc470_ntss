@@ -269,5 +269,3 @@ class EventsController(BaseController):
             elif form_data['cc_number'] == '1111-1111-1111-1111':
                 errors.append('Payment Failed, Try again')
         return errors
-
-

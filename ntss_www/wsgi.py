@@ -207,16 +207,6 @@ def add_user_to_event(request, response, event_guid: str):
     response = return_output(response, controller_response, 200)
     return response
 
-@application.route('/event/{event_guid}/user_report', methods=['GET'])
-@login_access_required
-def get_user_report(request, response, event_guid: str):
-    """
-    Gets user report for events
-    """
-    controller_response = EventsController(request, response).get_user_report(event_guid)
-    response = return_output(response, controller_response, 200)
-    return response
-
 # @application.route('/event/{event_guid}/list_users', methods=['GET'])
 # @login_access_required
 # def list_users_at_event(request, response, event_guid: str):
@@ -342,7 +332,6 @@ def delete_venue(request, response, guid: str):
     response = return_output(response, controller_response, 200)
     return response
 
-
 ### END VENUES ###
 
 #Start Revenue
@@ -350,10 +339,12 @@ def delete_venue(request, response, guid: str):
 @application.route('/revenue_report/{event_guid}', methods=['GET'])
 @login_access_required
 def get_report(request, response, event_guid:str):
-  """Route to direct to revenue report"""
-  output = RevenueController(request, response).get_report(event_guid)
-  response = return_output(response, output, 200)
-  return response
+    """
+    Route to direct to revenue report
+    """
+    output = RevenueController(request, response).get_report(event_guid)
+    response = return_output(response, output, 200)
+    return response
 
 # @application.route('/register', methods=['GET','POST'])
 # def register_user(request, response):
