@@ -265,7 +265,7 @@ class UsersController(BaseController):
 
     def add_speech(self):
         """
-        Add speech into system
+        Add speech into system 
         """
         posted_values = {}
         errors = None
@@ -292,6 +292,9 @@ class UsersController(BaseController):
             return SpeechesViews(self._session_data).no_speech_found(speech_guid)
         speech_info = speech_info[0]
 
+        columns = ['event_guid', 'name']
+        events = EventModel().get_events(columns=columns)
+
         if self._request.method == 'POST':
             for request_name, request_value in self._request.params.items():
                 posted_values[request_name] = request_value.strip()
@@ -299,8 +302,10 @@ class UsersController(BaseController):
 
             if Speeches().edit_speech(speech_guid, posted_values):
                 errors.append('Event was successfully Updated')
+        print(speech_info)
 
-        return SpeechesViews(self._session_data).edit_speech(speech_info, errors)
+        return SpeechesViews(self._session_data).edit_speech(speech_info, events, errors)
+
 
     def view_speech_info(self, speech_guid):
         """

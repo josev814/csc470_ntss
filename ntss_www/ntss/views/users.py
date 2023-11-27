@@ -72,33 +72,56 @@ class UserViews(Views):
         self.template_vars['form_post'] = posted_values
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
+   
+class UserSpeeches(Views):
+    """
+    class for Speeches in Views
+    """
 
-    def add_speech(self, user_session, posted_values, events, errors: list):
+    def __init__(self, session_info: dict):
+        super().__init__()
+        self._user_session = session_info
+        self._controller_type = 'speeches'
+        self.template_vars['current_user'] = self._user_session
+
+    def list_speeches(self, speeches: list) -> str:
+        """
+        List events in the system
+        """
+        self.template_vars['pageName'] = 'List Speech Proposals'
+        self.template_vars['speeches'] = speeches
+        if len(speeches) > 0:
+            self.set_template('speeches/speech_list.html')
+            return self.template.render(self.template_vars)
+        self.set_template('speeches/no_speech_found.html')
+        self.template_vars['controller_type'] = self._controller_type
+        return self.template.render(self.template_vars)
+
+    def add_speech(self, form_values, events, errors: list):
         """
         adds speech into system based on user
         """
         self.set_template('speeches/add_edit_speech.html')
         self.template_vars['pageName'] = 'Add Speech Proposal'
-        self.template_vars['current_user'] = user_session
         self.template_vars['events'] = events
-        self.template_vars['form_post'] = posted_values
+        self.template_vars['form_post'] = form_values
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
 
-    def edit_speech(self, user_session, speech_values, errors: list):
+    def edit_speech(self, speech_values, events, errors: list):
         """
         edit speech in system based on user
         """
         self.set_template('speeches/add_edit_speech.html')
         self.template_vars['pageName'] = 'Edit Speech Proposal'
-        self.template_vars['current_user'] = user_session
         self.template_vars['form_post'] = speech_values
+        self.template_vars['events'] = events
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
 
-    def view_speeches(self, speech_info):
+    def view_speech_info(self, speech_info):
         """
-        Load the speeches for a user
+        view speech information
         """
 
         self.template_vars['pageName'] = 'My Speech Proposals'

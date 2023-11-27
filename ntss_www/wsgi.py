@@ -372,4 +372,5 @@ def view_speech_info(request, response, speech_guid: str):
     """
     response.text = UsersController(request, response).view_speech_info(speech_guid)
     return response
+
 ### END SPEECH ROUTES ###

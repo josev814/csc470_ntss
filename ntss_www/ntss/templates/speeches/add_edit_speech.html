@@ -24,8 +24,9 @@
           <div class="row">
             <div class="col">
               <label>Speech Description</label>
-              <textarea type="text" class="form-control" name="speech_description" rows="3"
-              {% if form_post.speech_description: %} value="{{ form_post.speech_description}}" {% endif %} required></textarea>
+              <textarea type="text" class="form-control" name="speech_description" rows="3" required >
+                {%- if form_post.speech_description: -%} {{ form_post.speech_description}} {%- endif -%}
+              </textarea>
             </div>
           </div>
 
@@ -53,8 +54,8 @@
 
           <div class="row">
               <label for="review_notes"> Review Notes
-                <textarea class="form-control" name="review_notes" placeholder="Speech Review Notes..."
-                  {% if form_post.review_notes: %} value="{{ form_post.review_notes}}" {% endif %}>
+                <textarea class="form-control" name="review_notes" placeholder="Speech Review Notes...">
+                  {%- if form_post.review_notes: -%} {{ form_post.review_notes}} {%- endif -%}
                 </textarea>
               </label>
             </div>
