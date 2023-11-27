@@ -15,7 +15,8 @@ class RevenueViews(Views):
         self.template_vars['current_user'] = self._user_session
 
 
-    def get_report(self, date, event_name, event_id, all_transactions ,total_transactions, revenue, venue_cost, venue):
+    def get_report(self, date, event_name, event_id,
+    all_transactions ,total_transactions, revenue, venue_cost, venue):
         """
         Get revenue report
         """

@@ -270,7 +270,4 @@ class EventsController(BaseController):
                 errors.append('Payment Failed, Try again')
         return errors
 
-    def get_user_report(self, event_guid: str):
-        users = UsersModel().get_users()
-        print(users)
-        return
+

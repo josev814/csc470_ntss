@@ -1,14 +1,11 @@
 """
 Package to handle Users
 """
-from ntss.controllers.controller import BaseController
-from ntss.views.events import EventViews
-from ntss.models.event import Event as EventModel, EventUsers as EventUsersModel
-from ntss.models.venue import Venue as VenueModel
-from ntss.models.user import Users as UsersModel
-from ntss.models.transactions import Transaction as TransactionModel
-from ntss.views.revenue import RevenueViews
 from datetime import datetime
+from ntss.controllers.controller import BaseController
+from ntss.models.event import Event as EventModel
+from ntss.models.venue import Venue as VenueModel
+from ntss.views.revenue import RevenueViews
 
 
 class RevenueController(BaseController):
@@ -20,12 +17,11 @@ class RevenueController(BaseController):
         """
         Gets revenue report associated with event
         """
-        filters = [
-            {'column':'event_guid', 'operator':'=', 'value':'event_guid'}
-        ]
+        filters = [{'column': 'event_guid', 'operator': '=', 'value': event_guid}]
+ 
         joins = [{'table': 'transactions',
                   'src_column': 'event_guid', 'join_column': 'event_guid'}]
-        db_event_data = EventModel().get_events_by(filters=filters, joins=joins, limit=10000)
+        db_event_data = EventModel().get_events(filters=filters, joins=joins, limit=10000)
         venue = VenueModel().get_venue_by(guid=db_event_data[0]['venue_guid'])[0]
         venue_cost = float(venue['cost'])
         print(venue)
@@ -41,5 +37,5 @@ class RevenueController(BaseController):
                 revenue += float(event_data['price'])
                 print(float(event_data['price']))
         revenue = revenue - venue_cost
-        return RevenueViews(self._session_data).get_report(date, event_name, event_id, all_transactions,
-        total_transactions,revenue, venue_cost, venue)
+        return RevenueViews(self._session_data).get_report(date, event_name, event_id,
+        all_transactions,total_transactions,revenue, venue_cost, venue)
