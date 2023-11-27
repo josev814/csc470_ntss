@@ -9,7 +9,7 @@ from ntss.controllers.ntss import NtssController
 from ntss.controllers.events import EventsController
 from ntss.controllers.users import UsersController
 from ntss.controllers.venues import VenuesController
-
+from ntss.controllers.revenue import RevenueController
 
 application = Routes()
 
@@ -332,3 +332,20 @@ def delete_venue(request, response, guid: str):
     response = return_output(response, controller_response, 200)
     return response
 ### END VENUES ###
+
+#Start Revenue
+
+@application.route('/revenue_report/{event_guid}', methods=['GET'])
+@login_access_required
+def get_report(request, response, event_guid:str):
+  """Route to direct to revenue report"""
+  output = RevenueController(request, response).get_report(event_guid)
+  response = return_output(response, output, 200)
+  return response
+
+# @application.route('/register', methods=['GET','POST'])
+# def register_user(request, response):
+#     """Route to direct to register user function"""
+#     output = UsersController(request, response).register_user()
+#     response = return_output(response, output, 200)
+#     return response

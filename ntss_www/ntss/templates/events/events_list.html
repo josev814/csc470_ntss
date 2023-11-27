@@ -33,6 +33,9 @@
                     edit
                   </span>
                 </a>
+              <a href="/revenue_report/{{ event.event_guid}}" class="btn btn-link-dark p-0">
+                <span class="material-symbols-outlined"> monetization_on </span>
+              </a>
               </td>
               {% for column, value in event.items(): %}
               {%- if not column.endswith('_guid'): -%}
