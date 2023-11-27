@@ -17,14 +17,20 @@ class Event(MysqlDatabase):
         self.set_table_metadata()
         self.set_table('events')
 
-    def get_events(self, columns: list=None, joins: list=None, start: int=0, limit: int=20) -> list:
+    def get_events(self, columns: list=None, joins: list=None, filters: list=None, start: int=0, limit: int=20) -> list:
         """
         Gets all events from the database 
         """
+        if columns and joins and filters:
+            return self.db_select(columns=columns, joins=joins, filters=filters, start=start, limit=limit)
         if columns and joins:
             return self.db_select(columns=columns, joins=joins, start=start, limit=limit)
+        if filters and joins:
+            return self.db_select(joins=joins, filters=filters, start=start, limit=limit)
         if joins:
             return self.db_select(joins=joins, start=start, limit=limit)
+        if columns and filters:
+            return self.db_select(columns, filters=filters, start=start, limit=limit)
         if columns:
             return self.db_select(columns, start=start, limit=limit)
         return self.db_select(start=start, limit=limit)
