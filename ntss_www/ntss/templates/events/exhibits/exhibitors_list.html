@@ -1,0 +1,61 @@
+{% include "blocks/admin_top.html" %}
+<div class="row">
+  {% include "blocks/navigation.html" %}
+
+  <div class="col-9 px-md-4 text-start">
+    <div class="row">
+      <div class="col">
+        <h1 class="h2">{{ pageName }}</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="table-responsive col">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col-2">Event Name</th>
+              <th scope="col">Booth Information</th>
+              <th scope="col">Price $</th>
+              <th scope="col">Paid</th>
+              <th class="text-end" scope="col">Transaction Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for event in events: %}
+            <tr>
+              <td class="col-1">
+                <a href="/exhibit/view/{{ event.transactions.transaction_guid }}" class="btn btn-link-dark p-0">
+                  <span class="material-symbols-outlined">
+                    preview
+                  </span>
+                </a>
+                {% if current_user.user_roles not in ('EXHIBITOR') %}
+                <a href="/exhibit/edit/{{ event.transactions.transaction_guid }}" class="btn btn-link-dark p-0">
+                  <span class="material-symbols-outlined">
+                    edit
+                  </span>
+                </a>
+                {% endif %}
+              </td>
+              <td class="col-2">{{ event.name }}</td>
+              <td>{{ event.transactions.item_description }}</td>
+              <td>{{ event.transactions.price }}</td>
+              <td>{% if event.transactions.type == 'refund' %}
+                Refunded
+                {% elif event.transactions.type == 'invoice' %}
+                Invoice
+                {% else %}
+                Paid 
+                {% endif %}
+              </td>
+              <td class="text-end col-2">{{ event.transactions.create_date.strftime('%B %d, %Y') }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}

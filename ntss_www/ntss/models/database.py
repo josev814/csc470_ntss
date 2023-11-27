@@ -129,6 +129,8 @@ class MysqlDatabase:
                     filter_condition = self._table.c[column_name] <= value
                 case 'like':
                     filter_condition = self._table.c[column_name].like(f'%{value}%')
+                case 'in':
+                    filter_condition = self._table.c[column_name].in_(value)
             # Combine filter conditions based on 'type'
             if 'type' in query_filter and query_filter['type'] == 'or':
                 if combined_filter is None:

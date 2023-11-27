@@ -61,6 +61,12 @@
           {% if form_data['user_role'] == 'EXHIBITOR' and 'user_guid' in form_data %}
           <div class="row">
             <div class="col">
+              <label>Ticket Price</label>
+              <span>{{ event.ticket_price }}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
               <label>Booth Size</label>
               <select {% if 'booth' in form_data %}disabled{% endif %} class="form-select" name="booth" aria-label="select">
                 <option selected disabled>Select a booth size</option>
@@ -100,6 +106,16 @@
           {% endif %}
           {% endif %}
           {% if 'checkout' in form_data: %}
+          <div class="row">
+            <div class="col-1">
+              Total: 
+            </div>
+            <div class="col">
+              {% if  %}
+                {{ booths[form_data.booth] }}
+              {% endif %}
+            </div>
+          </div>
           {% include "blocks/payment.html" %}
           {% endif %}
           <div class="row mt-3">

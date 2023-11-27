@@ -61,11 +61,14 @@ class Users(MysqlDatabase):
             user = record
         return user
 
-    def get_user_by(self, user_id=None, email=None, user_guid=None, limit=1):
+    def get_user_by(self, user_id=None, email=None, 
+                    user_guid=None, filters: list[dict]=None, limit=1):
         """
         Performs a select query based on the params passed
         """
         query_filter = []
+        if filters:
+            query_filter = filters
         if user_id:
             query_filter.append(
                 {'column': 'user_id', 'operator': '=', 'value': user_id}

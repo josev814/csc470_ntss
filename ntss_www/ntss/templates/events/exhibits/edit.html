@@ -1,0 +1,52 @@
+{% include "blocks/admin_top.html" %}
+<div class="row">
+{% include "blocks/navigation.html" %}
+
+<div class="col-9 px-md-4">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ pageName }}</h1>
+  </div>
+  <div class="navbar-nav d-flex flex-wrap flex-md-nowrap pb-2 mb-3 border-bottom">
+    <div class="nav-item text-nowrap">
+      <a class="nav-link px-3" href="javascript:void()" onclick="history.back()">Back</a>
+    </div>
+  </div>
+  <div class="d-grid gap-3 text-start">
+    <form method="POST" class="form">
+      <div class="row mb-3">
+        <div class="col-2">
+          <label for="booth_size">Booth Size</label>
+        </div>
+        <div class="col">
+          {% set booth_size = exhibit.item_description.split('#')[0].split('-')[0] %}
+          {{ booth_size }}
+          <select class="form-select" name="booth_size" id="booth_size">
+            <option value="booth_size">{{ booth_size }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-2">
+          <label for="booth_number">Booth ID</label>
+        </div>
+        <div class="col">
+          {% set booth_id = exhibit.item_description.split('#')[1]|int %}
+          <select class="form-select" name="booth_number" id="booth_number">
+            {% for booth_number in range(1, exhibit.event.booths + 1) %}
+            <option {% if booth_id == booth_number %}selected{% elif booth_id in reserved_booths %}disabled{% endif %} value="{{ booth_number }}">{{ booth_number }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-1">
+          <button class="btn btn-primary">Save</button>
+        </div>
+        <div class="col-1">
+          <button class="btn btn-warning">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}

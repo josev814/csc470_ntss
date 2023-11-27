@@ -140,3 +140,39 @@ class EventViews(Views):
         self.template_vars['users'] = users
         self.template_vars['errors'] = messages
         return self.template.render(self.template_vars)
+
+
+class ExhibitViews(Views):
+    """
+    Class for Exhibit Views
+    """
+
+    def __init__(self, session_info: dict):
+        super().__init__()
+        self._user_session = session_info
+        self.template_vars['current_user'] = self._user_session
+        self._controller_type = 'exhibits'
+
+    def list(self, exhibits: list):
+        """
+        List exhibits in the system
+        """
+        self.template_vars['pageName'] = 'List Exhibits'
+        self.template_vars['exhibits'] = exhibits
+        if len(exhibits) > 0:
+            self.set_template('events/exhibits/list.html')
+            return self.template.render(self.template_vars)
+        self.set_template('no_items.html')
+        return self.template.render(self.template_vars)
+    
+    def edit_exhibit(self, exhibit: dict, form_data: dict) -> str:
+        """
+        Displays the form for editing an exhibit
+        """
+        print(exhibit['event'])
+        print(exhibit['item_description'])
+        self.template_vars['pageName'] = f'Exhibit: {exhibit["transaction_guid"]}'
+        self.template_vars['exhibit'] = exhibit
+        self.template_vars['form_data'] = form_data
+        self.set_template('events/exhibits/edit.html')
+        return self.template.render(self.template_vars)

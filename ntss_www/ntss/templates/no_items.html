@@ -1,0 +1,21 @@
+{% include "blocks/admin_top.html" %}
+<div class="row">
+{% include "blocks/navigation.html" %}
+
+  <div class="col-9 px-md-4">
+    <div class="row text-start">
+      <div class="col">
+        <h1 class="h2">{{pageName}}</h1>
+      </div>
+    </div>
+    <div class="row">
+      {% if current_user.user_roles == 'NTSS_ADMIN' %}
+        <p>We don't have any {{ controller_type }} <a href="/{{ controller_type }}/add">add one</a></p>
+      
+      {% elif current_user.user_roles == 'EVENT_STAFF' %}
+        <p>You have not created any {{ controller_type }}, <a href="/{{controller_type}}/add">create {{ controller_type }}</a></p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}

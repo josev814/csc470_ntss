@@ -54,11 +54,14 @@ class Transaction(MysqlDatabase):
             raise IndexError('Too many indexes in the Tuple')
 
         guid = self.generate_guid()
+        item_desc = args.get('item_description')
+        if '#' in item_desc:
+            item_desc = f'Booth: {item_desc}'
         values = {
             'transaction_guid': guid,
             'user_guid': args.get('user_guid'),
             'event_guid': args.get('event_guid'),
-            'item_description': args.get('item_description'),
+            'item_description': item_desc,
             'price': args.get('cost'),
             'type': args.get('transaction_type')
         }

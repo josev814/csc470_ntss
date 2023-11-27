@@ -1,0 +1,101 @@
+{% include "blocks/admin_top.html" %}
+<div class="row">
+{% include "blocks/navigation.html" %}
+
+<div class="col-9 px-md-4">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ pageName }}</h1>
+  </div>
+  <div class="navbar-nav d-flex flex-wrap flex-md-nowrap pb-2 mb-3 border-bottom">
+    <div class="nav-item text-nowrap">
+      <a class="nav-link px-3" href="javascript:void()" onclick="history.back()">Back</a>
+    </div>
+    <div class="nav-item text-nowrap">
+      <a class="nav-link px-3" href="/exhibit/invoice/{{ exhibit.user_guid }}">View Invoice</a>
+    </div>
+    <div class="nav-item text-nowrap">
+      <a class="nav-link px-3" href="/exhibit/invoice/print/{{ exhibit.user_guid }}" target="_blank">Print Invoice</a>
+    </div>
+  </div>
+  <div class="d-grid gap-3 text-start">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="exhibit-tab" data-bs-toggle="tab" data-bs-target="#exhibit" type="button"
+          role="tab" aria-controls="exhibit" aria-selected="true">Exhibit</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="event-tab" data-bs-toggle="tab" data-bs-target="#event" type="button"
+          role="tab" aria-controls="event" aria-selected="true">Event</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="venue-tab" data-bs-toggle="tab" data-bs-target="#venue" type="button"
+          role="tab" aria-controls="venue" aria-selected="true">Venue</button>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="exhibit" role="tabpanel" aria-labelledby="exhibit-tab">
+        <div class="row">
+          <div class="col-2"><b>Create Date:</b></div>
+          <div class="col">{{ exhibit.create_date }}</div>
+        </div>
+        <div class="row">
+          <div class="col-2"><b>Booth Description:</b></div>
+          <div class="col">{{ exhibit.item_description.capitalize() }}</div>
+        </div>
+        <div class="row">
+          <div class="col-2"><b>Cost:</b></div>
+          <div class="col">${{ exhibit.price }}</div>
+        </div>
+        <div class="row">
+          <div class="col-2"><b>Payment:</b></div>
+          <div class="col">{% if exhibit.type == 'refund' %}
+            Refunded
+            {% elif exhibit.type == 'invoice' %}
+            Invoice
+            {% else %}
+            Paid 
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="event" role="tabpanel" aria-labelledby="event-tab">
+        {% for col,val in exhibit.event.items() %}
+        {% if not col.endswith('_guid') and col not in ('create_date', 'updated_date', 'venue') %}
+        <div class="row">
+          <div class="col-2"><b>{{ col.capitalize() }}:</b></div>
+          <div class="col">{{ val }}</div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <hr />
+        {% set owner = exhibit.event_owner %}
+        <div class="row">
+          <div class="col-2"><b>Organizer:</b></div>
+          <div class="col">
+            {{ owner.prefix_name }} {{ owner.first_name }} {{ owner.middle_name }} {{ owner.last_name }} {{ owner.suffix_name }}
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="venue" role="tabpanel" aria-labelledby="venue-tab">
+        {% set venue = exhibit.event.venue %}
+        <div class="row">
+          <div class="col-2"><b>Name:</b></div>
+          <div class="col">{{ venue.name }}</div>
+        </div>
+        <div class="row">
+          <div class="col-2"><b>Address:</b></div>
+          <div class="col">
+            {{ venue.address }}
+            {{ venue.address2 }}
+            {{ venue.city }}, {{ venue.state }} {{ venue.zip }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-2"><b>Website:</b></div>
+          <div class="col">{{ venue.website }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}
