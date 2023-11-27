@@ -107,7 +107,7 @@ class UserViews(Views):
             self.set_template('speeches/speech_list.html')
         else:
             self.set_template('speeches/no_speech_found.html')
-            self.template_vars['controller_type'] = self._controller_type
+            self.template_vars['controller_type'] = 'Speeches'
         return self.template.render(self.template_vars)
 
 
