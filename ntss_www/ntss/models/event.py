@@ -132,6 +132,7 @@ class Event(MysqlDatabase):
             {'column': 'event_guid', 'operator': '=', 'value': f'{guid}'}
         ]
         return self.db_delete(filters)
+    
 
 
 class EventUsers(MysqlDatabase):

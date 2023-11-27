@@ -24,7 +24,8 @@
           <div class="row">
             <div class="col">
               <label>Speech Description</label>
-              
+              <textarea type="text" class="form-control" name="speech_description" rows="3"
+              {% if form_post.speech_description: %} value="{{ form_post.speech_description}}" {% endif %} required></textarea>
             </div>
           </div>
 
@@ -45,11 +46,39 @@
           <div class="row">
             <div class="col">
               <label>Proposal Acceptance</label>
-              <input type="text" class="form-select" name="is_accepted" placeholder="Speech Description"
-                {% if form_post.is_accepted: %} value="{{ form_post.is_accepted}}" {% endif %} required>
+              <input type="text" class="form-select" name="is_accepted" placeholder="Speech Acceptance"
+                {% if form_post.is_accepted: %} value="{{ form_post.is_accepted}}" {% endif %}>
             </div>
           </div>
 
+          <div class="row">
+              <label for="review_notes"> Review Notes
+                <textarea class="form-control" name="review_notes" placeholder="Speech Review Notes..."
+                  {% if form_post.review_notes: %} value="{{ form_post.review_notes}}" {% endif %}>
+                </textarea>
+              </label>
+            </div>
+          </div>
+
+          {% if pageName.startswith('Edit ') or pageName.startswith('Add ') %}
+            <div class="row">
+              <input type="hidden" name="user_guid" value="{{ form_post.user_guid}}" />
+            </div>
+            {% endif %}
+
+          <div class="row pt-5" >
+            <div class="col-2">
+              <button class="btn btn-lg btn-primary" type="submit">Save</button>
+            </div>
+            <div class="col-2">
+              <a onclick="history.back()" class="btn btn-lg btn-info">Cancel</a>
+            </div>
+            {% if pageName.startswith('Edit ') %}
+            <div class="col-2">
+              <a href="/speeches/delete/{{ form_post.speech_guid }}" class="btn btn-lg btn-danger">Delete</a>
+            </div>
+            {% endif %}
+          </div>
         </form>
     </div>
   </div>

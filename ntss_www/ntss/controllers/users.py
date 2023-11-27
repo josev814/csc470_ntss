@@ -3,7 +3,7 @@ Package to handle Users
 """
 import re
 from ntss.controllers.controller import BaseController
-from ntss.views.users import UserViews
+from ntss.views.users import UserViews, UserSpeeches as SpeechesViews
 from ntss.models.user import Users as UserModel, UserSpeeches as Speeches
 from ntss.models.session import Session
 from ntss.models.event import Event as EventModel
@@ -255,14 +255,17 @@ class UsersController(BaseController):
 
     ### SPEECH ROUTES ###
 
-    def approve_deny_speech(self, speech_guid):
+    def list_speeches(self, start: int = 0):
         """
-        approve or deny the speech (reviewer option)
+        Lists the speeches in the system
         """
+        columns = ['speech_guid','speech_name']
+        speech_data = Speeches().get_speeches(columns=columns, start=start)
+        return SpeechesViews(self._session_data).list_speeches(speech_data)
 
     def add_speech(self):
         """
-        Add speech into system based on user_guid
+        Add speech into system
         """
         posted_values = {}
         errors = None
@@ -272,39 +275,40 @@ class UsersController(BaseController):
             speech_guid = Speeches().add_speech(posted_values)
             if speech_guid:
                 print(f'redirecting to the edit user page for {speech_guid}')
-                return self.redirect('/users/speeches/{speech_guid}')
+                return self.redirect('/speeches/list')
         columns = ['event_guid', 'name']
         events = EventModel().get_events(columns=columns)
-        return UserViews().add_speech(self._session_data, posted_values, events, errors)
+        return SpeechesViews(self._session_data).add_speech(posted_values, events, errors)
 
     def edit_speech(self, speech_guid):
         """
-        edit speech in system based on user_guid
+        edit speech in system
         """
+        posted_values = {}
         errors = None
         speech_info = Speeches().get_speech_by(speech_guid=speech_guid)
-        print(speech_info)
-        if len(speech_info) > 0:
-            speech_info = speech_info[0]
-        else:
-            errors = ['Invalid Speech']
+
+        if len(speech_info) == 0:
+            return SpeechesViews(self._session_data).no_speech_found(speech_guid)
+        speech_info = speech_info[0]
 
         if self._request.method == 'POST':
             for request_name, request_value in self._request.params.items():
-                speech_info[request_name] = request_value.strip()
-            print(speech_info)
-            if Speeches().edit_speech(speech_info):
-                errors = ['User Saved to System']
-            else:
-                errors = ['Failed to save speech info, try again']
-        return UserViews().edit_speech(self._session_data, speech_info, errors)
+                posted_values[request_name] = request_value.strip()
+            speech_info = posted_values
 
-    def view_speeches(self, speech_guid):
+            if Speeches().edit_speech(speech_guid, posted_values):
+                errors.append('Event was successfully Updated')
+
+        return SpeechesViews(self._session_data).edit_speech(speech_info, errors)
+
+    def view_speech_info(self, speech_guid):
         """
-        lists the speeches in the system
+        view speech info
         """
-        speech_info = Speeches(self._session_data).get_speech_by(speech_guid)
+        speech_info = Speeches().get_speech_by(speech_guid)
         if len(speech_info) == 0:
-            return UserViews().no_speech_found(speech_guid)
+            return SpeechesViews(self._session_data).no_speech_found(speech_guid)
         speech_info = speech_info[0]
-        return UserViews().view_speeches(speech_info)
+
+        return SpeechesViews(self._session_data).view_speech_info(speech_info)
