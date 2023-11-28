@@ -6,7 +6,7 @@
                 <label class="form-select-label" for="paymentMethod">Payment Method</label>
                 <select name="paymentMethod" id="paymentMethod" class="form-select" required onchange="togglePayment()">
                     <option selected disabled>Select a payment method</option>
-                    {% if form_data.user_role == 'EXHIBITOR' %}
+                    {% if form_data.user_role == 'EXHIBITOR' or form_data.user_role == 'SELECTED_SPEAKER' or form_data.user_role == 'OBSERVER' %}
                     <option {% if form_data.paymentMethod=='invoice' %}selected{% endif %} value="incoice">Bill Me Later
                     </option>
                     {% endif %}

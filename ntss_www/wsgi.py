@@ -344,8 +344,59 @@ def delete_venue(request, response, guid: str):
 
 ### END VENUES ###
 
-#Start Revenue
 
+### START SPEECH ROUTES ###
+@application.route('/speeches/list', methods=['GET'])
+@login_access_required
+def list_speeches(request, response):
+    """
+    Lists the speeches in the system
+    """
+    response.text = UsersController(request, response).list_speeches()
+    return response
+
+
+@application.route('/speeches/add', methods=['GET', 'POST'])
+@login_access_required
+def add_speech(request, response):
+    """
+    Adds a speech in the system
+    """
+    controller_response = UsersController(request, response).add_speech()
+    response = return_output(response, controller_response, 200)
+    return response
+
+@application.route('/speeches/edit/{speech_guid}', methods=['GET', 'POST'])
+@login_access_required
+def edit_speech(request, response, speech_guid: str):
+    """
+    Processes an edit for a speech in the system based on the guid
+    """
+    response.text = UsersController(request, response).edit_speech(speech_guid)
+    return response
+
+@application.route('/speeches/view_speech_info/{speech_guid}', methods=['GET'])
+@login_access_required
+def view_speech_info(request, response, speech_guid: str):
+    """
+    view speech information
+    """
+    response.text = UsersController(request, response).view_speech_info(speech_guid)
+    return response
+
+@application.route('/speeches/delete/{speech_guid}', methods=['GET', 'POST'])
+@login_access_required
+def delete_speech(request, response, speech_guid: str):
+    """
+    Deletes a event in the system based on the guid
+    """
+    controller_response = UsersController(request, response).delete_speech(speech_guid)
+    response = return_output(response, controller_response, 200)
+    return response
+### END SPEECH ROUTES ###
+
+
+#Start Revenue
 @application.route('/revenue_report/{event_guid}', methods=['GET'])
 @login_access_required
 def get_report(request, response, event_guid:str):

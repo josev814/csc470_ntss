@@ -1,0 +1,95 @@
+{% include "blocks/admin_top.html" %}
+<div class="row text-start">
+  {% include "blocks/navigation.html" %}
+
+  <div class="col-9 px-md-4">
+    <div class="row border-bottom">
+      <h1 class="h2">{{pageName}}</h1>
+    </div>
+    {% if errors: %}
+    {% include "blocks/error_modal.html" %}
+    {% endif %}
+    <div class="row my-4 mb-md-0">
+      <div class="col">
+        <form method="POST" class="d-grid gap-3">
+            
+          <div class="row">
+            <div class="col">
+              <label>Speech Title</label>
+              <input type="text" class="form-control" name="speech_name" placeholder="Speech Title"
+                {% if form_post.speech_name: %} value="{{ form_post.speech_name }}" {% endif %} required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <label>Speech Description</label>
+              <textarea type="text" class="form-control" name="speech_description" rows="3" required >
+                {%- if form_post.speech_description: -%} {{ form_post.speech_description}} {%- endif -%}
+              </textarea>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <label for="events">Event</label>
+              <select class="form-select" name="event_guid" id="event_guid" required>
+                <option {% if not form_post.event_guid: %} selected {% endif %} value="">Choose...</option>
+                {% for event in events: %}
+                <option value="{{ event.event_guid }}" {% if form_post.event_guid and form_post.event_guid==event.event_guid: %} selected {% endif %}>
+                  {{ event.name }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          {% if current_user.user_roles != 'SELECTED_SPEAKER' %}
+          <div class="row">
+            <div class="col">
+              <label>Proposal Acceptance</label>
+              <select class="form-select" name="is_accepted" id="is_accepted" required>
+                <option {% if not form_post.is_accepted: %} selected {% endif %} value="">Choose...</option>
+                <option value='1' {% if form_post.is_accepted == '1' %} selected {% endif %}>Yes</option>
+                <option value='0' {% if form_post.is_accepted == '0' %} selected {% endif %}>No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+              <label for="review_notes"> Review Notes
+                <textarea class="form-control" name="review_notes" placeholder="Speech Review Notes...">
+                  {%- if form_post.review_notes: -%} {{ form_post.review_notes}} {%- endif -%}
+                </textarea>
+              </label>
+            </div>
+          </div>
+          {% endif %}
+
+          {% if current_user.user_roles == 'SELECTED_SPEAKER' %}
+            {% set user_guid = current_user.user_guid %}
+          {% else %}
+            {% set user_guid = form_post.user_guid %}
+          {% endif %}
+          <div class="row">
+             <input type="hidden" name="user_guid" value="{{user_guid}}" />
+          </div>
+
+          <div class="row pt-5" >
+            <div class="col-2">
+              <button class="btn btn-lg btn-primary" type="submit">Save</button>
+            </div>
+            <div class="col-2">
+              <a onclick="history.back()" class="btn btn-lg btn-info">Cancel</a>
+            </div>
+            {% if pageName.startswith('Edit ') %}
+            <div class="col-2">
+              <a href="/speeches/delete/{{ form_post.speech_guid }}" class="btn btn-lg btn-danger">Delete</a>
+            </div>
+            {% endif %}
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}

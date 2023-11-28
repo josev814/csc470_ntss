@@ -50,6 +50,10 @@
           <button class="nav-link" id="attendees-tab" data-bs-toggle="tab" data-bs-target="#attendees" type="button"
             role="tab" aria-controls="attendees" aria-selected="false">Attendees</button>
         </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="speeches-tab" data-bs-toggle="tab" data-bs-target="#speeches" type="button"
+            role="tab" aria-controls="speeches" aria-selected="false">Speeches</button>
+        </li>
       </ul>
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="event" role="tabpanel" aria-labelledby="event-tab">
@@ -240,6 +244,36 @@
                     <td class="text-end">$ {{ trxn.price }}</td>
                     {% endif %}
                   {% endfor %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="speeches" role="tabpanel" aria-labelledby="speeches-tab">
+          <div class="table-responsive">
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr>
+                  <th class="col text-start">Speech Name</th>
+                  <th class="col text-center">Speaker</th>
+                  <th class="col text-end">Approved</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for speech in speeches %}
+                <tr>
+                  <td class="col text-start">
+                    {{ speech.speech_name }}
+                  </td>
+                  <td class="col text-center">
+                    {{ speech.prefix_name}} {{ speech.first_name}} {{ speech.middle_name}} 
+                    {{ speech.last_name}} {{ speech.suffix_name}}
+                  </td>
+                  <td class="col text-end">
+                    {% if speech.is_accepted|int == 1 %}Yes{% else %}No{% endif %}
+                  </td>
+
                 </tr>
                 {% endfor %}
               </tbody>
