@@ -337,9 +337,11 @@ def delete_venue(request, response, guid: str):
     """
     Deletes a venue in the system based on the guid
     """
+
     controller_response = VenuesController(request, response).delete(guid)
     response = return_output(response, controller_response, 200)
     return response
+
 ### END VENUES ###
 
 #Start Revenue

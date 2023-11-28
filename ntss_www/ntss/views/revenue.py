@@ -7,6 +7,7 @@ class RevenueViews(Views):
     """
     The class for handling revenue reports for users by admin/staff
     """
+
     def __init__(self, session_info: dict):
         super().__init__()
         self._user_session = session_info
