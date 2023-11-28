@@ -39,7 +39,7 @@ class EventViews(Views):
         self.template_vars['users'] = users
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
-    
+
     def edit(self, form_values, venues, users, errors: list) -> str:
         """
         Edits an event in the system
@@ -52,7 +52,8 @@ class EventViews(Views):
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
 
-    def view(self, event_data, venue_data, cust_data, attendee_data, transactions) -> str:
+    def view(self, event_data, venue_data, cust_data,
+        attendee_data, transactions, speech_data) -> str:
         """
         Shows information about an event
         """
@@ -63,6 +64,7 @@ class EventViews(Views):
         self.template_vars['customer'] = cust_data
         self.template_vars['attendees'] = attendee_data
         self.template_vars['trxns'] = transactions
+        self.template_vars['speeches'] = speech_data
         return self.template.render(self.template_vars)
     
     def search(self, events: list, form_data: dict) -> str:
@@ -139,6 +141,17 @@ class EventViews(Views):
         self.template_vars['reserved_booths'] = reserved_boths
         self.template_vars['users'] = users
         self.template_vars['errors'] = messages
+        return self.template.render(self.template_vars)
+    
+    def get_user_report(self, user_roles, date, event_name):
+        """
+        Get user reports
+        """
+        self.set_template('/events/get_report.html')
+        self.template_vars['pageName'] = 'User Report'
+        self.template_vars['event_name'] = event_name
+        self.template_vars['user_roles'] = user_roles
+        self.template_vars['date'] = date
         return self.template.render(self.template_vars)
 
 

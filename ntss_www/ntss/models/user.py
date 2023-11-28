@@ -213,3 +213,110 @@ class Users(MysqlDatabase):
         values = {'password': self._set_encrypted_password(password)}
         where_clause = [{'column': 'email', 'operator': '=', 'value': email}]
         return self.db_update(values, where_clause)
+
+class UserSpeeches(MysqlDatabase):
+    """
+    The speeches class that interacts with the database
+    """
+    def __init__(self, debug=False):
+        """
+        When initializing the Users speeches model set the default table to speeches
+        """
+        super().__init__(debug)
+        self.set_table_metadata()
+        self.set_table('speeches')
+
+    def get_speeches(self, columns: list=None, joins: list=None, start=0, limit=20) -> list:
+        """
+        Gets all speeches from the database 
+        """
+        if columns and joins:
+            return self.db_select(columns=columns, joins=joins, start=start, limit=limit)
+        if joins:
+            return self.db_select(joins=joins, start=start, limit=limit)
+        if columns:
+            return self.db_select(columns, start=start, limit=limit)
+        return self.db_select(start=start, limit=limit)
+
+    def get_speech(self, speech_guid: str) -> dict:
+        """
+        Retrieves a speech from the database based on the speech guid
+        """
+        records = self.get_speech_by(speech_guid)
+        return records[0]
+    
+    def get_speech_by(self, speech_guid=None, filters: list[dict]=None, limit=1):
+        """
+        Performs a select query based on the params passed
+        """
+        query_filter = []
+        if filters:
+            query_filter = filters
+        if speech_guid:
+            query_filter.append(
+                {'column': 'speech_guid', 'operator': '=', 'value': speech_guid}
+            )
+        joins = [{'table': 'users','src_column': 'user_guid', 'join_column': 'user_guid'}]
+
+        records = self.db_select(
+            filters=query_filter,
+            joins=joins,
+            limit=limit
+        )
+        return records
+
+    def add_speech(self, *args) -> str|bool:
+        """
+        Adds a speech and returns the speech_guid from the database
+        """
+        if len(args) == 1:
+            args = args[0]
+        else:
+            raise IndexError('Too many indexes in the Tuple')
+
+        speech_guid = self.generate_guid()
+        speech_values = {
+            'speech_guid': speech_guid,
+            'speech_name': args.get('speech_name'),
+            'speech_description': args.get('speech_description'),
+            'user_guid': args.get('user_guid'),
+            'event_guid': args.get('event_guid'),
+            'review_notes': args.get('review_notes'),
+        }
+        if self.db_create(speech_values):
+            return speech_guid
+        return False
+
+    def edit_speech(self, speech_guid, *args) -> str|bool:
+        """
+        Edits speech based on its speech_guid
+        """
+        if len(args) == 1:
+            args = args[0]
+        else:
+            raise IndexError('Too many indexes in the Tuple')
+
+        speech_values = {
+            'speech_name': args.get('speech_name'),
+            'speech_description': args.get('speech_description'),
+            'user_guid': args.get('user_guid'),
+            'event_guid': args.get('event_guid'),
+        }
+        if args.get('is_accepted') is not None:
+            speech_values['is_accepted'] = args.get('is_accepted')
+
+        if args.get('review_notes') is not None:
+            speech_values['review_notes'] = args.get('review_notes')
+
+        where_clause = [{'column': 'speech_guid', 'operator': '=','value': f'{speech_guid}'}]
+        
+
+
+        return bool(self.db_update(speech_values, where_clause))
+
+    def delete_speech(self, speech_guid):
+        """
+        Deletes the speech from system
+        """
+        where_clause = [{'column': 'speech_guid', 'operator': '=', 'value': f'{speech_guid}'}]
+        return bool(self.db_delete(where_clause))

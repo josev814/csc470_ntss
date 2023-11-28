@@ -1,11 +1,12 @@
 """
 The package to handle events
 """
+from datetime import datetime
 from ntss.controllers.controller import BaseController
 from ntss.views.events import EventViews, ExhibitViews
 from ntss.models.event import Event as EventModel, EventUsers as EventUsersModel
 from ntss.models.venue import Venue as VenueModel
-from ntss.models.user import Users as UsersModel
+from ntss.models.user import Users as UsersModel, UserSpeeches as SpeechModel
 from ntss.models.transactions import Transaction as TransactionModel
 
 
@@ -51,7 +52,7 @@ class EventsController(BaseController):
 
     def edit(self, event_guid):
         """
-        Adds an event into the system
+        Edits an event into the system
         """
         posted_values = {}
         errors = None
@@ -86,7 +87,13 @@ class EventsController(BaseController):
             [{'column': 'event_guid', 'operator': '=', 'value': event_guid}],
             500
         )
-        return EventViews(self._session_data).view(event_info, venue_info, owner_info, users, trxs)
+        speech_data = SpeechModel(True).get_speech_by(filters= [{'column':'event_guid',
+            'operator':'=','value': event_guid},
+            {'column':'is_accepted','operator':'=', 'value':1}], limit=999)
+        
+        print(f'SD: {speech_data}')
+        return EventViews(self._session_data).view(
+            event_info, venue_info, owner_info, users, trxs, speech_data)
 
     def delete(self, guid):
         """
@@ -278,6 +285,22 @@ class EventsController(BaseController):
                 form_data, event_info, users, reserved_booths, errors
             )
 
+    def get_user_report(self, event_guid: str):
+        """ 
+        Gets user report
+        """
+        current_date = datetime.now()
+        date = current_date.date()
+        event_users = EventUsersModel().get_event_users(event_guid, ['user_roles'])
+        user_roles = {}
+        event_name = EventModel().get_event_by(guid=event_guid)[0]['name']
+        for event_user in event_users:
+            if event_user['user_roles'] in user_roles:
+                user_roles[event_user['user_roles']] += 1
+            else:
+                user_roles[event_user['user_roles']] = 1
+        return EventViews(self._session_data).get_user_report(user_roles, date, event_name)
+        
     def __verify_checkout_form(self, form_data):
         """
         Validation for the checkout form

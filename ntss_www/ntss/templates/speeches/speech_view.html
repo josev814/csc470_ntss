@@ -1,0 +1,50 @@
+{% include "blocks/admin_top.html" %}
+<div class="row">
+  {% include "blocks/navigation.html" %}
+
+  <div class="col-9 px-md-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+      <h1 class="h2">{{pageName}}</h1>
+    </div>
+    {% if errors: %}
+    {% include "blocks/error_modal.html" %}
+    {% endif %}
+    <div class="mb-2 mb-md-0">
+      <div class="col-12">
+        {% if not disable_form: %}
+        <form method="POST">
+        {% endif %}
+
+          <div class="text-start">
+        
+            <div class="row mt-3">
+                <div class="col-2"><b>Event:</b></div>
+                <div class="col">{{ speech_info.event.name }}</div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-2"><b>Speech Description:</b></div>
+                <div class="col">{{ speech_info.speech_description }}</div>
+
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-2"><b>Is Accepted:</b></div>
+
+                <div class="col">{% if speech_info.is_accepted|int == 1 %}Yes{% else %}No{% endif %}</div>
+
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-2"><b>Review Notes:</b></div>
+                <div class="col">{{ speech_info.review_notes }}</div>
+
+            </div>
+
+        </form>
+      </div>
+    </div>
+    </main>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}

@@ -3,9 +3,10 @@ Package to handle Users
 """
 import re
 from ntss.controllers.controller import BaseController
-from ntss.views.users import UserViews
-from ntss.models.user import Users as UserModel
+from ntss.views.users import UserViews, UserSpeeches as SpeechesViews
+from ntss.models.user import Users as UserModel, UserSpeeches as Speeches
 from ntss.models.session import Session
+from ntss.models.event import Event as EventModel
 from ntss.controllers.events import ExhibitsController
 
 
@@ -279,3 +280,84 @@ class UsersController(BaseController):
         exhibit['event'] = event
         exhibit['event_owner'] = owner[0]
         return UserViews(self._session_data).view_exhibit(exhibit)
+
+    ### SPEECH ROUTES ###
+
+    def list_speeches(self, start: int = 0):
+        """
+        Lists the speeches in the system
+        """
+        columns = ['speech_guid','speech_name', 'user_guid']
+        db_speech_data = Speeches().get_speeches(columns=columns, start=start)
+        speech_data = db_speech_data
+        if self._session_data['user_roles'] == 'SELECTED_SPEAKER':
+            speech_data = []
+            for speech in db_speech_data:
+                print(speech)
+                if speech['user_guid'] == self._session_data['user_guid']:
+                    speech_data.append(speech)
+        return SpeechesViews(self._session_data).list_speeches(speech_data)
+
+    def add_speech(self):
+        """
+        Add speech into system 
+        """
+        posted_values = {}
+        errors = None
+        if self._request.method == 'POST':
+            for request_name, request_value in self._request.params.items():
+                posted_values[request_name] = request_value.strip()
+            speech_guid = Speeches().add_speech(posted_values)
+            if speech_guid:
+                print(f'redirecting to the edit user page for {speech_guid}')
+                return self.redirect('/speeches/list')
+        columns = ['event_guid', 'name']
+        events = EventModel().get_events(columns=columns)
+        return SpeechesViews(self._session_data).add_speech(posted_values, events, errors)
+
+    def edit_speech(self, speech_guid):
+        """
+        edit speech in system
+        """
+        posted_values = {}
+        errors = []
+        speech_info = Speeches().get_speech_by(speech_guid=speech_guid)
+
+        if len(speech_info) == 0:
+            return SpeechesViews(self._session_data).no_speech_found(speech_guid)
+        speech_info = speech_info[0]
+
+        columns = ['event_guid', 'name']
+        events = EventModel().get_events(columns=columns)
+
+        if self._request.method == 'POST':
+            for request_name, request_value in self._request.params.items():
+                posted_values[request_name] = request_value.strip()
+            speech_info = posted_values
+
+            if Speeches().edit_speech(speech_guid, posted_values):
+                errors.append('Event was successfully Updated')
+        print(speech_info)
+
+        return SpeechesViews(self._session_data).edit_speech(speech_info, events, errors)
+
+
+    def view_speech_info(self, speech_guid):
+        """
+        view speech info
+        """
+        speech_info = Speeches().get_speech_by(speech_guid)
+        if len(speech_info) == 0:
+            return SpeechesViews(self._session_data).no_speech_found(speech_guid)
+        speech_info = speech_info[0]
+        event = EventModel().get_event_by(guid=speech_info['event_guid'])[0]
+        speech_info['event'] = event
+        return SpeechesViews(self._session_data).view_speech_info(speech_info)
+    
+    def delete_speech(self, speech_guid):
+        """
+        delete speech by guid
+        """
+        if Speeches().delete_speech(speech_guid):
+            return self.redirect('/speeches/list')
+        return self.redirect(f'/speeches/edit/{speech_guid}')
