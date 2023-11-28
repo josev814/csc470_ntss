@@ -3,7 +3,7 @@ Package to handle Users
 """
 from datetime import datetime
 from ntss.controllers.controller import BaseController
-from ntss.models.event import Event as EventModel, EventUsers as EventUsersModel
+from ntss.models.event import Event as EventModel
 from ntss.models.venue import Venue as VenueModel
 from ntss.views.revenue import RevenueViews
 
