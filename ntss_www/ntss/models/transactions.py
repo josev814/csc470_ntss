@@ -63,7 +63,7 @@ class Transaction(MysqlDatabase):
             'event_guid': args.get('event_guid'),
             'item_description': item_desc,
             'price': args.get('cost'),
-            'type': args.get('transaction_type')
+            'type': args.get('type')
         }
         if self.db_create(values):
             return guid
