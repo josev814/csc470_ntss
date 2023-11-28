@@ -1,15 +1,11 @@
 """
 Package to handle Users
 """
+from datetime import datetime
 from ntss.controllers.controller import BaseController
-from ntss.views.events import EventViews
 from ntss.models.event import Event as EventModel, EventUsers as EventUsersModel
 from ntss.models.venue import Venue as VenueModel
-from ntss.models.user import Users as UsersModel
-from ntss.models.transactions import Transaction as TransactionModel
 from ntss.views.revenue import RevenueViews
-from datetime import datetime
-
 
 class RevenueController(BaseController):
     """
@@ -29,8 +25,8 @@ class RevenueController(BaseController):
         print(venue)
         current_date = datetime.now()
         date = current_date.date()
-        eventName = db_event_data[0]['name']
-        eventId = db_event_data[0]['event_guid']
+        event_name = db_event_data[0]['name']
+        event_id = db_event_data[0]['event_guid']
         all_transactions = db_event_data
         total_transactions = len(db_event_data)
         revenue = 0.00
@@ -39,5 +35,5 @@ class RevenueController(BaseController):
                 revenue += float(event_data['price'])
                 print(float(event_data['price']))
         revenue = revenue - venue_cost
-        return RevenueViews(self._session_data).get_report(date, eventName, eventId, 
+        return RevenueViews(self._session_data).get_report(date, event_name, event_id, 
         all_transactions,total_transactions,revenue, venue_cost, venue)

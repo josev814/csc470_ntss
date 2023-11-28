@@ -347,10 +347,12 @@ def delete_venue(request, response, guid: str):
 @application.route('/revenue_report/{event_guid}', methods=['GET'])
 @login_access_required
 def get_report(request, response, event_guid:str):
-  """Route to direct to revenue report"""
-  output = RevenueController(request, response).get_report(event_guid)
-  response = return_output(response, output, 200)
-  return response
+    """
+    Route to direct to revenue report
+    """
+    output = RevenueController(request, response).get_report(event_guid)
+    response = return_output(response, output, 200)
+    return response
 
 # @application.route('/register', methods=['GET','POST'])
 # def register_user(request, response):
