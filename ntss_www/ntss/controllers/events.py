@@ -86,9 +86,11 @@ class EventsController(BaseController):
             [{'column': 'event_guid', 'operator': '=', 'value': event_guid}],
             500
         )
-        speech_data = SpeechModel().get_speech_by(filters= [{'column':'event_guid', 'operator':'=','value': event_guid},
-            {'column':'is_approved','operator':'=', 'value':1}])
-        return EventViews(self._session_data).view(event_info, venue_info, owner_info, users, trxs, speech_data)
+        speech_data = SpeechModel().get_speech_by(filters= [{'column':'event_guid',
+            'operator':'=','value': event_guid},
+            {'column':'is_accepted','operator':'=', 'value':1}])
+        return EventViews(self._session_data).view(
+            event_info, venue_info, owner_info, users, trxs, speech_data)
 
     def delete(self, guid):
         """

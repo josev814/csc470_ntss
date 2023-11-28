@@ -39,7 +39,7 @@ class EventViews(Views):
         self.template_vars['users'] = users
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
-    
+
     def edit(self, form_values, venues, users, errors: list) -> str:
         """
         Edits an event in the system
@@ -52,7 +52,8 @@ class EventViews(Views):
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
 
-    def view(self, event_data, venue_data, cust_data, attendee_data, speech_data, transactions) -> str:
+    def view(self, event_data, venue_data, cust_data,
+        attendee_data, speech_data, transactions) -> str:
         """
         Shows information about an event
         """
