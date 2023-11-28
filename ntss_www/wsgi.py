@@ -6,7 +6,7 @@ Import all controllers that will have route defined for them
 from functools import wraps
 from ntss.controllers.routes import Routes
 from ntss.controllers.ntss import NtssController
-from ntss.controllers.events import EventsController
+from ntss.controllers.events import EventsController, ExhibitsController
 from ntss.controllers.users import UsersController
 from ntss.controllers.venues import VenuesController
 from ntss.controllers.revenue import RevenueController
@@ -195,6 +195,14 @@ def delete_event(request, response, guid: str):
     response = return_output(response, controller_response, 200)
     return response
 
+@application.route('/events/search', methods=['POST'])
+@login_access_required
+def search_events(request, response):
+    """
+    Search for events in the system
+    """
+    response.text = EventsController(request, response).search()
+    return response
 
 ##### Start User/Event Routes #####
 @application.route('/event/{event_guid}/add_user', methods=['GET', 'POST'])
@@ -288,6 +296,38 @@ def view_customer_event(request, response, event_guid: str):
     response.text = EventsController(request, response).view_customer_event(event_guid)
     return response
 
+
+### EXHIBITORS ###
+
+@application.route('/myexhibits', methods=['GET'])
+def myexhibits(request, response):
+    """ A page to display a user's exhibits"""
+    response.text = UsersController(request, response).get_my_exhibits()
+    return response
+
+@application.route('/exhibit/view/{exhibit_guid}', methods=['GET'])
+def myexhibit(request, response, exhibit_guid):
+    """ A page to display a specific user exhibit"""
+    response.text = UsersController(request, response).get_exhibit(exhibit_guid)
+    return response
+
+### END EXHIBITORS ###
+
+### EXHIBITS ###
+
+@application.route('/exhibits/list', methods=['GET'])
+def exhibits(request, response):
+    """ A page to display exhibits"""
+    response.text = ExhibitsController(request, response).get_exhibits()
+    return response
+
+@application.route('/exhibit/edit/{exhibit_guid}', methods=['GET', 'POST'])
+def exhibit_edit(request, response, exhibit_guid):
+    """ A page to edit an exhibit"""
+    response.text = ExhibitsController(request, response).edit_exhibit(exhibit_guid)
+    return response
+
+### END EXHIBITS ###
 
 ### VENUES ###
 @application.route('/venues/list', methods=['GET'])

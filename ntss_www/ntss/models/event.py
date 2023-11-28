@@ -17,10 +17,11 @@ class Event(MysqlDatabase):
         self.set_table_metadata()
         self.set_table('events')
 
-    def get_events(self, columns: list=None, joins: list=None, 
-            filters: list=None, start: int=0, limit: int=20) -> list:
+    def get_events(self, columns: list=None, joins: list=None,
+                   filters: list[dict]=None, start: int=0,
+                   limit: int=20) -> list:
         """
-        Gets all events from the database 
+        Gets all events from the database
         """
         if columns and joins and filters:
             results = self.db_select(columns=columns, joins=joins, 
@@ -46,8 +47,8 @@ class Event(MysqlDatabase):
         records = self.get_event_by(guid=guid)
         return records[0]
 
-    def get_event_by(self, name=None, 
-                     city=None, state=None, guid=None, user_guid = None, limit: int=1):
+    def get_event_by(self, name=None, city=None, state=None, 
+                     guid=None, user_guid = None, limit: int=1):
         """
         Performs a select query based on the params passed
         """

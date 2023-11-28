@@ -110,3 +110,8 @@ main {
 .text-right {
   text-align: right;
 }
+
+option:disabled {
+  opacity: 1;
+  background-color: #e9ecef;
+}

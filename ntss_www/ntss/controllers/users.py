@@ -7,6 +7,7 @@ from ntss.views.users import UserViews, UserSpeeches as SpeechesViews
 from ntss.models.user import Users as UserModel, UserSpeeches as Speeches
 from ntss.models.session import Session
 from ntss.models.event import Event as EventModel
+from ntss.controllers.events import ExhibitsController
 
 
 class UsersController(BaseController):
@@ -252,6 +253,33 @@ class UsersController(BaseController):
         """
         user_db = UserModel(True)
         return user_db.change_password(email, password)
+
+    def get_my_exhibits(self):
+        """
+        Lists the exhibits for a user
+        """
+        events, transactions = ExhibitsController(self._request, self._response).get_user_exhibits(
+            self._session_data['user_guid']
+        )
+        for i in range(len(events)):
+            for transaction in transactions:
+                if transaction['event_guid'] == events[i]['event_guid']:
+                    events[i]['transactions'] = transaction
+        return UserViews(self._session_data).list_exhibits(events)
+
+    def get_exhibit(self, exhibit_guid):
+        """
+        Gets the exhibit for a user
+        """
+        event, transactions, owner = ExhibitsController(
+            self._request, self._response
+            ).get_exhibit(
+                exhibit_guid
+            )
+        exhibit = transactions[0]
+        exhibit['event'] = event
+        exhibit['event_owner'] = owner[0]
+        return UserViews(self._session_data).view_exhibit(exhibit)
 
     ### SPEECH ROUTES ###
 

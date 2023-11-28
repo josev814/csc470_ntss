@@ -1,0 +1,102 @@
+{% include "blocks/admin_top.html" %}
+<div class="row">
+{% include "blocks/navigation.html" %}
+
+<div class="col-9 px-md-4">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ pageName }}</h1>
+  </div>
+  {% if errors: %}
+  {% include "blocks/error_modal.html" %}
+  {% endif %}
+  <div class="navbar-nav d-flex flex-wrap flex-md-nowrap pb-2 mb-3 border-bottom">
+    <div class="nav-item text-nowrap">
+      <a class="nav-link px-3" href="javascript:void()" onclick="history.back()">Back</a>
+    </div>
+  </div>
+  <div class="d-grid gap-3 text-start">
+    <form method="POST" class="form">
+      <input type="hidden" name="user_role" value="EXHIBITOR" />
+      <div class="row mb-3">
+        <div class="col-2">
+          <label for="event_name">Event Name:</label>
+        </div>
+        <div class="col">
+          {{ exhibit.event.name }}
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-2">
+          <label for="booth_size">Booth Size</label>
+        </div>
+        <div class="col">
+          {% set booth_size = exhibit.item_description.split('#')[0].split('-')[0].strip() %}
+          {% if 'booth_size' in form_data %}
+          <select class="form-select" id="booth_size" {% if 'booth_size' in form_data %}disabled{% endif %}>
+            {% for size, cost in booths.items() %}
+            <option {% if size == form_data.booth_size %}selected{% endif %} value="{{ size }}">{{ size }} - {{ cost }}</option>
+            {% endfor %}
+          </select>
+          {% else %}
+          <select class="form-select" name="booth_size" id="booth_size" {% if 'booth_size' in form_data %}disabled{% endif %}>
+            {% for size, cost in booths.items() %}
+            <option {% if size == booth_size %}selected{% endif %} value="{{ size }}" onchange="populateCost('{{cost}}')">{{ size }} - {{ cost }}</option>
+            {% endfor %}
+          </select>
+          {% for size, cost in booths.items() %}
+          {% if size == booth_size %}
+          <input type="hidden" name="cost" id="booth_cost" value="{{cost}}" />
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-2">
+          <label for="booth_number">Booth ID</label>
+        </div>
+        <div class="col">
+          {% set booth_id = exhibit.item_description.split('#')[1]|int %}
+          <select class="form-select" name="booth_number" id="booth_number" {% if 'booth_number' in form_data %}disabled{% endif %}>
+            {% if 'booth_number' in form_data %}
+            <option selected value="{{ form_data.booth_number }}">{{ form_data.booth_number }}</option>
+            {% else %}
+              {% for booth_number in range(1, exhibit.event.booths + 1) %}
+              {% if booth_number not in exhibit.event.reserved_booths %}
+            <option {% if booth_id == booth_number %}selected{% endif %} value="{{ booth_number }}">{{ booth_number }}</option>
+              {% endif %}
+              {% endfor %}
+            {% endif %}
+          </select>
+        </div>
+      </div>
+      {% if 'booth_number' in form_data %}
+      <input type="hidden" name="booth_size" value="{{ form_data.booth_size }}" />
+      <input type="hidden" name="booth_number" value="{{ form_data.booth_number }}" />
+      <input type="hidden" name="item_description" value="{{ form_data.booth_size }} - #{{ form_data.booth_number }}" />
+      <input type="hidden" name="cost" value="{{ booths[form_data.booth_size] }}" />
+      <input type="hidden" name="checkout" value="True" />
+      {% include "blocks/payment.html" %}
+      {% endif %}
+      <div class="row">
+        <div class="col-2">
+          {% if 'checkout' in form_data %}
+          <input type="submit" class="btn btn-primary" value="Submit" />
+          {% else %}
+          <input type="hidden" name="checkout" value="True" />
+          <input type="submit" class="btn btn-primary" value="Next" />
+          {% endif %}
+        </div>
+        <div class="col-2">
+          <a href="/exhibits/list" class="btn btn-warning">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+  function populateCost(cost){
+    document.getElementById('booth_cost').value = cost;
+  }
+</script>
+{% include "blocks/admin_bottom.html" %}

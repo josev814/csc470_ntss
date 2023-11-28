@@ -3,7 +3,7 @@ The package to handle events
 """
 from datetime import datetime
 from ntss.controllers.controller import BaseController
-from ntss.views.events import EventViews
+from ntss.views.events import EventViews, ExhibitViews
 from ntss.models.event import Event as EventModel, EventUsers as EventUsersModel
 from ntss.models.venue import Venue as VenueModel
 from ntss.models.user import Users as UsersModel, UserSpeeches as SpeechModel
@@ -108,6 +108,38 @@ class EventsController(BaseController):
             return self.redirect('/events/list')
         except Exception:
             return EventViews(self._session_data).not_found(guid)
+    
+    def search(self, start: int = 0):
+        """
+        Search the events in the system
+        """
+        posted_values = {}
+        columns = ['event_guid', 'name', 'name_1', 'city', 'state', 'start_date', 'end_date']
+        joins = [{'table': 'venues', 'src_column': 'venue_guid', 'join_column': 'venue_guid'}]
+        if self._request.method == 'POST':
+            for request_name, request_value in self._request.params.items():
+                posted_values[request_name] = request_value.strip()
+            filters = [
+                {'column': 'start_date', 'operator': '<=', 'value': posted_values['search_date']},
+                {
+                    'type': 'and',
+                    'column': 'end_date',
+                    'operator': '>=',
+                    'value': posted_values['search_date']
+                }
+            ]
+            db_event_data = EventModel().get_events(
+                columns=columns, joins=joins, filters=filters, start=start
+            )
+        else:
+            db_event_data = EventModel().get_events(columns=columns, joins=joins, start=start)
+        event_data = []
+        for db_event in db_event_data:
+            venue_name = db_event['name_1']
+            db_event['venue'] = venue_name
+            del db_event['name_1']
+            event_data.append(db_event)
+        return EventViews(self._session_data).search(event_data, posted_values)
 
     def __verify_add_form(self, posted_values):
         """
@@ -243,12 +275,21 @@ class EventsController(BaseController):
                 errors.append(f'Transaction GUID: {transaction_guid}')
         users = UsersModel().get_users()
         event_info = EventModel().get_event_by(guid=event_guid)
+        booth_transactions = TransactionModel().get_transactions_by_filter([
+            {'column': 'event_guid', 'operator': '=', 'value': event_guid},
+            {'column': 'item_description', 'operator': 'like', 'value': '#'}
+        ])
+        reserved_booths = []
+        for booth_transaction in booth_transactions:
+            reserved_booths.append(
+                int(booth_transaction['item_description'].split('#')[1])
+            )
         if len(event_info) == 0:
             # TODO: event not found (probably deleted)
             pass
         event_info = event_info[0]
         return EventViews(self._session_data).form_add_attendee(
-                form_data, event_info, users, errors
+                form_data, event_info, users, reserved_booths, errors
             )
 
     def get_user_report(self, event_guid: str):
@@ -280,6 +321,146 @@ class EventsController(BaseController):
             ])
             if len(trxns) > 0:
                 errors.append('User has already registered for the event.')
+        if not errors and 'paymentMethod' in form_data:
+            if 'cc_name' not in form_data:
+                errors.append(missing_payment)
+            elif 'cc_number' not in form_data:
+                errors.append(missing_payment)
+            elif 'cc_expiration' not in form_data:
+                errors.append(missing_payment)
+            elif 'cc_cvv' not in form_data:
+                errors.append(missing_payment)
+            elif form_data['cc_number'] == '1111-1111-1111-1111':
+                errors.append('Payment Failed, Try again')
+        return errors
+
+
+class ExhibitsController(BaseController):
+    """
+    Controller specifically for Exhibits
+    """
+    def get_user_exhibits(self, user_guid):
+        """
+        Gets the exhibits for a user
+        """
+        # Pull the events that we have exhibits for
+        transactions = TransactionModel().get_transactions_by_filter([
+            {'column': 'item_description', 'operator': 'like', 'value': '#'},
+            {'column': 'user_guid', 'operator': '=', 'value': user_guid}
+        ])
+        event_guids = [trx['event_guid'] for trx in transactions]
+        # pull the actual events
+        events = EventModel(True).get_events(filters=[{
+            'column': 'event_guid', 'operator': 'in', 'value': event_guids
+        }])
+        return events, transactions
+
+    def get_exhibit(self, exhibit_guid):
+        """
+        Gets the exhibit based on the guid
+        """
+        event, transactions, owner = self._get_exhibit_data(exhibit_guid)
+        return event, transactions, owner
+    
+    def _get_exhibit_data(self, exhibit_guid):
+        # Pull the transaction for the exhibit guid
+        transactions = TransactionModel().get_transactions_by_filter([
+            {'column': 'item_description', 'operator': 'like', 'value': '#'},
+            {'column': 'transaction_guid', 'operator': '=', 'value': exhibit_guid}
+        ])
+        event_guids = [trx['event_guid'] for trx in transactions]
+        user_guids = [trx['user_guid'] for trx in transactions]
+        # pull the actual events
+        event = EventModel().get_events(filters=[{
+            'column': 'event_guid', 'operator': 'in', 'value': event_guids
+        }])
+        if len(event) == 0:
+            raise Exception
+        event = event[0]
+        if len(transactions) == 1:
+            user = UsersModel().get_user_by(
+                filters=[{
+                    'column': 'user_guid', 'operator': 'in', 'value': user_guids
+                }]
+            )
+            transactions[0]['user'] = user
+        owner = UsersModel().get_user_by(user_guid=event['user_guid'])
+        event['venue'] = VenueModel().get_venue_by(guid=event['venue_guid'])[0]
+        return event, transactions, owner
+
+    def get_exhibits(self):
+        """
+        Gets a list of exhibits
+        """
+        # Pull the transactions for exhibits
+        exhibits = TransactionModel().get_transactions_by_filter([
+            {'column': 'item_description', 'operator': 'like', 'value': '#'}
+        ])
+        for inc in range(len(exhibits)):
+            # pull the actual events
+            event = EventModel().get_events(filters=[{
+                'column': 'event_guid', 'operator': '=', 'value': exhibits[inc]['event_guid']
+            }])
+            if len(event) == 0:
+                event = {}
+            else:
+                event = event[0]
+            event['venue'] = VenueModel().get_venue_by(guid=event['venue_guid'])[0]
+            exhibits[inc]['event'] = event
+            user = UsersModel().get_user_by(user_guid=exhibits[inc]['user_guid'])
+            exhibits[inc]['user'] = user[0]
+        return ExhibitViews(self._session_data).list(exhibits)
+
+    def edit_exhibit(self, exhibit_guid):
+        """
+        Edits an exhibit in the system
+        """
+        event, transactions, owner = self._get_exhibit_data(exhibit_guid)
+        exhibit = transactions[0]
+        exhibit['event'] = event
+        exhibit['event']['owner'] = owner[0]
+        form_data = {}
+        messages = []
+        if self._request.method == 'POST':
+            for request_name, request_value in self._request.params.items():
+                form_data[request_name] = request_value.strip()
+            messages = self.__verify_checkout_form(form_data)
+            # submit to database
+            if 'paymentMethod' in form_data and not messages:
+                if form_data['paymentMethod'] in ['credit', 'debit']:
+                    form_data['type'] = 'payment'
+                else:
+                    form_data['type'] = 'invoice'
+                if TransactionModel().update(form_data, exhibit['transaction_guid']):
+                    if 'cost' in form_data and float(form_data['cost']) < exhibit['price']:
+                        refund = float(exhibit['price']) - float(form_data['cost'])
+                        messages.append(f'Refunding ${refund}')
+                    messages.append(f'Transaction GUID: {exhibit["transaction_guid"]}')
+                else:
+                    messages.append(
+                        'An Error was encountered processing the transaction, \
+                        please try again.'
+                    )
+
+        booth_transactions = TransactionModel().get_transactions_by_filter([
+            {'column': 'event_guid', 'operator': '=', 'value': exhibit['event_guid']},
+            {'column': 'item_description', 'operator': 'like', 'value': '#'},
+            {'column': 'transaction_guid', 'operator': '!=', 'value': exhibit['transaction_guid']}
+        ])
+        reserved_booths = []
+        for booth_transaction in booth_transactions:
+            reserved_booths.append(
+                int(booth_transaction['item_description'].split('#')[1])
+            )
+        exhibit['event']['reserved_booths'] = reserved_booths
+        return ExhibitViews(self._session_data).edit_exhibit(exhibit, form_data, messages)
+
+    def __verify_checkout_form(self, form_data):
+        """
+        Validation for the checkout form
+        """
+        errors = []
+        missing_payment = 'Missing Payment information'
         if not errors and 'paymentMethod' in form_data:
             if 'cc_name' not in form_data:
                 errors.append(missing_payment)

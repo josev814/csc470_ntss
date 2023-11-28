@@ -9,6 +9,13 @@ class UserViews(Views):
     The class for handling views for users
     """
 
+    def __init__(self, session_info: dict|None=None):
+        super().__init__()
+        self._user_session = session_info
+        self._controller_type = 'users'
+        self.template_vars['states'] = self.US_STATES
+        self.template_vars['current_user'] = self._user_session
+
     def get_user_profile(self, user_session, user_info):
         """
         Load the the profile for a user
@@ -71,8 +78,34 @@ class UserViews(Views):
         self.template_vars['roles'] = new_roles
         self.template_vars['form_post'] = posted_values
         self.template_vars['errors'] = errors
+        return self.template.render(self.template_vars)   
+
+    def list_exhibits(self, events):
+        """
+        Lists exhibits for a user
+        """
+        if self._user_session['user_roles'] not in ['NTSS_ADMIN', 'EVENT_STAFF', 'EXHIBITOR']:
+            self.set_template('access_denied.html')
+            return self.template.render(self.template_vars)
+
+        self.set_template('events/exhibits/exhibitors_list.html')
+        self.template_vars['pageName'] = 'Exhibits'
+        self.template_vars['events'] = events
         return self.template.render(self.template_vars)
-   
+
+    def view_exhibit(self, exhibit):
+        """
+        View a particular exhibit
+        """
+        if self._user_session['user_roles'] not in ['NTSS_ADMIN', 'EVENT_STAFF', 'EXHIBITOR']:
+            self.set_template('access_denied.html')
+            return self.template.render(self.template_vars)
+
+        self.set_template('events/exhibits/view_exhibit.html')
+        self.template_vars['pageName'] = f'Exhibit {exhibit["transaction_guid"]}'
+        self.template_vars['exhibit'] = exhibit
+        return self.template.render(self.template_vars)
+
 class UserSpeeches(Views):
     """
     class for Speeches in Views

@@ -61,16 +61,21 @@
           {% if form_data['user_role'] == 'EXHIBITOR' and 'user_guid' in form_data %}
           <div class="row">
             <div class="col">
+              <label>Ticket Price</label>
+              <span>{{ event.ticket_price }}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
               <label>Booth Size</label>
               <select {% if 'booth' in form_data %}disabled{% endif %} class="form-select" name="booth" aria-label="select">
-                <option selected disabled>Select a booth</option>
+                <option selected disabled>Select a booth size</option>
                 {% for size, cost in booths.items() %}
                 <option {% if size == form_data.booth %}selected{% endif %} value="{{ size }}">
                   {{ size }} (${{ cost }})
                 </option>
                 {% endfor %}
               </select>
-              <input type="hidden" name="checkout" value="True" />
               {% if 'booth' in form_data %}
               <input type="hidden" name="booth" value="{{ form_data.booth }}" />
               <input type="hidden" name="item_description" value="{{ form_data.booth }}" />
@@ -78,9 +83,39 @@
               {% endif %}
             </div>
           </div>
+          {% if 'booth' in form_data %}
+          <div class="row">
+            <div class="col">
+              <label for="booth_id">Booth Id</label>
+              <select name="booth_id" id="booth_id" {% if 'booth_id' in form_data %}disabled{% endif %} class="form-select" aria-label="select">
+                <option selected disabled>Select a booth</option>
+            {% for i in range(1, event.booths + 1) %}
+                <option {% if 'booth_id' in form_data and form_data.booth_id|int == i %}selected{% endif %}{% if i in reserved_booths %} disabled {% endif %} value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+              </select>
+            </div>
+            <input type="hidden" name="checkout" value="True" />
+            {% if 'booth_id' in form_data %}
+              <input type="hidden" name="booth_id" value="{{ form_data.booth_id }}" />
+              <input type="hidden" name="item_description" value="Booth: {{ form_data.booth }} - #{{ form_data.booth_id }}" />
+            {% endif %}
+            </div>
+          </div>
+          {% endif %}
           {% endif %}
           {% endif %}
           {% if 'checkout' in form_data: %}
+          <div class="row">
+            <div class="col-1">
+              Total: 
+            </div>
+            <div class="col">
+              <!-- TODO: Add ticket to cost breakdown if this is an exhibitor -->
+              {% if booth_id==booths %}
+                {{ booths[form_data.booth] }}
+              {% endif %}
+            </div>
+          </div>
           {% include "blocks/payment.html" %}
           {% endif %}
           <div class="row mt-3">
