@@ -87,7 +87,6 @@
           <div class="row">
             <div class="col">
               <label for="booth_id">Booth Id</label>
-              {{ reserved_booths }}
               <select name="booth_id" id="booth_id" {% if 'booth_id' in form_data %}disabled{% endif %} class="form-select" aria-label="select">
                 <option selected disabled>Select a booth</option>
             {% for i in range(1, event.booths + 1) %}
