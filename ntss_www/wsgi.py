@@ -9,7 +9,7 @@ from ntss.controllers.ntss import NtssController
 from ntss.controllers.events import EventsController
 from ntss.controllers.users import UsersController
 from ntss.controllers.venues import VenuesController
-
+from ntss.controllers.revenue import RevenueController
 
 application = Routes()
 
@@ -207,6 +207,15 @@ def add_user_to_event(request, response, event_guid: str):
     response = return_output(response, controller_response, 200)
     return response
 
+@application.route('/event/{event_guid}/user_report', methods=['GET'])
+@login_access_required
+def get_user_report(request, response, event_guid: str):
+    """
+    Gets user report for events
+    """
+    controller_response = EventsController(request, response).get_user_report(event_guid)
+    response = return_output(response, controller_response, 200)
+    return response
 
 # @application.route('/event/{event_guid}/list_users', methods=['GET'])
 # @login_access_required
@@ -328,13 +337,15 @@ def delete_venue(request, response, guid: str):
     """
     Deletes a venue in the system based on the guid
     """
+
     controller_response = VenuesController(request, response).delete(guid)
     response = return_output(response, controller_response, 200)
     return response
+
 ### END VENUES ###
 
-### START SPEECH ROUTES ###
 
+### START SPEECH ROUTES ###
 @application.route('/speeches/list', methods=['GET'])
 @login_access_required
 def list_speeches(request, response):
@@ -383,3 +394,22 @@ def delete_speech(request, response, speech_guid: str):
     response = return_output(response, controller_response, 200)
     return response
 ### END SPEECH ROUTES ###
+
+
+#Start Revenue
+@application.route('/revenue_report/{event_guid}', methods=['GET'])
+@login_access_required
+def get_report(request, response, event_guid:str):
+    """
+    Route to direct to revenue report
+    """
+    output = RevenueController(request, response).get_report(event_guid)
+    response = return_output(response, output, 200)
+    return response
+
+# @application.route('/register', methods=['GET','POST'])
+# def register_user(request, response):
+#     """Route to direct to register user function"""
+#     output = UsersController(request, response).register_user()
+#     response = return_output(response, output, 200)
+#     return response
