@@ -315,5 +315,14 @@ class UsersController(BaseController):
         if len(speech_info) == 0:
             return SpeechesViews(self._session_data).no_speech_found(speech_guid)
         speech_info = speech_info[0]
-
+        event = EventModel().get_event_by(guid=speech_info['event_guid'])[0]
+        speech_info['event'] = event
         return SpeechesViews(self._session_data).view_speech_info(speech_info)
+    
+    def delete_speech(self, speech_guid):
+        """
+        delete speech by guid
+        """
+        if Speeches().delete_speech(speech_guid):
+            return self.redirect('/speeches/list')
+        return self.redirect(f'/speeches/edit/{speech_guid}')

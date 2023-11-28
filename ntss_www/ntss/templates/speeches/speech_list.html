@@ -12,11 +12,9 @@
             <thead>
               <tr>
                 <th scope="col"></th>
-                {%- for column in speeches[0].keys(): -%}
-                {%- if not column.endswith('_guid'): -%}
-                <th scope="col">{{ column.capitalize() }}</th>
-                {%- endif -%}
-                {%- endfor -%}
+                
+                <th scope="col">Speech Name</th>
+                
               </tr>
             </thead>
             <tbody>

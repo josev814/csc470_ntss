@@ -1,0 +1,18 @@
+{% include "blocks/admin_top.html" %}
+<div class="row">
+{% include "blocks/navigation.html" %}
+
+  <div class="col-9 px-md-4">
+    <div class="row text-start">
+      <h1 class="h2">{{pageName}}</h1>
+    </div>
+    <div class="row">
+      
+      {% if current_user.user_roles == 'SELECTED_SPEAKER' %}
+        <p>You have not created any {{ controller_type }}, <a href="/speeches/add">propose a {{ controller_type }}</a></p>
+
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% include "blocks/admin_bottom.html" %}

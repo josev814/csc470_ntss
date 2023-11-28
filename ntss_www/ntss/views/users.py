@@ -121,16 +121,11 @@ class UserSpeeches(Views):
 
     def view_speech_info(self, speech_info):
         """
-        view speech information
+        view speech info
         """
-
-        self.template_vars['pageName'] = 'My Speech Proposals'
-        self.template_vars['speeches'] = speech_info
-        if len(speech_info) > 0:
-            self.set_template('speeches/speech_list.html')
-        else:
-            self.set_template('speeches/no_speech_found.html')
-            self.template_vars['controller_type'] = 'Speeches'
+        self.set_template('speeches/speech_view.html')
+        self.template_vars['pageName'] = f'Speech: {speech_info["speech_name"]}'
+        self.template_vars['speech_info'] = speech_info
         return self.template.render(self.template_vars)
 
 

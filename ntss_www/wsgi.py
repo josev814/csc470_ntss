@@ -373,4 +373,13 @@ def view_speech_info(request, response, speech_guid: str):
     response.text = UsersController(request, response).view_speech_info(speech_guid)
     return response
 
+@application.route('/speeches/delete/{speech_guid}', methods=['GET', 'POST'])
+@login_access_required
+def delete_speech(request, response, speech_guid: str):
+    """
+    Deletes a event in the system based on the guid
+    """
+    controller_response = UsersController(request, response).delete_speech(speech_guid)
+    response = return_output(response, controller_response, 200)
+    return response
 ### END SPEECH ROUTES ###

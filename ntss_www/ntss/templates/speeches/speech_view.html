@@ -19,22 +19,25 @@
         
             <div class="row mt-3">
                 <div class="col-2"><b>Event:</b></div>
-                <div class="col">{{ speeches.event }}</div>
+                <div class="col">{{ speech_info.event.name }}</div>
             </div>
 
             <div class="row mt-3">
                 <div class="col-2"><b>Speech Description:</b></div>
-                
+                <div class="col">{{ speech_info.speech_description }}</div>
+
             </div>
 
             <div class="row mt-3">
                 <div class="col-2"><b>Is Accepted:</b></div>
-                
+                <div class="col">{{ speech_info.is_accepted }}</div>
+
             </div>
 
             <div class="row mt-3">
                 <div class="col-2"><b>Review Notes:</b></div>
-                
+                <div class="col">{{ speech_info.review_notes }}</div>
+
             </div>
 
         </form>

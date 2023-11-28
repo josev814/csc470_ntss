@@ -5,7 +5,7 @@ from ntss.controllers.controller import BaseController
 from ntss.views.events import EventViews
 from ntss.models.event import Event as EventModel, EventUsers as EventUsersModel
 from ntss.models.venue import Venue as VenueModel
-from ntss.models.user import Users as UsersModel
+from ntss.models.user import Users as UsersModel, UserSpeeches as SpeechModel
 from ntss.models.transactions import Transaction as TransactionModel
 
 
@@ -86,7 +86,9 @@ class EventsController(BaseController):
             [{'column': 'event_guid', 'operator': '=', 'value': event_guid}],
             500
         )
-        return EventViews(self._session_data).view(event_info, venue_info, owner_info, users, trxs)
+        speech_data = SpeechModel().get_speech_by(filters= [{'column':'event_guid', 'operator':'=','value': event_guid},
+            {'column':'is_approved','operator':'=', 'value':1}])
+        return EventViews(self._session_data).view(event_info, venue_info, owner_info, users, trxs, speech_data)
 
     def delete(self, guid):
         """
