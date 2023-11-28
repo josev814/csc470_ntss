@@ -126,9 +126,10 @@ class EventViews(Views):
         self.template_vars['errors'] = messages
         return self.template.render(self.template_vars)
     
-    def get_user_report(self, user_roles, date):
+    def get_user_report(self, user_roles, date, event_name):
         self.set_template('/events/get_report.html')
         self.template_vars['pageName'] = 'User Report'
+        self.template_vars['event_name'] = event_name
         self.template_vars['user_roles'] = user_roles
         self.template_vars['date'] = date
         return self.template.render(self.template_vars)

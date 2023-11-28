@@ -6,6 +6,7 @@
     <div
       class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
       <h1 class="h2">{{pageName}}</h1>
+ 
       <div class="navbar-nav">
         <div class="nav-item text-nowrap">
           <a class="btn nav-link px-3" onclick="history.back()">Back</a>
@@ -16,6 +17,7 @@
     <div class="d-grid gap-3 text-start">
         <div class="row">
           <b>Date: {{date}}&nbsp;</b>
+          <b>Event: {{event_name}}&nbsp;</b>
         </div>
         <div class="col-12 mt-4">
           <div class="row">
@@ -24,12 +26,14 @@
                 <thead>
                   <tr>
                     <th scope="col">Users</th>
+                    <th scope="col">Quantity</th>
                   </tr>
                 </thead>
                 <tbody>
-                    {% for user_role in user_roles %}
+                    {% for role, count in user_roles.items() %}
                     <tr>
-                        <td>{{user_roles}}</td>
+                        <td>{{role}}</td>
+                        <td>{{count}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

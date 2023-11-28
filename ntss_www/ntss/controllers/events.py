@@ -251,8 +251,15 @@ class EventsController(BaseController):
         """
         current_date = datetime.now()
         date = current_date.date()
-        user_roles = UsersModel().get_users(['user_roles'])
-        return EventViews(self._session_data).get_user_report(user_roles, date)
+        event_users = EventUsersModel().get_event_users(event_guid, ['user_roles'])
+        user_roles = {}
+        event_name = EventModel().get_event_by(guid=event_guid)[0]['name']
+        for event_user in event_users:
+            if event_user['user_roles'] in user_roles:
+                user_roles[event_user['user_roles']] += 1
+            else:
+                user_roles[event_user['user_roles']] = 1
+        return EventViews(self._session_data).get_user_report(user_roles, date, event_name)
         
     def __verify_checkout_form(self, form_data):
         """

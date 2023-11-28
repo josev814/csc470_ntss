@@ -157,14 +157,15 @@ class EventUsers(MysqlDatabase):
         ]
         return self.db_select(joins=joins, filters=filters, limit=limit)
 
-    def get_event_users(self, event_guid, limit=20) -> list:
+    def get_event_users(self, event_guid, columns: list=None, limit=20) -> list:
         """
         Gets all users for a particular event 
         """
-        columns=[
-            'user_guid', 'prefix_name', 'first_name', 'middle_name', 'last_name', 
-            'suffix_name', 'create_date'
-        ]
+        if not columns:
+            columns=[
+                'user_guid', 'prefix_name', 'first_name', 'middle_name', 'last_name', 
+                'suffix_name', 'create_date'
+            ]
         joins = [{'table': 'users', 'src_column': 'user_guid', 'join_column': 'user_guid'}]
         filters=[
             {'column': 'event_guid', 'operator': '=', 'value': event_guid}
