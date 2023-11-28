@@ -121,9 +121,16 @@ class EventsController(BaseController):
                 posted_values[request_name] = request_value.strip()
             filters = [
                 {'column': 'start_date', 'operator': '<=', 'value': posted_values['search_date']},
-                {'type': 'and', 'column': 'end_date', 'operator': '>=', 'value': posted_values['search_date']}
+                {
+                    'type': 'and',
+                    'column': 'end_date',
+                    'operator': '>=',
+                    'value': posted_values['search_date']
+                }
             ]
-            db_event_data = EventModel().get_events(columns=columns, joins=joins, filters=filters, start=start)
+            db_event_data = EventModel().get_events(
+                columns=columns, joins=joins, filters=filters, start=start
+            )
         else:
             db_event_data = EventModel().get_events(columns=columns, joins=joins, start=start)
         event_data = []
@@ -427,7 +434,10 @@ class ExhibitsController(BaseController):
                         messages.append(f'Refunding ${refund}')
                     messages.append(f'Transaction GUID: {exhibit["transaction_guid"]}')
                 else:
-                    messages.append('An Error was encountered processing the transaction, please try again.')
+                    messages.append(
+                        'An Error was encountered processing the transaction, \
+                        please try again.'
+                    )
 
         booth_transactions = TransactionModel().get_transactions_by_filter([
             {'column': 'event_guid', 'operator': '=', 'value': exhibit['event_guid']},
