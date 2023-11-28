@@ -412,6 +412,9 @@ class ExhibitsController(BaseController):
         return ExhibitViews(self._session_data).list(exhibits)
 
     def edit_exhibit(self, exhibit_guid):
+        """
+        Edits an exhibit in the system
+        """
         event, transactions, owner = self._get_exhibit_data(exhibit_guid)
         exhibit = transactions[0]
         exhibit['event'] = event
