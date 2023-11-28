@@ -1,5 +1,5 @@
 """
-Package to handle Users
+Package to handle Revenue Reports
 """
 from datetime import datetime
 from ntss.controllers.controller import BaseController
