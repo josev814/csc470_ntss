@@ -387,15 +387,29 @@ class ExhibitsController(BaseController):
         exhibit['event'] = event
         exhibit['event']['owner'] = owner[0]
         form_data = {}
+        messages = []
         if self._request.method == 'POST':
             for request_name, request_value in self._request.params.items():
                 form_data[request_name] = request_value.strip()
-            # validate form
+            messages = self.__verify_checkout_form(form_data)
             # submit to database
-        event_info = EventModel().get_event_by(guid=exhibit['event_guid'])
+            if 'paymentMethod' in form_data and not messages:
+                if form_data['paymentMethod'] in ['credit', 'debit']:
+                    form_data['type'] = 'payment'
+                else:
+                    form_data['type'] = 'invoice'
+                if TransactionModel().update(form_data, exhibit['transaction_guid']):
+                    if 'cost' in form_data and float(form_data['cost']) < exhibit['price']:
+                        refund = float(exhibit['price']) - float(form_data['cost'])
+                        messages.append(f'Refunding ${refund}')
+                    messages.append(f'Transaction GUID: {exhibit["transaction_guid"]}')
+                else:
+                    messages.append('An Error was encountered processing the transaction, please try again.')
+
         booth_transactions = TransactionModel().get_transactions_by_filter([
             {'column': 'event_guid', 'operator': '=', 'value': exhibit['event_guid']},
-            {'column': 'item_description', 'operator': 'like', 'value': '#'}
+            {'column': 'item_description', 'operator': 'like', 'value': '#'},
+            {'column': 'transaction_guid', 'operator': '!=', 'value': exhibit['transaction_guid']}
         ])
         reserved_booths = []
         for booth_transaction in booth_transactions:
@@ -403,4 +417,23 @@ class ExhibitsController(BaseController):
                 int(booth_transaction['item_description'].split('#')[1])
             )
         exhibit['event']['reserved_booths'] = reserved_booths
-        return ExhibitViews(self._session_data).edit_exhibit(exhibit, form_data)
+        return ExhibitViews(self._session_data).edit_exhibit(exhibit, form_data, messages)
+
+    def __verify_checkout_form(self, form_data):
+        """
+        Validation for the checkout form
+        """
+        errors = []
+        missing_payment = 'Missing Payment information'
+        if not errors and 'paymentMethod' in form_data:
+            if 'cc_name' not in form_data:
+                errors.append(missing_payment)
+            elif 'cc_number' not in form_data:
+                errors.append(missing_payment)
+            elif 'cc_expiration' not in form_data:
+                errors.append(missing_payment)
+            elif 'cc_cvv' not in form_data:
+                errors.append(missing_payment)
+            elif form_data['cc_number'] == '1111-1111-1111-1111':
+                errors.append('Payment Failed, Try again')
+        return errors

@@ -165,14 +165,13 @@ class ExhibitViews(Views):
         self.set_template('no_items.html')
         return self.template.render(self.template_vars)
     
-    def edit_exhibit(self, exhibit: dict, form_data: dict) -> str:
+    def edit_exhibit(self, exhibit: dict, form_data: dict, messages: list) -> str:
         """
         Displays the form for editing an exhibit
         """
-        print(exhibit['event'])
-        print(exhibit['item_description'])
         self.template_vars['pageName'] = f'Exhibit: {exhibit["transaction_guid"]}'
         self.template_vars['exhibit'] = exhibit
         self.template_vars['form_data'] = form_data
+        self.template_vars['errors'] = messages
         self.set_template('events/exhibits/edit.html')
         return self.template.render(self.template_vars)

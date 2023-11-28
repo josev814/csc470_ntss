@@ -55,8 +55,8 @@ class Transaction(MysqlDatabase):
 
         guid = self.generate_guid()
         item_desc = args.get('item_description')
-        if '#' in item_desc:
-            item_desc = f'Booth: {item_desc}'
+        # if '#' in item_desc:
+        #     item_desc = f'Booth: {item_desc}'
         values = {
             'transaction_guid': guid,
             'user_guid': args.get('user_guid'),
@@ -68,3 +68,18 @@ class Transaction(MysqlDatabase):
         if self.db_create(values):
             return guid
         return False
+
+    def update(self, form_data: dict, transaction_guid: str) -> bool:
+        """
+        Updates a transaction and returns True or False on Success
+        """
+        item_desc = form_data.get('item_description')
+        # if '#' in item_desc:
+        #     item_desc = f'Booth: {item_desc}'
+        values = {
+            'item_description': item_desc,
+            'price': form_data.get('cost'),
+            'type': form_data.get('type')
+        }
+        filters = [{'column': 'transaction_guid', 'operator': '=', 'value': transaction_guid}]
+        return self.db_update(values, filters)
