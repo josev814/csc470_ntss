@@ -28,7 +28,6 @@ class RevenueViews(Views):
         self.template_vars['totalTransactions'] = total_transactions
         self.template_vars['allTransactions'] = all_transactions
         self.template_vars['venueCost'] = venue_cost 
-        # self.template_vars['revenue'] = revenue
         self.template_vars['venue'] = venue
         self.template_vars['totalRevenue'] = f"{revenue:0.2f}"
         return self.template.render(self.template_vars)
