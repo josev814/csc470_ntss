@@ -116,9 +116,9 @@ class EventsController(BaseController):
                 {'column': 'start_date', 'operator': '<=', 'value': posted_values['search_date']},
                 {'type': 'and', 'column': 'end_date', 'operator': '>=', 'value': posted_values['search_date']}
             ]
-            db_event_data = EventModel().get_events(columns=columns, joins=joins, filters=filters)
+            db_event_data = EventModel().get_events(columns=columns, joins=joins, filters=filters, start=start)
         else:
-            db_event_data = EventModel().get_events(columns=columns, joins=joins)
+            db_event_data = EventModel().get_events(columns=columns, joins=joins, start=start)
         event_data = []
         for db_event in db_event_data:
             venue_name = db_event['name_1']
