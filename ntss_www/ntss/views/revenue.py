@@ -31,4 +31,3 @@ class RevenueViews(Views):
         self.template_vars['venue'] = venue
         self.template_vars['totalRevenue'] = f"{revenue:0.2f}"
         return self.template.render(self.template_vars)
-        
