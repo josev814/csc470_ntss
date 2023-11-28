@@ -53,7 +53,7 @@ class EventViews(Views):
         return self.template.render(self.template_vars)
 
     def view(self, event_data, venue_data, cust_data,
-        attendee_data, speech_data, transactions) -> str:
+        attendee_data, transactions, speech_data) -> str:
         """
         Shows information about an event
         """

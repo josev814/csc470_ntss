@@ -247,12 +247,15 @@
               <tbody>
                 {% for speech in speeches %}
                 <tr>
-                  <td>
+                  <td class="col text-start">
                     {{ speech.speech_name }}
                   </td>
-                  <td></td>
-                  <td>
-                    {{ speech.is_approved }}
+                  <td class="col text-center">
+                    {{ speech.prefix_name}} {{ speech.first_name}} {{ speech.middle_name}} 
+                    {{ speech.last_name}} {{ speech.suffix_name}}
+                  </td>
+                  <td class="col text-end">
+                    {% if speech.is_accepted|int == 1 %}Yes{% else %}No{% endif %}
                   </td>
 
                 </tr>

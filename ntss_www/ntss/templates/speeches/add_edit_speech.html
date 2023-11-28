@@ -44,12 +44,15 @@
             </div>
           </div>
 
-          
+          {% if current_user.user_roles != 'SELECTED_SPEAKER' %}
           <div class="row">
             <div class="col">
               <label>Proposal Acceptance</label>
-              <input type="text" class="form-select" name="is_accepted" placeholder="Speech Acceptance"
-                {% if form_post.is_accepted: %} value="{{ form_post.is_accepted}}" {% endif %}>
+              <select class="form-select" name="is_accepted" id="is_accepted" required>
+                <option {% if not form_post.is_accepted: %} selected {% endif %} value="">Choose...</option>
+                <option value='1' {% if form_post.is_accepted == '1' %} selected {% endif %}>Yes</option>
+                <option value='0' {% if form_post.is_accepted == '0' %} selected {% endif %}>No</option>
+              </select>
             </div>
           </div>
 
@@ -61,12 +64,16 @@
               </label>
             </div>
           </div>
+          {% endif %}
 
-          {% if pageName.startswith('Edit ') or pageName.startswith('Add ') %}
-            <div class="row">
-              <input type="hidden" name="user_guid" value="{{ form_post.user_guid}}" />
-            </div>
-            {% endif %}
+          {% if current_user.user_roles == 'SELECTED_SPEAKER' %}
+            {% set user_guid = current_user.user_guid %}
+          {% else %}
+            {% set user_guid = form_post.user_guid %}
+          {% endif %}
+          <div class="row">
+             <input type="hidden" name="user_guid" value="{{user_guid}}" />
+          </div>
 
           <div class="row pt-5" >
             <div class="col-2">

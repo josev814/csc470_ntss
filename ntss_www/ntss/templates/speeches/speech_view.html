@@ -30,7 +30,8 @@
 
             <div class="row mt-3">
                 <div class="col-2"><b>Is Accepted:</b></div>
-                <div class="col">{{ speech_info.is_accepted }}</div>
+
+                <div class="col">{% if speech_info.is_accepted|int == 1 %}Yes{% else %}No{% endif %}</div>
 
             </div>
 

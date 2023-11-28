@@ -259,8 +259,15 @@ class UsersController(BaseController):
         """
         Lists the speeches in the system
         """
-        columns = ['speech_guid','speech_name']
-        speech_data = Speeches().get_speeches(columns=columns, start=start)
+        columns = ['speech_guid','speech_name', 'user_guid']
+        db_speech_data = Speeches().get_speeches(columns=columns, start=start)
+        speech_data = db_speech_data
+        if self._session_data['user_roles'] == 'SELECTED_SPEAKER':
+            speech_data = []
+            for speech in db_speech_data:
+                print(speech)
+                if speech['user_guid'] == self._session_data['user_guid']:
+                    speech_data.append(speech)
         return SpeechesViews(self._session_data).list_speeches(speech_data)
 
     def add_speech(self):
@@ -285,7 +292,7 @@ class UsersController(BaseController):
         edit speech in system
         """
         posted_values = {}
-        errors = None
+        errors = []
         speech_info = Speeches().get_speech_by(speech_guid=speech_guid)
 
         if len(speech_info) == 0:

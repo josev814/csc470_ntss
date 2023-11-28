@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `speeches`
     `is_accepted` TINYINT(1) NOT NULL DEFAULT '0' , 
     `user_guid` VARCHAR(75) NOT NULL , 
     `event_guid` VARCHAR(75) NOT NULL , 
-    `review_notes` TEXT NOT NULL , 
+    `review_notes` TEXT DEFAULT NULL , 
     `created_datetime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP , 
     `updated_datetime` TIMESTAMP on update CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP , 
     PRIMARY KEY (`speech_guid`), 

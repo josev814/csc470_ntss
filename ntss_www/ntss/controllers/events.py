@@ -88,7 +88,8 @@ class EventsController(BaseController):
         )
         speech_data = SpeechModel(True).get_speech_by(filters= [{'column':'event_guid',
             'operator':'=','value': event_guid},
-            {'column':'is_accepted','operator':'=', 'value':1}])
+            {'column':'is_accepted','operator':'=', 'value':1}], limit=999)
+        
         print(f'SD: {speech_data}')
         return EventViews(self._session_data).view(
             event_info, venue_info, owner_info, users, trxs, speech_data)

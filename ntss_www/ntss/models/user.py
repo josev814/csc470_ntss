@@ -253,8 +253,11 @@ class UserSpeeches(MysqlDatabase):
             query_filter.append(
                 {'column': 'speech_guid', 'operator': '=', 'value': speech_guid}
             )
+        joins = [{'table': 'users','src_column': 'user_guid', 'join_column': 'user_guid'}]
+
         records = self.db_select(
             filters=query_filter,
+            joins=joins,
             limit=limit
         )
         return records
