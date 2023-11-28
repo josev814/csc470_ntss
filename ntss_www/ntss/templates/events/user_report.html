@@ -1,0 +1,27 @@
+{% include "blocks/admin_top.html" %}
+<div class="row text-start">
+  {% include "blocks/navigation.html" %}
+
+  <div class="col-9 px-md-4">
+    <div class="row border-bottom">
+      <div class="col">
+        <h1 class="h2">{{pageName}}</h1>
+      </div>
+      <div class="col text-end">
+        <a class="nav-link px-3" href="/event/{{ event.event_guid }}/add_user">
+          <span class="material-symbols-outlined"> event_seat </span>
+          Add User
+        </a>
+      </div>
+      <div class="col text-end">
+        <a
+          class="nav-link px-3"
+          href="/event/{{ event.event_guid }}/user_report"
+        >
+          <span class="material-symbols-outlined"> receipt </span>
+          User Report
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
