@@ -11,20 +11,24 @@
         <div class="container">
           <div class="row">
             <div class="col text-end">
+              {% if current_user.user_roles != 'DOMAIN_EXPERT' %}
               <a class="nav-link px-1" href="/event/{{ event.event_guid }}/add_user">
                 <span class="material-symbols-outlined">
                   event_seat
                 </span>
                 Add User/Exhibit
               </a> 
+              {% endif %}
             </div>
             <div class="col-4 text-end">
+              {% if current_user.user_roles != 'DOMAIN_EXPERT' %}
               <a class="nav-link px-1" href="/event/{{ event.event_guid }}/user_report">
                 <span class="material-symbols-outlined">
                   receipt
                 </span>
                 User Report
               </a>
+              {% endif %}
             </div>
           </div>
         </div>
