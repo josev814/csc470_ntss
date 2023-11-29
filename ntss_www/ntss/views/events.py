@@ -175,6 +175,7 @@ class ExhibitViews(Views):
         if len(exhibits) > 0:
             self.set_template('events/exhibits/list.html')
             return self.template.render(self.template_vars)
+        self.template_vars['controller_type'] = self._controller_type
         self.set_template('no_items.html')
         return self.template.render(self.template_vars)
     
