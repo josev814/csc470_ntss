@@ -234,5 +234,5 @@ INSERT INTO `events` (
     `booths`, `conference_rooms`, `ticket_price`, `start_date`, `end_date`
 ) VALUES (
     '1915731d79ca47a89fadc07064514889', @user_guid, '7cb27f06534249c7a57f78cbc159017b', 'La Fiesta', 'slog', 'theme', 'https://google.com',
-    250, 22, 25.00, '2023-11-16', '2023-11-25'
+    250, 22, 25.00, '2023-11-27', '2023-12-05'
 );
