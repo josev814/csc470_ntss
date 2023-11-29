@@ -73,7 +73,7 @@ class UserViews(Views):
         self.template_vars['states'] = self.US_STATES
         new_roles = []
         for role in self.ROLES:
-            if role not in ['NTSS_ADMIN', 'EVENT_STAFF']:
+            if role not in ['NTSS_ADMIN', 'EVENT_STAFF', 'OBSERVER']:
                 new_roles.append(role) 
         self.template_vars['roles'] = new_roles
         self.template_vars['form_post'] = posted_values
