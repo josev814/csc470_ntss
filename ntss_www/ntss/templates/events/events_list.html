@@ -39,14 +39,18 @@
                     preview
                   </span>
                 </a>
+                {% if current_user.user_roles != 'DOMAIN_EXPERT' %}
                 <a href="/event/edit/{{ event.event_guid}}" class="btn btn-link-dark p-0">
                   <span class="material-symbols-outlined">
                     edit
                   </span>
                 </a>
+                {% endif %}
+                {% if current_user.user_roles != 'DOMAIN_EXPERT' %} 
               <a href="/revenue_report/{{ event.event_guid}}" class="btn btn-link-dark p-0">
                 <span class="material-symbols-outlined"> monetization_on </span>
               </a>
+              {% endif %}
               </td>
               {% for column, value in event.items(): %}
               {%- if not column.endswith('_guid'): -%}

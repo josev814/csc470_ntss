@@ -8,39 +8,48 @@
         <li class="mb-1">
           <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
             data-bs-target="#home-collapse" aria-expanded="false">
-            <span class="material-symbols-outlined">home</span>
             Home
           </button>
           <div class="collapse" id="home-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <li><a href="/dashboard" class="link-dark rounded">Overview</a></li>
-              <li><a href="#" class="link-dark rounded">Updates</a></li>
-              <li><a href="#" class="link-dark rounded">Reports</a></li>
+              <li>
+                <a href="/dashboard" class="link-dark rounded">
+                  <span class="material-symbols-outlined">home</span>
+                  Dashboard
+                </a>
+              </li>
             </ul>
           </div>
         </li>
         <li class="mb-1">
           <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-            data-bs-target="#dashboard-collapse" aria-expanded="false">
-            <span class="material-symbols-outlined">
-              calendar_month
-            </span>
+            data-bs-target="#speeches-collapse" aria-expanded="false">
             Speeches
           </button>
-          <div class="collapse" id="dashboard-collapse">
+          <div class="collapse" id="speeches-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
               <li>
                 <a href="/speeches/list" class="link-dark rounded">
                   <span class="material-symbols-outlined">
-                    app_registration
+                    chat
                   </span>
                   Speech Proposals
                 </a>
               </li>
+            </ul>
+          </div>
+        </li>
+        <li class="mb-1">
+          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+            data-bs-target="#events-collapse" aria-expanded="false">
+            Events
+          </button>
+          <div class="collapse" id="events-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
               <li>
-                <a href="#" class="link-dark rounded">
+                <a href="/events/list" class="link-dark rounded">
                   <span class="material-symbols-outlined">
-                    app_registration
+                    event
                   </span>
                   Upcoming Events
                 </a>
