@@ -22,6 +22,15 @@
             </tr>
           </thead>
           <tbody>
+            {% if 'transactions' not in events[0] %}
+            <tr>
+              <td></td>
+              <td>You currently have no exhibits</td>
+              {% for i in range(4) %}
+              <td></td>
+              {% endfor %}
+            </tr>
+            {% else %}
             {% for event in events: %}
             <tr>
               <td class="col-1">
@@ -52,6 +61,7 @@
               <td class="text-end col-2">{{ event.transactions.create_date.strftime('%B %d, %Y') }}</td>
             </tr>
             {% endfor %}
+            {% endif %}
           </tbody>
         </table>
       </div>
