@@ -4,7 +4,12 @@
 
   <div class="col-9 px-md-4">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-      <h1 class="h2">{{pageName}}</h1>
+      <h1 class="h5">{{pageName}}</h1>
+      <div class="navbar-nav">
+        <div class="nav-item text-nowrap">
+          <a class="btn nav-link px-3" onclick="history.back()">Back</a>
+        </div>
+      </div>
     </div>
     {% if errors: %}
     {% include "blocks/error_modal.html" %}

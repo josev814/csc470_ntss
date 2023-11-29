@@ -21,6 +21,7 @@ class UserViews(Views):
         Load the the profile for a user
         """
         self.set_template('users/user_profile.html')
+        self.template_vars['pageName'] = f'User GUID: {user_info["user_guid"]}'
         self.template_vars['states'] = self.US_STATES
         self.template_vars['roles'] = self.ROLES
         self.template_vars['user'] = user_info
@@ -54,14 +55,13 @@ class UserViews(Views):
         self.template_vars['errors'] = errors
         return self.template.render(self.template_vars)
 
-    def list_users(self, users: list, current_user: dict):
+    def list_users(self, users: list):
         """
         List users in the system
         """
         self.set_template('users/list_users.html')
         self.template_vars['pageName'] = 'List Users'
         self.template_vars['users'] = users
-        self.template_vars['current_user'] = current_user
         return self.template.render(self.template_vars)
 
     def register_user(self, posted_values, errors):

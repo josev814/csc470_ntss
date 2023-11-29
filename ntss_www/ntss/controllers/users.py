@@ -240,14 +240,7 @@ class UsersController(BaseController):
         Lists the users in the system
         """
         users_data = UserModel().get_users(start)
-        # Get current user session
-        # pass the user info to views
-        # Ensure that the role for the user is detected in the navigation
-        # TODO: use session to load current user info``
-        # sid = self._get_session_id()
-        # session_data = self._get_session_data(sid)
-        user_info = {'user_roles': 'NTSS_ADMIN'}
-        return UserViews().list_users(users_data, user_info)
+        return UserViews(self._session_data).list_users(users_data)
 
     def change_password(self, email, password) -> bool:
         """
