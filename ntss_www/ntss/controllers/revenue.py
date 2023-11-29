@@ -21,7 +21,10 @@ class RevenueController(BaseController):
  
         joins = [{'table': 'transactions',
                   'src_column': 'event_guid', 'join_column': 'event_guid'}]
-        db_event_data = EventModel().get_events(filters=filters, joins=joins, limit=10000)
+        db_event_data = EventModel(True).get_events(filters=filters, joins=joins, limit=10000)
+        if len(db_event_data) == 0:
+            db_event_data = EventModel(True).get_events(filters=filters)
+
         venue = VenueModel().get_venue_by(guid=db_event_data[0]['venue_guid'])[0]
         venue_cost = float(venue['cost'])
         print(venue)
@@ -33,9 +36,8 @@ class RevenueController(BaseController):
         total_transactions = len(db_event_data)
         revenue = 0.00
         for event_data in db_event_data:
-            if event_data['type'] in ('payment','invoice'):
+            if 'type' in event_data and event_data['type'] in ('payment','invoice'):
                 revenue += float(event_data['price'])
-                print(float(event_data['price']))
         revenue = revenue - venue_cost
         return RevenueViews(self._session_data).get_report(date, event_name, event_id,
         all_transactions,total_transactions,revenue, venue_cost, venue)
