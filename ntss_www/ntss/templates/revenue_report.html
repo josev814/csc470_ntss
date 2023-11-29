@@ -43,6 +43,14 @@
                   <td>Reservation Venue</td>
                   <td class="text-end">-{{venue.cost}}</td>
                 </tr>
+                {% if 'transaction_guid' not in allTransactions %}
+                <tr>
+                  <td></td>
+                  <td>No more transactions found</td>
+                  <td></td>
+                  <td class="text-end"></td>
+                </tr>
+                {% else %}
                 {% for transaction in allTransactions: %}
                 <tr>
                   <td>{{transaction.transaction_guid.capitalize()}}</td>
@@ -51,6 +59,7 @@
                   <td class="text-end">{{transaction.price}}</td>
                 </tr>
                 {% endfor %}
+                {% endif %}
               </tbody>
               <tfoot> 
                 <tr>
