@@ -71,7 +71,7 @@ class UsersController(BaseController):
         Returns if the current user has access
         """
         print(f'Accessing path {path}')
-        if self._user_info['user_roles'] == 'OBSERVER':
+        if 'user_roles' not in self._user_info or self._user_info['user_roles'] == 'OBSERVER':
             return False
         return True
 
