@@ -8,7 +8,7 @@
       <h1 class="h3 mb-3 fw-normal">{{ platformName }}</h1>
       <h2 class="h3 mb-3 fw-normal">Please sign in</h2>
       <div class="form-floating">
-        <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com" {% if email: %} value="{{ email }}" {% endif %} required oninvalid="setCustomValidity('Please enter a valid email address.')">
+        <input type="email"  onkeypress="setCustomValidity('')" class="form-control" id="floatingInput" name="email" placeholder="name@example.com" {% if email: %} value="{{ email }}" {% endif %} required oninvalid="setCustomValidity('Please enter a valid email address.')">
         <label for="floatingInput">Email address</label>
       </div>
       <div class="form-floating">
@@ -21,5 +21,18 @@
     <br />
     <a href="/register" class="w-100 btn btn-lg btn-primary">Register</a>
   </main>
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+      const emailInput = document.getElementById('floatingInput');
+      
+      if (emailInput) {
+        emailInput.addEventListener('input', function(event) {
+          if (event.target.validity.valid) {
+            event.target.setCustomValidity('');
+          }
+        });
+      }
+    });
+  </script>
 </body>
 {% include "blocks/footer.html" %}

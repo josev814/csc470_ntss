@@ -47,6 +47,8 @@ class NtssController(BaseController):
             self._create_session(user_ctrl)
             self._add_cookie(self._session_id)
             error_msg = None
+        if not user_ctrl.has_access('/dashboard'):
+            error_msg = 'Access Denied'
         if not email:
             error_msg = 'Email is required'
         elif not password:

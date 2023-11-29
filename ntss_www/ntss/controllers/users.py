@@ -70,7 +70,9 @@ class UsersController(BaseController):
         """
         Returns if the current user has access
         """
-        print(path)
+        print(f'Accessing path {path}')
+        if self._user_info['user_roles'] == 'OBSERVER':
+            return False
         return True
 
     def create_session(self):

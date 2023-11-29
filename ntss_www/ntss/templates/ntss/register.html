@@ -22,7 +22,7 @@
                                 <div class="row">
                                     <div class="col">
                                         <label for="floatingInput">Email address</label>
-                                        <input type="email" class="form-control" id="floatingInput" name="email"
+                                        <input onkeypress="setCustomValidity('')" type="email" class="form-control" id="floatingInput" name="email"
                                             placeholder="name@example.com" {% if form_post.email: %}
                                             value="{{ form_post.email }}" {% endif %} required
                                             oninvalid="setCustomValidity('Please enter a valid email address.')">
